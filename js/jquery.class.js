@@ -17,7 +17,7 @@
 				return function(){
 					var tmp = this._super;
 					this._super = _super[name]; // Add a new ._super() method that is the same method but on the super-class
-					var ret = fn.apply(this, arguments); // The method only need to be bound temporarily, so we remove it when we're done executing
+					var ret = fn.apply(this, arguments); // The method only need to be bound temporarily, so we remove it when we're done executing        
 					this._super = tmp;
 					return ret;
 				};

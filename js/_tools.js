@@ -1,4 +1,3 @@
-
 /*** JS OVERRIDES **********************************************************************************************************************************/
 String.prototype.trim=function(str){return this.ltrim(str).rtrim(str);};
 String.prototype.ltrim=function(str){if(str)return this.replace(eval("/^"+str+"+/"),""); return this.replace(/^\s+/,"");};
@@ -99,19 +98,19 @@ _$.compareObjects = function(x, y){
 /**
  * Cleans empty or null properties from an object
  * @param [required] 1			first parameter is an object to clean
- * @param [optional] 2,3,...	names of properties to remove from the object
+ * @param [optional] 2,3,...	names of properties to remove from the object 
  * @returns						clean object
  */
 _$.clearProperties = function(){
 	if (arguments.length<1) return {};
 	var obj = arguments[0], newO = {}, name='', val, props = [];
 	if (arguments.length>1) props = Array.prototype.slice.call(arguments,1);
-	for (name in obj){
-		val = obj[name];
+	for (name in obj){ 
+		val = obj[name]; 
 		if (typeof val == 'undefined' || val == null || val == -1) continue;		// if null or undefined
 		if (typeof val == 'string' && !val.length) continue;						// if empty string
-		if (props.in_array(name)>-1) continue;										// if name is in disabled properties list
-		newO[name] = val;
+		if (props.in_array(name)>-1) continue;										// if name is in disabled properties list 
+		newO[name] = val; 
 	}
 	return newO;
 };
@@ -150,6 +149,6 @@ _$.rand = function(max,min){min=min||0;return Math.floor(Math.random()*(max-min)
 _$.getParam = function(param, url){
 	var paramStr=(url || location.search).substr(1), paramAr=paramStr.split('&'), i=0, il=paramAr.length, par;
 	for (; i<il; i++){par=paramAr[i].split('='); if(par[0]==param)return par[1];}
-	return false;
+	return false;	
 };
 /*** JS EXTENDER ***********************************************************************************************************************************/

@@ -10,7 +10,7 @@
 
 .sizing(@type: border-box){ -moz-box-sizing: @type; -webkit-box-sizing: @type; box-sizing: @type; }
 
-.radius (@radius: 3px){
+.radius (@radius: 3px){ 
 	-moz-border-radius: @radius; -webkit-border-radius: @radius; border-radius: @radius;
 	-moz-background-clip: padding; -webkit-background-clip: padding; background-clip: padding-box;
 }
@@ -21,8 +21,8 @@
 
 .gradient (@from, @mid, @to) {
 	background: @mid;
-	background: -webkit-linear-gradient(top, @from, @mid, @to);
-	background: -moz-linear-gradient(top, @from, @mid, @to);
+	background: -webkit-linear-gradient(top, @from, @mid, @to); 
+	background: -moz-linear-gradient(top, @from, @mid, @to); 
 	background: linear-gradient(top, @from, @mid, @to);
 }
 .gradient (@from, @to) {
@@ -36,14 +36,14 @@
 .transition { -moz-transition: all .2s ease-out; -webkit-transition: all .2s ease-out; transition: all .2s ease-out; }
 .transition(@a){ -moz-transition: @arguments; -webkit-transition: @arguments; transition: @arguments; }
 
-.non-selectable {
+.non-selectable { 
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	cursor: default;
+	cursor: default; 
 }
 
 
