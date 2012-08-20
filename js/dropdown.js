@@ -271,18 +271,24 @@ var DropDown = Class.extend({
 		this.menu.find('.selected').removeClass('selected focused');
 		if (id !=-1 && this.items && this.items.length){																		// list available -> select item on list
 			this.focused = this.menu.find('.menu-item-id-'+id);
-			if (!this.conf['static']) this.focused.addClass('selected focused');													// selec item
+			if (!this.conf['static']) this.focused.addClass('selected focused');												// selec item
 			for (var i=0, item; item = this.items[i++] ;)
 				if (id == (typeof item =='object' ? item[this.conf.fieldId] : item)){ 
 					this.selectedItem = item; 
 					break;
 				}
 			if (!name && this.selectedItem) name = this.mapName(this.conf.fieldName, this.selectedItem);
-			if (!this.conf['static']) this.label.html(name);																		// set caption to item name
+			if (!this.conf['static']) {
+				name = name.replace(/&amp;/g, '&').replace(/&/g, '&amp;');														// encode all & to &amp; for IE
+				this.label.html(name);																							// set caption to item name
+			}
 		}
 		else {
 			name = name || (id == -1 ? this.conf.defaultText || '' : id);														// if no name, set to id (if id not -1) or to defaultText or to ''
-			if (!this.conf['static']) this.label.html(name);																		// no list -> set value in blind
+			if (!this.conf['static']) {																							// no list -> set value "in blind"
+				name = name.replace(/&amp;/g, '&').replace(/&/g, '&amp;');														// encode all & to &amp; for IE
+				this.label.html(name);
+			}
 		}
 		return this;
 	}

@@ -1,9 +1,8 @@
 ﻿<!DOCTYPE html>
 <meta charset="UTF-8"/>
-<link rel="stylesheet" type="text/css" href="css/style.css">
-<link href="dropdown.less" rel="stylesheet/less" type="text/css">
+<link href="css/dropdown.less" rel="stylesheet/less" type="text/css">
 <script src="js/less-1.3.0.min.js"></script>
-<style>body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }</style>
+<style>body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; } </style>
 
 
 <input id="dropdown" type="text" name="input1" value="3"/>
@@ -31,7 +30,7 @@ $(function(){
 	dd3 = new DropDown({ target: 'dropdown3', isStatic: true, items: [ 'all', 'none' ], emptyText: '<input type="checkbox" name="" value="" />' });
 	
 	//changelist2(dd);
-	//changelist2(dd2);
+	changelist2(dd2);
 });
 
 function getvalue(d){ log(d.getIdValue(), d.getValue()); }
