@@ -146,37 +146,54 @@ var MultiSelect = DropDown.extend({
 	,reset : function(){ this.setValue([-1], 'All ' + this.conf.defaultText); }
 	
 	,setValue : function(ids, name){
-		if (ids === undefined) return false;
+		if (ids === undefined || ids === null || ids === '') return false;
 		this.value = ids;
 		this.selectAll();
+		if ($.type(ids) !== 'array') ids = [ids];
 		if (ids.length === 1 && ids[0] == -1) this.selectAll();
 		else {
-			var items = this.menu.find('.menu-items .menu-item'), i = 0, il = ids.length;
-			if (items.length && il){
-				if (items.length == il) this.selectAll();																		// if checked items == all items -> select all
-				else {
-					this.selectNone();
-					for (; i < il; i++) items.filter('.menu-item-'+ids[i]).addClass('menu-item-checked');
-				}
+			if (ids.length === 0) this.selectNone();
+			else if (ids.length > 1) {
+				this.label.html('Multiple '+this.conf.defaultText);
+				this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 			}
-			else if (name && name.length) this.label.html(name);
-			else this.selectNone();
+			//else if (name && name.length) this.label.html(name);
 			
-			if (this.menu.find('.menu-items .menu-item').length){
-				var checked = this.menu.find('.menu-items .menu-item-checked');
+			var items = this.menu.find('.menu-items .menu-item'), i = 0, il = ids.length;
+			if (items.length){
+				if (il){
+					if (items.length == il) this.selectAll();																		// if checked items == all items -> select all
+					else {
+						this.selectNone();
+						for (; i < il; i++) items.filter('.menu-item-'+ids[i]).addClass('menu-item-checked');
+					}
+				}
+				
+				var checked = items.filter('.menu-item-checked');
 				if (checked.length == 1) this.label.html(checked.data('val'));
 				else if (checked.length == 0) this.selectNone();
 				else {
 					this.label.html('Multiple '+this.conf.defaultText);
 					this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
-				}
+				} 
+			}
+			else if (il && (!name || !name.length)){
+				this.label.html('Multiple '+this.conf.defaultText);
+				this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 			}
 		}
-		
-		this.value = ids;
 	}
 	
+	/**
+	 * Returns the selected (text) value
+	 */
 	,getValue : function(){ return this.value; }
+	
+	/**
+	 * Returns the selected option "id"
+	 */
+	,getIdValue : function(){ return this.value; }
+	
 	,getTextValue : function(){ return this.label.html(); }
 	
 	/**

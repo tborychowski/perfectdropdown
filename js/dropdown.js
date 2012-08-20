@@ -59,6 +59,7 @@ var DropDown = Class.extend({
 			else this.setValue(v);																								// set mixed value (single, multiple)
 		}
 		if (this.conf.items && this.conf.items.length) this.replaceList(this.conf.items);										// use the data store provided in the config
+		if (this.conf.url || !this.conf.items) this.reset();																	// if no list - put correct label
 	}
 	
 	/**
