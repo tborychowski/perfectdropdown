@@ -23,7 +23,7 @@ var DropDown = Class.extend({
 				value: null,
 				items: null,
 				isExpanded: false,
-				'static': false,																								// if true - don't change the button label (name)
+				isStatic: false,																								// if true - don't change the button label (name)
 				disabled: false
 			};
 		this.conf = $.extend({}, defaults, conf);
@@ -51,15 +51,16 @@ var DropDown = Class.extend({
 		this.label = this.el.find('.text');
 		this.input = this.el.find('input').val('');																				// empty the value auto added from cache
 		if (this.conf.disabled) this.disable();
-		if (this.conf.defaultText && this.conf.defaultText.length && !this.conf['static']) this.label.html(this.conf.defaultText);
-		//if (this.conf.value !== undefined && this.conf.value !== null){
-		if (this.conf.value){
+		if (this.conf.defaultText && this.conf.defaultText.length && !this.conf.isStatic) this.label.html(this.conf.defaultText);
+		if (this.conf.value !== undefined && this.conf.value !== null){
 			var c = this.conf, v = c.value, fid = v[c.fieldId], fin = v[c.fieldName];
 			if ($.type(v) === 'object' && fid && fin) this.setValue(fid, fin);													// set single value, e.g. {id:1, name:'item1'}
 			else this.setValue(v);																								// set mixed value (single, multiple)
 		}
+		else {
+			if (this.conf.url || !this.conf.items) this.reset();																// if no list - put correct label
+		}
 		if (this.conf.items && this.conf.items.length) this.replaceList(this.conf.items);										// use the data store provided in the config
-		if (this.conf.url || !this.conf.items) this.reset();																	// if no list - put correct label
 	}
 	
 	/**
@@ -269,23 +270,23 @@ var DropDown = Class.extend({
 		this.input.val(id);																										// set input value
 		this.selectedItem = this.focused = null;
 		this.menu.find('.selected').removeClass('selected focused');
-		if (id !=-1 && this.items && this.items.length){																		// list available -> select item on list
+		if (id != -1 && this.items && this.items.length){																		// list available -> select item on list
 			this.focused = this.menu.find('.menu-item-id-'+id);
-			if (!this.conf['static']) this.focused.addClass('selected focused');												// selec item
+			if (!this.conf.isStatic) this.focused.addClass('selected focused');													// selec item
 			for (var i=0, item; item = this.items[i++] ;)
 				if (id == (typeof item =='object' ? item[this.conf.fieldId] : item)){ 
 					this.selectedItem = item; 
 					break;
 				}
 			if (!name && this.selectedItem) name = this.mapName(this.conf.fieldName, this.selectedItem);
-			if (!this.conf['static']) {
+			if (!this.conf.isStatic) {
 				name = name.replace(/&amp;/g, '&').replace(/&/g, '&amp;');														// encode all & to &amp; for IE
 				this.label.html(name);																							// set caption to item name
 			}
 		}
 		else {
 			name = name || (id == -1 ? this.conf.defaultText || '' : id);														// if no name, set to id (if id not -1) or to defaultText or to ''
-			if (!this.conf['static']) {																							// no list -> set value "in blind"
+			if (!this.conf.isStatic) {																							// no list -> set value "in blind"
 				name = name.replace(/&amp;/g, '&').replace(/&/g, '&amp;');														// encode all & to &amp; for IE
 				this.label.html(name);
 			}
@@ -337,7 +338,7 @@ var DropDown = Class.extend({
 		else this.populate(items);
 		var val = this.getIdValue();
 		if (val !== undefined && val != -1) this.setValue(val);
-		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf['static']) this.label.html(this.conf.emptyText);
+		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.label.html(this.conf.emptyText);
 	}
 	
 	,clearList : function(){ this.menu.find('ul').remove(); }
@@ -447,7 +448,7 @@ var DropDown = Class.extend({
 		actionName = target.attr('data-val');
 		if (actionId === undefined) return;
 		this.collapse(e);
-		if (this.conf['static'] !== true) this.setValue(actionId, actionName);
+		if (this.conf.isStatic !== true) this.setValue(actionId, actionName);
 		if (this.conf.action) this.conf.action.call(this.conf.scope, actionId, this.selectedItem, this);
 	}
 	
