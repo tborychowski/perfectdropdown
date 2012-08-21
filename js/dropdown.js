@@ -280,14 +280,14 @@ var DropDown = Class.extend({
 				}
 			if (!name && this.selectedItem) name = this.mapName(this.conf.fieldName, this.selectedItem);
 			if (!this.conf.isStatic) {
-				name = name.replace(/&amp;/g, '&').replace(/&/g, '&amp;');														// encode all & to &amp; for IE
+				name = (''+name).replace(/&amp;/g, '&').replace(/&/g, '&amp;');													// encode all & to &amp; for IE
 				this.label.html(name);																							// set caption to item name
 			}
 		}
 		else {
 			name = name || (id == -1 ? this.conf.defaultText || '' : id);														// if no name, set to id (if id not -1) or to defaultText or to ''
 			if (!this.conf.isStatic) {																							// no list -> set value "in blind"
-				name = name.replace(/&amp;/g, '&').replace(/&/g, '&amp;');														// encode all & to &amp; for IE
+				name = (''+name).replace(/&amp;/g, '&').replace(/&/g, '&amp;');													// encode all & to &amp; for IE
 				this.label.html(name);
 			}
 		}
