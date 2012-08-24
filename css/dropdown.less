@@ -1,36 +1,44 @@
 @import "_lib.less";
 
 
-/*** DROPDOWN ***************************************************************************************************************************************************************/
+/*** DROPDOWN ********************************************************************************************************************/
 .dropdown { position: relative; cursor: default; float: left; 
 	&>a { text-decoration: none; cursor: default; } 
-	.button { cursor: default; outline: none; text-decoration:none; float: left; padding: 3px 18px 3px 8px; height: 21px; line-height: 1.3; width: 100%;
-		color: #444; font-size: 11px; text-shadow: 0 1px 1px rgba(255,255,255,0.5); line-height: 15px; border: 1px solid #A7A7A7;
-		.gradient(#FAFAFA, #E0E0E0); .radius(); .sizing; .non-selectable; .shadow(inset 0 1px 0 rgba(255,255,255,.6), 0 1px 0 rgba(255,255,255,.5));
-		.text { float: left;
+	.button { cursor: default; outline: none; float: left; padding: 3px 18px 3px 8px; height: 22px; width: 100%; 
+		color: #444; font-size: 11px; text-shadow: 0 1px 1px rgba(255,255,255,0.5); line-height: 15px; text-decoration:none; 
+		border: 1px solid #A7A7A7; .radius(); .sizing; .non-selectable; .gradient(#FAFAFA, #E0E0E0); 
+		.shadow(inset 0 1px 0 rgba(255,255,255,.6), 0 1px 0 rgba(255,255,255,.5));
+		.text { float: left; overflow: hidden; padding-right: 10px; text-overflow: ellipsis; width: 100%; .sizing;
 			input { margin: -3px 2px 0 0; vertical-align: middle; } 
 		}
 		&::-moz-focus-inner { border:0; padding:0; }
 		&.focused,
-		&:hover { border-color: #777; }
+		&:hover { border-color: #666; }
 		&:active { background: #ccc; }
 	}
+	.expander { float:right; height: 15px; width: 14px; margin-right: -11px; margin-left: -5px;
+			.bgimg('dropdown/dropdown-expander.png', right, center);
+		.shadow(1px 0 0 rgba(150,150,150,.5) inset, 2px 0 0 rgba(255,255,255,.7) inset);	
+	}
 	&.expanded .button { background: #ccc; }
+	&.expanded, .button:active {
+		.expander { .shadow(1px 0 0 rgba(100,100,100,.4) inset, 2px 0 0 rgba(220,220,220,.6) inset); }
+	}
 	&.dropdown-right { float:right; }
-	.expander { float:right; height: 15px; width: 12px; margin-right: -13px; background: url("@{img-base}/dropdown/dropdown-expander.png") right center no-repeat; }
 }
 
 .dropdown-disabled .button, .button-disabled {
 	&, &:active, &:hover { border: 1px solid #bbb; background: #eee; color: #999; cursor: default; text-shadow: none; }
 	.expander { opacity: .6; }
 }
-/*** DROPDOWN ***************************************************************************************************************************************************************/
+/*** DROPDOWN ********************************************************************************************************************/
 
 
 
-/*** MENU *******************************************************************************************************************************************************************/
-.menu { display: none; position: absolute; background: #fff; z-index: 700; padding: 0; overflow-x: hidden; overflow-y: auto; max-height: 600px; min-width: 120px;
-	border: 1px solid #999; border: 0 solid rgba(0,0,0,0); /*no border when shadow*/ .shadow(0 1px 2px 1px rgba(0,0,0,.3)); .padding-clip;
+/*** MENU ************************************************************************************************************************/
+.menu { display: none; position: absolute; background: #fff; z-index: 700; padding: 0; overflow-x: hidden; overflow-y: auto; 
+	max-height: 600px; min-width: 120px; border: 1px solid #999; border: 0 solid rgba(0,0,0,0); /*no border when shadow*/ 
+	.shadow(0 1px 2px 1px rgba(0,0,0,.3)); .padding-clip;
 	
 	&, ul { 
 		&::-webkit-scrollbar { width: 7px; height: 7px; }
@@ -57,13 +65,13 @@
 		&:hover, &:focus { text-decoration: underline; }
 	}
 	
-	.loading { background: url("{@img-base}/dropdown/spinner.gif") 0 0 no-repeat; margin: 3px 0 3px 10px; padding: 1px 0 1px 24px; font-size: 12px; }
+	.loading { margin: 3px 0 3px 10px; padding: 1px 0 1px 24px; font-size: 12px; .bgimg('dropdown/spinner.gif'); }
 	.no-results { font-size: 12px; color: #444; padding: 8px; }	
 
-
-	/* menu keyword filter */
-	.menu-filter { margin: 15px 10px 5px; min-width: 120px; 
-		.search-icon { background: #fff url("@{img-base}/dropdown/dropdown-filter.png") 0 0 no-repeat; width: 20px; height: 20px; margin: 2px 0 0; right: 13px; position: absolute; }
+	.menu-filter { margin: 15px 10px 5px; min-width: 120px; 																		//* menu keyword filter */
+		.search-icon { width: 20px; height: 20px; margin: 2px 0 0; right: 13px; position: absolute; 
+			.bgimgc(#fff, 'dropdown/dropdown-filter.png'); 
+		}
 	}
 	.menu-filter-text { padding: 3px 5px; width: 100%; border: 1px solid #ddd; .sizing(border-box); 
 		&:focus { border-color: #999; }
@@ -76,10 +84,7 @@
 
 .itouch .menu { margin-top: -2px; } 
 
-
-
-
-/* multiselect */
+/*** MULTISELECT ***/
 .multiselect {
 	.selected { color: #016CB0; background-color: transparent; background-color: none; }
 	.menu-select { border-bottom: 1px solid #ebebeb; }
@@ -87,36 +92,25 @@
 	.menu-apply { border-top: 1px solid #ebebeb; 
 		.menu-item-icon { display: none; }
 	}
-	
-	/* not checked 			*/ 
-	.menu-item .menu-item-icon { background: url("@{img-base}/dropdown/dropdown-checkbox.png") 0 0 no-repeat; margin-top: -1px; }
-	
-	/* not checked - hover	*/ 
-	.menu-item:hover .menu-item-icon { background: url("@{img-base}/dropdown/dropdown-checkbox.png") 0 -13px no-repeat; margin-top: -1px; }
-	
-	/* checked				*/
-	.menu-item-checked .menu-item-icon, &.all-items-selected .menu-item .menu-item-icon { opacity: 1; background-position: 0 -52px; }
-	
-	/* checked - hover		*/
-	.menu-item-checked:hover .menu-item-icon, &.all-items-selected .menu-item:hover .menu-item-icon { opacity: 1; background-position: 0 -65px; }
+	.menu-item .menu-item-icon { .bgimg('dropdown/dropdown-checkbox.png'); margin-top: -1px; }									//* not checked */
+	.menu-item:hover .menu-item-icon { .bgimg('dropdown/dropdown-checkbox.png', -, -13px); margin-top: -1px; }					//* not checked - hover */
+	.menu-item-checked .menu-item-icon, 
+	&.all-items-selected .menu-item .menu-item-icon { opacity: 1; background-position: 0 -52px; }									//* checked	*/
+	.menu-item-checked:hover .menu-item-icon, 
+	&.all-items-selected .menu-item:hover .menu-item-icon { opacity: 1; background-position: 0 -65px; }							//* checked - hover */
 } 
  
 .multiple-items-selected {
-	/* multiple 			*/
-	.menu-item-all .menu-item-icon { background-position: 0 -26px; }
-	
-	/* multiple - hover 	*/
-	.menu-item-all:hover .menu-item-icon { background-position: 0 -39px; }
+	.menu-item-all .menu-item-icon { background-position: 0 -26px; }															//* multiple */
+	.menu-item-all:hover .menu-item-icon { background-position: 0 -39px; }														//* multiple - hover */
 }
 
 .all-items-selected {
-	/* fade-out text and checkboxes when "all items selected"			*/
-	.menu-items .menu-item { color: #999; }
+	.menu-items .menu-item { color: #999; }																						//* fade-out text and checkboxes when "all items selected" */
 	.menu-items .menu-item .menu-item-icon { opacity: .3; }
-	
-	/* unfade on hover		*/
-	.menu-item:hover .menu-item-icon, &.multiselect .menu-item-checked:hover .menu-item-icon { opacity: 1; }
+	.menu-item:hover .menu-item-icon, 
+	&.multiselect .menu-item-checked:hover .menu-item-icon { opacity: 1; }														//* unfade on hover */
 }
 
-/*** MENU *******************************************************************************************************************************************************************/
+/*** MENU ************************************************************************************************************************/
 
