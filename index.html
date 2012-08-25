@@ -7,33 +7,51 @@ body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 #console { border: 1px solid red; width: 500px; height: 300px; overflow-y: auto; margin-top: 50px; }
 .demotab { border-collapse: collapse; } 
 .demotab td { border: 1px solid #999; padding: 10px 15px; } 
-.demotab td:first-child { width: 100px; } 
+.demotab td:first-child { width: 160px; } 
 .demotab .dropdown { width: 100%; } 
 </style>
 
 <table class="demotab">
 	<tr>
-		<td><input id="dropdown1" type="text" name="input1" value="3"/></td>
-		<td>
-			<button id="btn1">Get Value</button>
-		
-		</td>
+		<td><button id="btnInit">Init widgets</button><button id="btnDestroy">Destroy</button></td>
+		<td>Actions</td>
+		<td>Options</td>
 	</tr>
-	<tr>
-		<td><input id="dropdown2" type="text" name="input2" /></td>
+	
+	<tr data-idx="1">
 		<td>
-		
+			Normal dropdown:
+			<input id="dropdown1" type="text" name="input1" value="3"/>
 		</td>
+		<td>
+			<button class="btn" data-action="getValue">Get Value</button>
+			<button class="btn" data-action="getIdValue">Get ID Value</button>
+			<button class="btn" data-action="reset">Reset</button>
+			<button class="btn" data-action="replaceList">Replace List</button>
+		</td>
+		<td>{ target: 'dropdown1', defaultText: 'Not Selected', emptyText: 'Please select' } </td>
 	</tr>
-	<tr>
-		<td><input id="dropdown3" type="text" name="input3" /></td>
+	<tr data-idx="2">
 		<td>
-		
+			Static menu:
+			<input id="dropdown2" type="text" name="input2" />
 		</td>
+		<td></td>
+		<td>{ target: 'dropdown2', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu' }</td>
+	</tr>
+	<tr data-idx="3">
+		<td>
+			Multiselect:
+			<input id="dropdown3" type="text" name="input3" />
+		</td>
+		<td>
+			<button class="btn" data-action="getValue">Get Value</button>
+			<button class="btn" data-action="reset">Reset</button>
+			<button class="btn" data-action="replaceList">Replace List</button>
+		</td>
+		<td>{ target: 'dropdown3', defaultText: 'Items', emptyText: 'All Items' }</td>
 	</tr>
 </table>
-
-<br><br><br><br>
 
 	
 	
@@ -48,3 +66,4 @@ body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 
 <script src="js/app.js"></script>
 <script src="js/console.js"></script>
+<script src="js/demo.js"></script>

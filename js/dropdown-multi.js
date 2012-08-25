@@ -6,8 +6,13 @@
 var MultiSelect = DropDown.extend({
 	init : function(conf){
 		this._super(conf);
+		if (!this.el || !this.el.length) return;
 		this.el.addClass('static');
 		this.menu.addClass('multiselect');
+		if (this.value && this.value.length && typeof this.value === 'string'){
+			var arr = this.value.split(',');
+			if (arr.length) this.setValue(arr);
+		}
 	}
 
 	/**
@@ -195,6 +200,16 @@ var MultiSelect = DropDown.extend({
 	,getIdValue : function(){ return this.value; }
 	
 	,getTextValue : function(){ return this.label.html(); }
+	
+	
+	,replaceList : function(items){
+		if(!items) this.loadingError();
+		else this.populate(items);
+		var val = this.getValue();
+		if (val !== undefined && val != -1) this.setValue(val);
+		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.label.html(this.conf.emptyText);
+	}
+	
 	
 	/**
 	 * Applies the selected elements as new "this.value" (array) for the field
