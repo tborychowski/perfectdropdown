@@ -59,7 +59,7 @@ var MultiSelect = DropDown.extend({
 	,action : function(e){
 		e.preventDefault();
 		if (this.el.hasClass('dropdown-disabled')) return;
-		var actionName, target = $(e.target);
+		var actionName, target = $(e.target), noItemsSelected = true, checked = null;
 		if (e.type == 'keydown') target = this.focused;
 		else target = $(e.target);
 		if (!target) return;
@@ -69,6 +69,7 @@ var MultiSelect = DropDown.extend({
 		if (actionName === undefined) return;
 		
 		if (actionName == '#apply') {
+			if (target.closest('.no-items-selected').length) return;															// disable "Apply" when no items selected
 			this.applySelected();
 			this.collapse(e);
 			this.conf.action.call(this.conf.scope, this.getValue(), this.selectedItems, this);
@@ -77,6 +78,7 @@ var MultiSelect = DropDown.extend({
 			var check = target.hasClass('menu-item-checked');
 			
 			if (actionName == '#select-all'){																					// if "select all" clicked
+				noItemsSelected = check;																						// no items selected - don't show "Apply" menu
 				if (check) this.selectNone();																					// select none
 				else this.selectAll();																							// or all
 			}
@@ -84,27 +86,29 @@ var MultiSelect = DropDown.extend({
 				if (this.menu.hasClass('all-items-selected')){																	// if "all items" is selected
 					this.unselectAll();																							// unselect "all items" and "select" all items 
 					target.removeClass('menu-item-checked');																	// except target
-					
-					if (this.menu.find('.menu-items .menu-item-checked').length == 0) {
+					checked = this.menu.find('.menu-items .menu-item-checked');
+					if (checked.length == 0) {
 						this.label.html('No '+this.conf.defaultText);
 						this.menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
 					}
+					noItemsSelected = (checked.length == 0);																	// no items selected - don't show "Apply" menu
 				}
 				else {
 					this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 					target.toggleClass('menu-item-checked', !check);
 					
-					var checked = this.menu.find('.menu-items .menu-item-checked');
+					checked = this.menu.find('.menu-items .menu-item-checked');
 					if (checked.length == 1) this.label.html(checked.data('val'));
 					else if (checked.length == 0) {
 						this.label.html('No '+this.conf.defaultText);
 						this.menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
 					}
 					else this.label.html('Multiple '+this.conf.defaultText);
+					noItemsSelected = (checked.length == 0);																	// no items selected - don't show "Apply" menu
 				}
 			}
 			
-			if (!this.menu.find('.menu-apply').length){																			// add "apply" menu
+			if (!this.menu.find('.menu-apply').length && !noItemsSelected){														// add "apply" menu
 				this.menu.append(this.getApplyHtml());
 				this.adjustPosition();
 				

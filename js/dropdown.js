@@ -5,6 +5,9 @@
  * sample usage:
  * var dd1 = new DropDown({ target: 'myInputId' });
  * var dd2 = new DropDown({ target: $('.selector'), defaultText: 'Please select', items: [1,2,3], value: 3 });
+ *
+ * //TODO: improve documentation here
+ * 
  */
 
 var DropDown = Class.extend({

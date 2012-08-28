@@ -60,7 +60,9 @@
 		$('.btn').on('click', btnAction);																						// Init button click events
 		
 		$('#btnInit').on('click', initWidgets);
-		$('#btnDestroy').on('click', destroyWidgets);		
+		$('#btnDestroy').on('click', destroyWidgets);
+		
+		initWidgets();
 	};
 
 	
