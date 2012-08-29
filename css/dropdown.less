@@ -1,10 +1,9 @@
 @import "_lib.less";
 
-
 /*** DROPDOWN ********************************************************************************************************************/
 .dropdown { position: relative; cursor: default; float: left; 
 	&>a { text-decoration: none; cursor: default; } 
-	.button { cursor: default; outline: none; float: left; padding: 3px 18px 3px 8px; height: 22px; width: 100%; 
+	.button { cursor: default; outline: none; float: left; padding: 3px 18px 3px 8px; height: 22px; width: 100%; text-indent: 0; 
 		color: #444; font-size: 11px; text-shadow: 0 1px 1px rgba(255,255,255,0.5); line-height: 15px; text-decoration:none; 
 		border: 1px solid #A7A7A7; .radius(2px); .sizing; .non-selectable; .gradient(#FAFAFA, #E0E0E0); 
 		.shadow(inset 0 1px 0 rgba(255,255,255,.4), 0 1px 0 rgba(255,255,255,.5));
@@ -68,8 +67,8 @@
 	.loading { margin: 3px 0 3px 10px; padding: 1px 0 1px 24px; font-size: 12px; .bgimg('dropdown/spinner.gif'); }
 	.no-results { font-size: 12px; color: #444; padding: 8px; }	
 
-	.menu-filter { margin: 15px 10px 5px; min-width: 120px; 																		//* menu keyword filter */
-		.search-icon { width: 20px; height: 20px; margin: 2px 0 0; right: 13px; position: absolute; 
+	.menu-filter { margin: 15px 10px 5px; min-width: 120px; position: relative; overflow: hidden;								//* menu keyword filter */
+		.search-icon { width: 20px; height: 20px; margin: 2px 0 0; right: 1px; position: absolute; 
 			.bgimgc(#fff, 'dropdown/dropdown-filter.png'); 
 		}
 	}
@@ -78,7 +77,6 @@
 	}
 	.menu-filter-dirty .search-icon { background-position: 0 -20px; 
 		&:hover { background-position: 0 -40px; }
-		&:active { margin-top: 3px; }
 	}
 }
 
@@ -116,4 +114,3 @@
 	&, &:hover, &:focus, &.focused { color: #bbb; background: none; }
 }
 /*** MENU ************************************************************************************************************************/
-
