@@ -186,8 +186,9 @@ var MultiSelect = DropDown.extend({
 					this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 				} 
 			}
-			else if (il && (!name || !name.length)){
-				this.label.html('Multiple '+this.conf.defaultText);
+			else if (il){
+				if (name && name.length) this.label.html(name);
+				else this.label.html('Multiple '+this.conf.defaultText);
 				this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 			}
 		}
