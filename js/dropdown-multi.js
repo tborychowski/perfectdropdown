@@ -161,35 +161,33 @@ var MultiSelect = DropDown.extend({
 		if ($.type(ids) !== 'array') ids = [ids];
 		if (ids.length === 1 && ids[0] == -1) this.selectAll();
 		else {
-			if (ids.length === 0) this.selectNone();
-			else if (ids.length > 1) {
+			var items = this.menu.find('.menu-items .menu-item'), i = 0, il = ids.length;
+			
+			if (il == 0) this.selectNone();
+			else {
 				this.label.html('Multiple '+this.conf.defaultText);
 				this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
-			}
-			//else if (name && name.length) this.label.html(name);
-			
-			var items = this.menu.find('.menu-items .menu-item'), i = 0, il = ids.length;
-			if (items.length){
-				if (il){
+
+				if (items.length){
 					if (items.length == il) this.selectAll();																		// if checked items == all items -> select all
 					else {
 						this.selectNone();
 						for (; i < il; i++) items.filter('.menu-item-'+ids[i]).addClass('menu-item-checked');
-					}
+						
+						var checked = items.filter('.menu-item-checked');
+						if (checked.length == 1) this.label.html(checked.data('val'));
+						else if (checked.length == 0) this.selectNone();
+						else {
+							this.label.html('Multiple '+this.conf.defaultText);
+							this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
+						} 
+					}					
 				}
-				
-				var checked = items.filter('.menu-item-checked');
-				if (checked.length == 1) this.label.html(checked.data('val'));
-				else if (checked.length == 0) this.selectNone();
 				else {
-					this.label.html('Multiple '+this.conf.defaultText);
+					if (name && name.length) this.label.html(name);
+					else this.label.html('Multiple '+this.conf.defaultText);
 					this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
-				} 
-			}
-			else if (il){
-				if (name && name.length) this.label.html(name);
-				else this.label.html('Multiple '+this.conf.defaultText);
-				this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
+				}
 			}
 		}
 	}
