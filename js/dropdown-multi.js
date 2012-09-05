@@ -33,25 +33,28 @@ var MultiSelect = DropDown.extend({
 					}
 			}
 			else if (typeof items[0] !== 'object') for(i=0; item = items[i++];) ar.push(this.getItemHtml(item, item)); 			// using 1D array
-			else for(i=0; item = items[i++];) ar.push(this.getItemHtml(item[this.conf.fieldId], item[this.conf.fieldName]));	// name is a string 			
+			else for(i=0; item = items[i++];) ar.push(this.getItemHtml(item[this.conf.fieldId], item[this.conf.fieldName]));	// name is a string
 			if (ar.length) this.menu.append('<ul class="menu-items">'+ar.join('')+'</ul>');										// replace the list
 			this.items = items;																									// store items
 		}
 		this.adjustPosition();
-		if (this.value) this.setValue(this.value); else this.reset();		
+
+		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
+		else if (this.value != undefined) this.setValue(this.value);
+		else this.reset();
 		if (!this.isTouch) this.menu.find('.menu-filter-text').focus();
 	}
-	
+
 	,getItemHtml : function(id, name){
-		return  (id === -1 ? 
-			'<li class="menu-item menu-item-all menu-item-checked" data-id="#select-all">' : 
-			'<li class="menu-item menu-item-checked menu-item-'+id+'" data-id="'+id+'" data-val="'+name+'" >') + 
-			'<span class="menu-item-icon"></span><span class="menu-item-name">'+name+'</span></li>';		
+		return  (id === -1 ?
+			'<li class="menu-item menu-item-all menu-item-checked" data-id="#select-all">' :
+			'<li class="menu-item menu-item-checked menu-item-'+id+'" data-id="'+id+'" data-val="'+name+'" >') +
+			'<span class="menu-item-icon"></span><span class="menu-item-name">'+name+'</span></li>';
 	}
 	,getApplyHtml : function(){
 		return '<ul class="menu-apply"><li class="menu-item" data-id="#apply"><span class="menu-item-icon"></span><span class="menu-item-name">Apply</span></li></ul>';
 	}
-	
+
 	/**
 	 * On menu item click - action
 	 * @param {Object} e		click event
@@ -65,9 +68,9 @@ var MultiSelect = DropDown.extend({
 		if (!target) return;
 		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
 		actionName = target.data('id');
-		
+
 		if (actionName === undefined) return;
-		
+
 		if (actionName == '#apply') {
 			if (target.closest('.no-items-selected').length) return;															// disable "Apply" when no items selected
 			this.applySelected();
@@ -76,7 +79,7 @@ var MultiSelect = DropDown.extend({
 		}
 		else {
 			var check = target.hasClass('menu-item-checked');
-			
+
 			if (actionName == '#select-all'){																					// if "select all" clicked
 				noItemsSelected = check;																						// no items selected - don't show "Apply" menu
 				if (check) this.selectNone();																					// select none
@@ -84,7 +87,7 @@ var MultiSelect = DropDown.extend({
 			}
 			else {
 				if (this.menu.hasClass('all-items-selected')){																	// if "all items" is selected
-					this.unselectAll();																							// unselect "all items" and "select" all items 
+					this.unselectAll();																							// unselect "all items" and "select" all items
 					target.removeClass('menu-item-checked');																	// except target
 					checked = this.menu.find('.menu-items .menu-item-checked');
 					if (checked.length == 0) {
@@ -96,7 +99,7 @@ var MultiSelect = DropDown.extend({
 				else {
 					this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 					target.toggleClass('menu-item-checked', !check);
-					
+
 					checked = this.menu.find('.menu-items .menu-item-checked');
 					if (checked.length == 1) this.label.html(checked.data('val'));
 					else if (checked.length == 0) {
@@ -107,11 +110,11 @@ var MultiSelect = DropDown.extend({
 					noItemsSelected = (checked.length == 0);																	// no items selected - don't show "Apply" menu
 				}
 			}
-			
+
 			if (!this.menu.find('.menu-apply').length && !noItemsSelected){														// add "apply" menu
 				this.menu.append(this.getApplyHtml());
 				this.adjustPosition();
-				
+
 				var mn = target.closest('.menu-items'), mh = mn.innerHeight(),
 					it = target.position().top, ih = target.outerHeight(true) + it;
 				if (it <= 0) mn.scrollTop(-it);
@@ -121,39 +124,42 @@ var MultiSelect = DropDown.extend({
 			if (this.menu.find('.menu-items .menu-item').length == this.menu.find('.menu-items .menu-item-checked').length) this.selectAll();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Fake selects all items, selects "All items" and turns the whole menu into "all items selected" look
 	 */
 	,selectAll : function(){
-		this.menu.find('.menu-item-checked').removeClass('menu-item-checked');  
+		this.menu.find('.menu-item-checked').removeClass('menu-item-checked');
 		this.menu.find('.menu-item-all').addClass('menu-item-checked');
 		this.menu.removeClass('multiple-items-selected no-items-selected').addClass('all-items-selected');
 		this.label.html('All '+this.conf.defaultText);
 	}
-	
+
 	/**
 	 * Unselects "All items" and turns the whole menu into normal "multiple items selected" look
 	 */
 	,unselectAll : function(){
 		this.menu.find('.menu-item-all').removeClass('menu-item-checked');
-		this.menu.find('.menu-items .menu-item').addClass('menu-item-checked');  
+		this.menu.find('.menu-items .menu-item').addClass('menu-item-checked');
 		this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 		this.label.html('Multiple '+this.conf.defaultText);
 	}
-	
+
 	/**
 	 * Unselect everything (except the just-checked element)
 	 */
 	,selectNone : function(){
-		this.menu.find('.menu-item').removeClass('menu-item-checked');  
+		this.menu.find('.menu-item').removeClass('menu-item-checked');
 		this.menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
 		this.label.html('No '+this.conf.defaultText);
 	}
-	
-	,reset : function(){ this.setValue([-1], 'All ' + this.conf.defaultText); }
-	
+
+	,reset : function(){
+		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
+		else this.setValue([-1], 'All ' + this.conf.defaultText);
+	}
+
 	,setValue : function(ids, name){
 		if (ids === undefined || ids === null || ids === '') return false;
 		this.value = ids;
@@ -162,7 +168,7 @@ var MultiSelect = DropDown.extend({
 		if (ids.length === 1 && ids[0] == -1) this.selectAll();
 		else {
 			var items = this.menu.find('.menu-items .menu-item'), i = 0, il = ids.length;
-			
+
 			if (il == 0) this.selectNone();
 			else {
 				this.label.html('Multiple '+this.conf.defaultText);
@@ -173,15 +179,15 @@ var MultiSelect = DropDown.extend({
 					else {
 						this.selectNone();
 						for (; i < il; i++) items.filter('.menu-item-'+ids[i]).addClass('menu-item-checked');
-						
+
 						var checked = items.filter('.menu-item-checked');
 						if (checked.length == 1) this.label.html(checked.data('val'));
 						else if (checked.length == 0) this.selectNone();
 						else {
 							this.label.html('Multiple '+this.conf.defaultText);
 							this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
-						} 
-					}					
+						}
+					}
 				}
 				else {
 					if (name && name.length) this.label.html(name);
@@ -191,45 +197,46 @@ var MultiSelect = DropDown.extend({
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the selected (text) value
 	 */
 	,getValue : function(){ return this.value; }
-	
+
 	/**
 	 * Returns the selected option "id"
 	 */
 	,getIdValue : function(){ return this.value; }
-	
+
 	,getTextValue : function(){ return this.label.html(); }
-	
-	
+
+
 	,replaceList : function(items){
+		var val = this.getValue();
 		if(!items) this.loadingError();
 		else this.populate(items);
-		var val = this.getValue();
-		if (val !== undefined && val != -1) this.setValue(val);
+		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
+		else if (val !== undefined && val != -1) this.setValue(val);
 		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.label.html(this.conf.emptyText);
 	}
-	
-	
+
+
 	/**
 	 * Applies the selected elements as new "this.value" (array) for the field
 	 */
-	,applySelected : function(){ 
+	,applySelected : function(){
 		var vals = [], all = this.menu.hasClass('all-items-selected'), items = this.menu.find('.menu-items .menu-item-checked'), i = 0, item;
 		if (all) vals.push(-1);
 		else for (; item = items[i++] ;) vals.push($(item).data('id'));
 		this.value = vals;
 	}
-	
-	
+
+
 	,expand : function(e){
 		this._super(e);
 		this.adjustPosition();
 	}
-	
+
 	,collapse : function(e){
 		this._super(e);
 		this.menu.find('.menu-apply').remove();

@@ -5,10 +5,10 @@
 <style>
 body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 #console { border: 1px solid red; width: 500px; height: 300px; overflow-y: auto; margin-top: 50px; }
-.demotab { border-collapse: collapse; } 
-.demotab td { border: 1px solid #999; padding: 10px 15px; } 
-.demotab td:first-child { width: 160px; } 
-.demotab .dropdown { width: 100%; } 
+.demotab { border-collapse: collapse; }
+.demotab td { border: 1px solid #999; padding: 10px 15px; }
+.demotab td:first-child { width: 160px; }
+.demotab .dropdown { width: 100%; }
 </style>
 
 <table class="demotab">
@@ -17,7 +17,7 @@ body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 		<td>Actions</td>
 		<td>Options</td>
 	</tr>
-	
+
 	<tr data-idx="1">
 		<td>
 			Normal dropdown:
@@ -29,33 +29,49 @@ body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 			<button class="btn" data-action="reset">Reset</button>
 			<button class="btn" data-action="replaceList">Replace List</button>
 		</td>
-		<td>{ target: 'dropdown1', defaultText: 'Not Selected', emptyText: 'Please select' } </td>
+		<td>{ target: 'dropdown1', defaultText: 'Not selected' } </td>
 	</tr>
+
 	<tr data-idx="2">
 		<td>
-			Static menu:
-			<input id="dropdown2" type="text" name="input2" />
+			Normal dropdown:
+			<input id="dropdown2" type="text" name="input2"/>
 		</td>
-		<td></td>
-		<td>{ target: 'dropdown2', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu' }</td>
+		<td>
+			<button class="btn" data-action="getValue">Get Value</button>
+			<button class="btn" data-action="getIdValue">Get ID Value</button>
+			<button class="btn" data-action="reset">Reset</button>
+			<button class="btn" data-action="replaceList">Replace List</button>
+		</td>
+		<td>{ target: 'dropdown2', defaultValue: 1,<br>&nbsp;&nbsp;&nbsp;&nbsp;items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }] <br>} </td>
 	</tr>
+
 	<tr data-idx="3">
 		<td>
-			Multiselect:
+			Static menu:
 			<input id="dropdown3" type="text" name="input3" />
+		</td>
+		<td></td>
+		<td>{ target: 'dropdown3', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu' }</td>
+	</tr>
+
+	<tr data-idx="4">
+		<td>
+			Multiselect:
+			<input id="dropdown4" type="text" name="input4" />
 		</td>
 		<td>
 			<button class="btn" data-action="getValue">Get Value</button>
 			<button class="btn" data-action="reset">Reset</button>
 			<button class="btn" data-action="replaceList">Replace List</button>
 		</td>
-		<td>{ target: 'dropdown3', defaultText: 'Items', emptyText: 'All Items' }</td>
+		<td>{ target: 'dropdown4', defaultText: 'Items', emptyText: 'All Items' }</td>
 	</tr>
 </table>
 
-	
-	
-	
+
+
+
 <script src="js/utils.js"></script>
 <script src="js/jquery-1.8.0.min.js"></script>
 <script src="js/jquery.pubsub.js"></script>

@@ -1,36 +1,37 @@
 /**
- * DropDown component v2.0 (2012-08-25)
+ * DropDown component v2.1 (2012-08-25)
  * @author Tom
- *  
+ *
  * sample usage:
  * var dd1 = new DropDown({ target: 'myInputId' });
  * var dd2 = new DropDown({ target: $('.selector'), defaultText: 'Please select', items: [1,2,3], value: 3 });
  *
- * //TODO: improve documentation here
- * 
+ * //TODO: improve documentation
+ *
  */
 
 var DropDown = Class.extend({
 	init : function(conf){
-		
+
 		if (typeof conf.target == 'string'){
 			var oldDD = $('#' + conf.target);
 			if (oldDD.is('.dropdown')) oldDD.data('dropdown').destroy();
-		}		
-		
-		var defaults = { 
+		}
+
+		var defaults = {
 				id: null,																										// id for the dropdown div
 				name: '',																										// input[text] name
-				fieldName: 'name',																								// this can be a string (fieldName); a pattern (eg. '{name}, {id}') or a function (eg. fieldName: function(){ return this.name+'123'; } 
-				fieldId: 'id', 
-				defaultText: '', 																								// this is a 1st element (e.g. "Please select") of for multiple - it becomes "All {defaultText}", e.g. "All Items", etc. 
+				fieldName: 'name',																								// this can be a string (fieldName); a pattern (eg. '{name}, {id}') or a function (eg. fieldName: function(){ return this.name+'123'; }
+				fieldId: 'id',
+				defaultText: '', 																								// this is a 1st element (e.g. "Please select") of for multiple - it becomes "All {defaultText}", e.g. "All Items", etc.
 				emptyText: '',																									// this is a default label for the dropdown when nothing is selected
 				menuAlign: 'left',																								// if menu is longer than button - this can make it align to the right
 				cls: '',																										// additional class for the dropdown (without menu)
 				menuCls: '',																									// additional class for the menu (menu is rendered to the body)
-				action: function(v,rec,el){}, 
-				scope: window, 
+				action: function(v,rec,el){},
+				scope: window,
 				value: null,
+				defaultValue: null,
 				items: null,
 				isStatic: false,																								// if true - don't change the button label (name)
 				disabled: false																									// init as disabled
@@ -41,7 +42,7 @@ var DropDown = Class.extend({
 		this.initEvents();
 		this.el.data('dropdown', this);
 	}
-	
+
 	/**
 	 * Initialize DropDown components
 	 */
@@ -61,7 +62,7 @@ var DropDown = Class.extend({
 		this.menu = this.el.find('.menu').appendTo('body');																		// move menu to body, so it does show on top of everything
 		this.label = this.el.find('.text');
 		this.input = this.el.find('input[type=hidden]').val('');																// empty the value auto added from cache
-		
+
 		if (this.conf.id) this.el.attr('id', this.conf.id);
 		if (this.conf.menuCls) this.menu.addClass(this.conf.menuCls);
 		if (this.conf.disabled) this.disable();
@@ -76,7 +77,7 @@ var DropDown = Class.extend({
 		}
 		if (this.conf.items && this.conf.items.length) this.replaceList(this.conf.items);										// use the data store provided in the config
 	}
-	
+
 	/**
 	 * Initialize DropDown events
 	 */
@@ -87,25 +88,25 @@ var DropDown = Class.extend({
 				click: function(e){ e.stopPropagation(); e.preventDefault(); return false; },									// don't hash the addressbar
 				focus: function(e){ self.button.addClass('focused'); },
 				blur: function(e){ self.button.removeClass('focused'); },
-				keydown: function(e){																							// launch action on enter 
+				keydown: function(e){																							// launch action on enter
 					switch(e.keyCode){
 						case 32 : 																								// space
 						case 13 : self.action.call(self,e); break;																// enter
 						case 27 : self.collapse.call(self); break;																// esc
 						case 38 : 																								// up arrow
 							if (!self.isExpanded){ self.expand.call(self); break; }
-							if (!self.focused || !self.focused.length){ 
+							if (!self.focused || !self.focused.length){
 								self.focused = self.menu.find('.menu-item:visible').first().addClass('focused');
 							}
 							else {
-								var its = self.menu.find('.menu-item:visible'), 
-									f = its.filter('.focused'), 
-									idx = its.index(f[0])-1, 
+								var its = self.menu.find('.menu-item:visible'),
+									f = its.filter('.focused'),
+									idx = its.index(f[0])-1,
 									p = its.eq(idx);
 								if (idx>=0){
 									f.removeClass('focused');
 									self.focused = p.addClass('focused');
-									if (p.position().top <= 0){ 
+									if (p.position().top <= 0){
 										p.parent('.menu-items').animate({ scrollTop: '-='+p.outerHeight(true) }, 0);			// scroll element to the view
 									}
 								}
@@ -118,9 +119,9 @@ var DropDown = Class.extend({
 								self.focused = self.menu.find('.menu-item:visible').first().addClass('focused');
 							}
 							else {
-								var its = self.menu.find('.menu-item:visible'), 
-									f = its.filter('.focused'), 
-									idx = its.index(f[0])+1, 
+								var its = self.menu.find('.menu-item:visible'),
+									f = its.filter('.focused'),
+									idx = its.index(f[0])+1,
 									n = its.eq(idx);
 								if (n.length){
 									f.removeClass('focused');
@@ -133,23 +134,23 @@ var DropDown = Class.extend({
 							break;
 						default : ; //log(e.keyCode);
 					}
-				}				
+				}
 			}, '.button');
-			
-		
+
+
 		if (this.label.is('input')) this.el.on({
 			focus: function(e){ self.expand(e); return false; },
 			click: function(e){ self.expand(e); return false; },
 			change: function(e){ if (!e.target.value) self.input.val(''); return false; }										// if text input empty - clear the value
 		}, '.text');
-		
+
 		this.menu
 			.on({
 				mousedown: function(e){ return false; },																		// allow scrolling with mousedown
-				mouseup: function(e){ self.action.call(self,e); return false; },			
-				click: function(e){ 
+				mouseup: function(e){ self.action.call(self,e); return false; },
+				click: function(e){
 					if (self.isTouch) setTimeout(function(){ $(window).scrollTop(200);},0);
-					//return false;																								// don't hash the addressbar 
+					//return false;																								// don't hash the addressbar
 				}
 			}, 'ul')
 
@@ -173,13 +174,13 @@ var DropDown = Class.extend({
 				self.focused = null;
 				self.menu.find('.focused').removeClass('focused');
 			});
-		
+
 		this.el.on('destroyed', $.proxy(this.destroy, this) );
 	}
-	
+
 	/**
 	 * Clean up - remove menu when the dropdown is removed from the DOM
-	 * requires jquery plugin "destroyed" for this function to be called automatically 
+	 * requires jquery plugin "destroyed" for this function to be called automatically
 	 */
 	,destroy : function(e){
 		this.collapse();
@@ -194,15 +195,15 @@ var DropDown = Class.extend({
 		}
 		this.el.remove();
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Hides/shows the menu
 	 * @param {Object} e		click event object
 	 */
 	,toggle : function(e){ if (this.isExpanded) this.collapse(e); else this.expand(e); }
-		
+
 	,expand : function(e){
 		if (this.conf.disabled) return;
 		if (this.isExpanded) return;
@@ -227,43 +228,43 @@ var DropDown = Class.extend({
 		},100);
 		if (!this.isTouch) this.menu.find('.menu-filter-text').focus();
 	}
-	
+
 	,adjustPosition : function(){
 		if (!this.isExpanded) return;
 		this.menu.height('auto');
 		this.menu.find('ul').height('auto');
-		var off = this.el.offset(), elH = this.el.height(), elW = this.el.width(), menuH = this.menu.height(), menuW = this.menu.outerWidth(), 
+		var off = this.el.offset(), elH = this.el.height(), elW = this.el.width(), menuH = this.menu.height(), menuW = this.menu.outerWidth(),
 			winH = $(window).innerHeight(), mx = off.left, my = off.top + elH, menuMinH = 100;
-		
+
 		if (this.conf.menuAlign === 'right')  mx -= menuW - elW;
-		
+
 		if (menuH > menuMinH && my + menuH + 20 > winH){																		// if menu higher than screen - shorten it
 			menuH = winH - my - 20;
 			menuH = menuH > menuMinH ? menuH : menuMinH;
 			this.menu.height(menuH);
 		}
-		
-		if (my + menuH > winH) {																								// move menu above the target 
-			this.menu.addClass('menu-top'); 
+
+		if (my + menuH > winH) {																								// move menu above the target
+			this.menu.addClass('menu-top');
 			this.menu.height('auto');
 			this.menu.find('.menu-items').height('auto');
 			menuH = this.menu.height();
 			if (menuH > winH-elH-20){ menuH = winH - elH - 20; this.menu.height(menuH); }
-			if (menuH+20 > off.top){ 
-				menuH = off.top - 20; 
+			if (menuH+20 > off.top){
+				menuH = off.top - 20;
 				menuH = menuH > menuMinH ? menuH : menuMinH;
-				this.menu.height(menuH); 
+				this.menu.height(menuH);
 			}
-			my = off.top - menuH - 2; 
+			my = off.top - menuH - 2;
 		}
 		else this.menu.removeClass('menu-top');
 		this.menu.css({ left: mx, top: my });
-	
+
 		menuH -= 10;
 		if (this.menu.find('.menu-filter').length) menuH -=  this.menu.find('.menu-filter').outerHeight() + 20;
 		this.menu.find('.menu-items').height(menuH);
 	}
-	
+
 	,collapse : function(e){
 		if (!this.isExpanded) return;
 		this.menu.hide();
@@ -273,21 +274,26 @@ var DropDown = Class.extend({
 		$(document).off('mousedown DOMMouseScroll mousewheel keyup', this.documentClick);
 		$(window).off('resize', this.documentClick);
 	}
-	
+
 	/**
-	 * STATIC. Collapses all opened dropdowns' menus. 
+	 * STATIC. Collapses all opened dropdowns' menus.
 	 */
-	,collapseAll : function(){ 
+	,collapseAll : function(){
 		$('.dropdown.expanded').each(function(idx, el){$(el).data('dropdown').collapse();});
 		try{ App.ProjectMenu.hide(); }catch(e){}
 	}
-	
-	
+
+
 	/**
 	 * Sets the value to 0 & defaultText
 	 */
-	,reset : function(){ this.setValue('', this.conf.defaultText || ''); }
-	
+	,reset : function(){
+		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
+		else if (this.conf.defaultText && this.conf.defaultText.length) this.setValue('', this.conf.defaultText);
+		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.setValue('', this.conf.emptyText);
+		else this.select(0);
+	}
+
 	/**
 	 * Sets the dropdown value and label
 	 * @param id		id of the item on the dropdown list
@@ -302,8 +308,8 @@ var DropDown = Class.extend({
 			this.focused = this.menu.find('.menu-item-id-'+id);
 			if (!this.conf.isStatic) this.focused.addClass('selected focused');													// selec item
 			for (var i=0, item; item = this.items[i++] ;)
-				if (id == (typeof item =='object' ? item[this.conf.fieldId] : item)){ 
-					this.selectedItem = item; 
+				if (id == (typeof item =='object' ? item[this.conf.fieldId] : item)){
+					this.selectedItem = item;
 					break;
 				}
 			if (!name && this.selectedItem) name = this.mapName(this.conf.fieldName, this.selectedItem);
@@ -321,8 +327,8 @@ var DropDown = Class.extend({
 		}
 		return this;
 	}
-	
-	
+
+
 	/**
 	 * Sets the dropdown value and label by list item index
 	 * @param idx		index of the item on the dropdown list
@@ -331,20 +337,20 @@ var DropDown = Class.extend({
 		var item = this.menu.find('.menu-item').eq(idx || 0);
 		if (item.length) this.setValue(item.attr('data-idval'), item.attr('data-val'));
 	}
-	
-	
+
+
 	/**
 	 * Returns the selected (text) value
 	 */
 	,getValue : function(){ return this.label.text(); }
-	
+
 	/**
 	 * Returns the selected option "id"
 	 */
 	,getIdValue : function(){ return this.input.val(); }
-	
-	
-	
+
+
+
 	/**
 	 * Load list from the server
 	 */
@@ -360,23 +366,24 @@ var DropDown = Class.extend({
 			}
 		});
 	}
-	
+
 	,replaceList : function(items){
-		if(!items) this.loadingError();
-		else this.populate(items);
 		var val = this.getIdValue();
-		if (val !== undefined && val != '') this.setValue(val);
+		if (!items) this.loadingError();
+		else this.populate(items);
+		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
+		else if (val !== undefined && val != '') this.setValue(val);
 		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.label.html(this.conf.emptyText);
 	}
-	
+
 	,clearList : function(){ this.menu.find('ul').remove(); }
-	
+
 	,filter : function(key){
-		var filter = this.menu.find('.menu-filter'), 
-			inp = filter.find('.menu-filter-text'), 
-			items = this.menu.find('.menu-items .menu-item'), 
+		var filter = this.menu.find('.menu-filter'),
+			inp = filter.find('.menu-filter-text'),
+			items = this.menu.find('.menu-items .menu-item'),
 			i=0, item, reg;
-			
+
 		if (typeof key !== 'string') key = inp.val();
 		inp.val(key);
 		reg = new RegExp(key, 'i');
@@ -389,7 +396,7 @@ var DropDown = Class.extend({
 		this.adjustPosition();
 	}
 	,clearFilter : function(){ this.filter(''); }
-	
+
 	/**
 	 * Populates the dropdown with a given list
 	 * @param items			array of items
@@ -412,39 +419,39 @@ var DropDown = Class.extend({
 					}
 			}
 			else if (typeof items[0] !== 'object') for(i=0; item = items[i++];) ar.push(this.getItemHtml(item, item)); 			// using 1D array
-			else for(i=0; item = items[i++];) ar.push(this.getItemHtml(item[this.conf.fieldId], item[this.conf.fieldName]));	// name is a string 			
+			else for(i=0; item = items[i++];) ar.push(this.getItemHtml(item[this.conf.fieldId], item[this.conf.fieldName]));	// name is a string
 			if (ar.length) this.menu.append('<ul class="menu-items">'+ar.join('')+'</ul>');										// replace the list
-			this.items = items;																									// store items			
+			this.items = items;																									// store items
 		}
 		this.adjustPosition();
-		if (!this.getIdValue() || typeof this.getIdValue() === undefined) this.select(0);
+
+		var val = this.getIdValue();
+		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
+		else if (val !== undefined && val != '') this.setValue(val);
+		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.label.html(this.conf.emptyText);
+		else this.select(0);
 		if (!this.isTouch) this.menu.find('.menu-filter-text').focus();
 	}
-	
+
 	,noItems : function(items){ this.menu.html('<span class="loading-error">No items</span>'); }
 	,loadingError : function(items){ this.menu.html('<span class="loading-error">Loading error</span>'); }
 	,filterHtml : function(){ return '<div class="menu-filter"><span class="search-icon"></span><input type="text" class="menu-filter-text"/></div>'; }
-	
+
 	,getHtml : function(conf){
-		var html=[];
-		html.push('<a class="button" href="#">');
-		html.push('<span class="expander"></span>');
-		html.push('<input type="hidden" name="',conf.name,'" />');
-		html.push('<span class="text">');
-			if (conf.emptyText.length) html.push(conf.emptyText);
-		html.push('</span></a><div class="menu"></div>');
-		return html.join('');
+		return '<a class="button" href="#"><span class="expander"></span><input type="hidden" name="' + conf.name + '" />'+
+				'<span class="text">'+ (conf.emptyText.length ? conf.emptyText : '' ) + '</span>'+
+			'</a><div class="menu"></div>';
 	}
-	
-	,getItemHtml : function(id, name){ 
-		return '<li class="menu-item '+(id=='' ? 'menu-item-empty-text' : 'menu-item-id-'+id )+'" '+
-					'data-idval="'+id+'" data-val="'+name+'">'+
+
+	,getItemHtml : function(id, name){
+		var cls = (name == this.conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-'+id);
+		return '<li class="menu-item '+cls+'" data-idval="'+id+'" data-val="'+name+'">'+
 					'<span class="menu-item-name">'+name+'</span>'+
-				'</li>'; 
+				'</li>';
 	}
-	
+
 	,mapName : function(name, rec){
-		if (typeof name === 'function') name = name.call(rec);																	// use defined function to "render" name		
+		if (typeof name === 'function') name = name.call(rec);																	// use defined function to "render" name
 		else {
 			var match = /{(\w+)}/i.exec(name);																					// match template pattern, e.g. {fieldName}
 			if (match && match.length){
@@ -459,8 +466,8 @@ var DropDown = Class.extend({
 		}
 		return name;
 	}
-	
-	
+
+
 	/**
 	 * On menu item click - action
 	 * @param {Object} e		click event
@@ -479,32 +486,32 @@ var DropDown = Class.extend({
 		if (this.conf.isStatic !== true) this.setValue(actionId, actionName);
 		if (this.conf.action) this.conf.action.call(this.conf.scope, actionId, this.selectedItem, this);
 	}
-	
-	
+
+
 	,show : function(reset){ if (reset) this.setValue(); this.el.show(); }
 	,hide : function(reset){ if (reset) this.setValue(); this.el.hide(); }
-	
-	,disable : function(reset){ 
-		if (reset) this.setValue(); 
-		this.el.addClass('dropdown-disabled'); 
+
+	,disable : function(reset){
+		if (reset) this.setValue();
+		this.el.addClass('dropdown-disabled');
 		this.conf.disabled = true;
 	}
-	
-	,enable : function(reset){ 
-		if (reset) this.setValue(); 
-		this.el.removeClass('dropdown-disabled'); 
+
+	,enable : function(reset){
+		if (reset) this.setValue();
+		this.el.removeClass('dropdown-disabled');
 		this.conf.disabled = false;
 	}
-	
-		
-	
+
+
+
 	/**
 	 * Document click handler - expand function adds it, collapse - removes; It hides the menu when clicked elsewhere
 	 */
 	,documentClick : function(e){
 		if (e.type == 'keyup'){ if (!e.keyCode || e.keyCode != 27) return; }
 		var tar = $(e.target);
-		if (tar.parents('.menu').length || tar.hasClass('menu')) return; 
+		if (tar.parents('.menu').length || tar.hasClass('menu')) return;
 		this.collapse();
 	}
 
