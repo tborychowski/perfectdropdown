@@ -2,6 +2,7 @@
 
 /*** DROPDOWN ********************************************************************************************************************/
 .dropdown { position: relative; cursor: default; float: left; 
+	&:after { clear: both; content: ""; display: block; overflow: hidden; width: 100%; }
 	&>a { text-decoration: none; cursor: default; } 
 	.button { cursor: default; outline: none; float: left; padding: 3px 18px 3px 8px; height: 22px; width: 100%; text-indent: 0; 
 		color: #444; font-size: 11px; text-shadow: 0 1px 1px rgba(255,255,255,0.5); line-height: 15px; text-decoration:none; 
@@ -11,12 +12,12 @@
 			input { margin: -3px 2px 0 0; vertical-align: middle; } 
 		}
 		&::-moz-focus-inner { border:0; padding:0; }
-		&.focused,
 		&:hover { border-color: #666; }
 		&:active { background: #ccc; }
+		&.focused,
+		&:focus { .shadow(0 0 0 1px orange) !important; }
 	}
-	.expander { float:right; height: 15px; width: 14px; margin-right: -11px; margin-left: -5px;
-			.bgimg('dropdown/dropdown-expander.png', right, center);
+	.expander { float:right; height: 15px; width: 14px; margin-right: -11px; margin-left: -5px; .bgimg('dropdown/dropdown-expander.png', right, center);
 		.shadow(1px 0 0 rgba(150,150,150,.5) inset, 2px 0 0 rgba(255,255,255,.7) inset);	
 	}
 	&.expanded .button { background: #ccc; }
@@ -27,8 +28,9 @@
 }
 
 .dropdown-disabled .button, .button-disabled {
-	&, &:active, &:hover { border: 1px solid #bbb; background: #eee; color: #999; cursor: default; text-shadow: none; }
-	.expander { opacity: .6; }
+	&, &:active, &:hover { border: 1px solid #bbb; background: #eee; color: #999; cursor: default; text-shadow: none; 
+		.expander { opacity: .6; .shadow(1px 0 0 rgba(150,150,150,.5) inset, 2px 0 0 rgba(255,255,255,.7) inset); }
+	}
 }
 /*** DROPDOWN ********************************************************************************************************************/
 
@@ -68,7 +70,7 @@
 	.no-results { font-size: 12px; color: #444; padding: 8px; }	
 
 	.menu-filter { margin: 15px 10px 5px; min-width: 120px; position: relative; overflow: hidden;								//* menu keyword filter */
-		.search-icon { width: 20px; height: 20px; margin: 2px 0 0; right: 1px; position: absolute; 
+		.search-icon { width: 20px; height: 18px; margin: 2px 1px 0 0; right: 1px; position: absolute; 
 			.bgimgc(#fff, 'dropdown/dropdown-filter.png'); 
 		}
 	}

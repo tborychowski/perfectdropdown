@@ -271,6 +271,7 @@ var DropDown = Class.extend({
 		this.clearFilter();																										// if menu has a filter - clear it
 		this.el.removeClass('expanded');
 		this.isExpanded=false;
+		this.button.focus();
 		$(document).off('mousedown DOMMouseScroll mousewheel keyup', this.documentClick);
 		$(window).off('resize', this.documentClick);
 	}
