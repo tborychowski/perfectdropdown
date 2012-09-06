@@ -92,7 +92,8 @@ var DropDown = Class.extend({
 					switch(e.keyCode){
 						case 32 : 																								// space
 						case 13 : self.action.call(self,e); break;																// enter
-						case 27 : self.collapse.call(self); break;																// esc
+						case 27 : self.collapse.call(self, e); break;															// esc
+						case  9 : self.collapse.call(self, e); break;															// tab
 						case 38 : 																								// up arrow
 							if (!self.isExpanded){ self.expand.call(self); break; }
 							if (!self.focused || !self.focused.length){
@@ -267,6 +268,7 @@ var DropDown = Class.extend({
 
 	,collapse : function(e){
 		if (!this.isExpanded) return;
+		if (e) e.stopPropagation();
 		this.menu.hide();
 		this.clearFilter();																										// if menu has a filter - clear it
 		this.el.removeClass('expanded');
