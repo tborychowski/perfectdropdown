@@ -9,6 +9,8 @@ body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 .demotab td { border: 1px solid #999; padding: 10px 15px; }
 .demotab td:first-child { width: 160px; }
 .demotab .dropdown { width: 100%; }
+
+.menu-header { padding: 8px 10px; color: #333; font-weight: bold; }
 </style>
 
 <table class="demotab">
@@ -18,7 +20,7 @@ body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 		<td>Options</td>
 	</tr>
 
-	<tr data-idx="1">
+	<tr>
 		<td>
 			Normal dropdown:
 			<input id="dropdown1" type="text" name="input1" value="3"/>
@@ -32,7 +34,7 @@ body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 		<td>{ target: 'dropdown1', defaultText: 'Not selected' } </td>
 	</tr>
 
-	<tr data-idx="2">
+	<tr>
 		<td>
 			Normal dropdown:
 			<input id="dropdown2" type="text" name="input2"/>
@@ -46,27 +48,38 @@ body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
 		<td>{ target: 'dropdown2', defaultValue: 1,<br>&nbsp;&nbsp;&nbsp;&nbsp;items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }] <br>} </td>
 	</tr>
 
-	<tr data-idx="3">
-		<td>
-			Static menu:
-			<input id="dropdown3" type="text" name="input3" />
-		</td>
-		<td></td>
-		<td>{ target: 'dropdown3', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu' }</td>
-	</tr>
-
-	<tr data-idx="4">
+	<tr>
 		<td>
 			Multiselect:
-			<input id="dropdown4" type="text" name="input4" />
+			<input id="dropdown3" type="text" name="input3" />
 		</td>
 		<td>
 			<button class="btn" data-action="getValue">Get Value</button>
+			<button class="btn" data-action="getTextValue">Get Text Value</button>
 			<button class="btn" data-action="reset">Reset</button>
 			<button class="btn" data-action="replaceList">Replace List</button>
 		</td>
-		<td>{ target: 'dropdown4', defaultText: 'Items', emptyText: 'All Items' }</td>
+		<td>{ target: 'dropdown3', defaultText: 'Items', emptyText: 'All Items' }</td>
 	</tr>
+
+	<tr>
+		<td>
+			Static menu:
+			<input id="dropdown4" type="text" name="input4" />
+		</td>
+		<td></td>
+		<td>{ target: 'dropdown4', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu' }</td>
+	</tr>
+
+	<tr>
+		<td>
+			Static menu with sidebar:
+			<input id="dropdown5" type="text" name="input5" />
+		</td>
+		<td></td>
+		<td>{ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu', showSidebar: true }</td>
+	</tr>
+
 </table>
 
 

@@ -7,6 +7,7 @@
  * var dd2 = new DropDown({ target: $('.selector'), defaultText: 'Please select', items: [1,2,3], value: 3 });
  *
  * //TODO: improve documentation
+ * //TODO: isExpanded = remove?
  *
  */
 
@@ -62,6 +63,8 @@ var DropDown = Class.extend({
 		this.menu = this.el.find('.menu').appendTo('body');																		// move menu to body, so it does show on top of everything
 		this.label = this.el.find('.text');
 		this.input = this.el.find('input[type=hidden]').val('');																// empty the value auto added from cache
+
+		this.sidebarCls = (this.conf.showSidebar ? ' has-sidebar' : '');
 
 		if (this.conf.id) this.el.attr('id', this.conf.id);
 		if (this.conf.menuCls) this.menu.addClass(this.conf.menuCls);
@@ -160,7 +163,9 @@ var DropDown = Class.extend({
 				self.menu.find('.focused').removeClass('focused');
 			})
 			.on('keydown', '.menu-filter-text', function(e){																	// if down key - select first item on list
-				if (e.keyCode == 27) self.collapse.call(self);																	// if Esc - close menu
+				if (e.keyCode == 27) {
+					if (!this.value.length) self.collapse.call(self);															// if Esc and value is empty - close menu
+				}
 				if (e.keyCode == 40){
 					var n = self.menu.find('.menu-item').filter(':visible').first();
 					if (n.length){
@@ -169,7 +174,10 @@ var DropDown = Class.extend({
 					}
 				}
 			})
-			.on('keyup', '.menu-filter-text', $.proxy(this.filter, this))														// menu filter
+			.on('keyup', '.menu-filter-text', function(e){																		// menu filter
+				if (e.keyCode == 27 && this.value.length) this.value = '';														// first Esc - clears the filter
+				self.filter.call(self, this.value);
+			})
 			.on('click', '.menu-filter .search-icon', $.proxy(this.clearFilter, this))											// menu filter clear-icon
 			.on('mousemove', function(e){
 				self.focused = null;
@@ -234,8 +242,11 @@ var DropDown = Class.extend({
 		if (!this.isExpanded) return;
 		this.menu.height('auto');
 		this.menu.find('ul').height('auto');
-		var off = this.el.offset(), elH = this.el.height(), elW = this.el.width(), menuH = this.menu.height(), menuW = this.menu.outerWidth(),
-			winH = $(window).innerHeight(), mx = off.left, my = off.top + elH, menuMinH = 100;
+		var off = this.el.offset(),
+			elH = this.el.height(), elW = this.el.width(),
+			menuH = this.menu.height(), menuW = this.menu.outerWidth(),
+			winH = $(window).innerHeight(), mx = off.left, my = off.top + elH, menuMinH = 100,
+			mnItems = this.menu.find('.menu-items');
 
 		if (this.conf.menuAlign === 'right')  mx -= menuW - elW;
 
@@ -261,9 +272,20 @@ var DropDown = Class.extend({
 		else this.menu.removeClass('menu-top');
 		this.menu.css({ left: mx, top: my });
 
-		menuH -= 10;
-		if (this.menu.find('.menu-filter').length) menuH -=  this.menu.find('.menu-filter').outerHeight() + 20;
+		menuH -= parseInt(mnItems.css('paddingTop'), 10) + parseInt(mnItems.css('paddingBottom'), 10);							// subtract ul top+bottom padding
+		if (this.menu.find('.menu-filter').length) menuH -=  this.menu.find('.menu-filter').outerHeight();
 		this.menu.find('.menu-items').height(menuH);
+		this.adjustSidebar();
+	}
+
+	,adjustSidebar : function(){
+		var mn = this.menu.find('.has-sidebar'), items, maxW = 0, i = 0, item = null, padL = 0;
+		if (!mn.length) return;
+		items = mn.find('.menu-item-aside').width('auto');
+		for (; item = items[i++] ;) maxW = Math.max(maxW, $(item).outerWidth());
+		padL = parseInt(items.css('padding-left'), 10);
+		this.menu.find('.has-sidebar').css('padding-left', maxW)
+		items.outerWidth(maxW).css('margin-left', -(maxW + padL));																// include all asides
 	}
 
 	,collapse : function(e){
@@ -393,7 +415,8 @@ var DropDown = Class.extend({
 		filter.toggleClass('menu-filter-dirty', !!key.length);
 		for(; item = items[i++] ;){
 			item = $(item);
-			if (reg.test(item.attr('data-val')) === true) item.show(); else item.hide();
+			if (reg.test(item.attr('data-val')) === true || item.hasClass('ignore-filter')) item.show();
+			else item.hide();
 		}
 		inp.focus();
 		this.adjustPosition();
@@ -411,19 +434,17 @@ var DropDown = Class.extend({
 		this.menu.html('');
 		if (!items || !items.length) this.noItems();
 		else {
-			var i, item, ar = [];
+			var i, item, ar = [], fName = this.conf.fieldName, fId = this.conf.fieldId;
 			if (items.length > 10) this.menu.append(this.filterHtml());															// add filter to long lists
 			if (this.conf.defaultText && this.conf.defaultText.length) ar.push(this.getItemHtml('', this.conf.defaultText));	// add empty text as a 1st option
-			if (typeof this.conf.fieldName === 'function' || 																	// name is a function
-				(typeof this.conf.fieldName === 'string' && this.conf.fieldName.indexOf('{')>-1)								// or a template
-				){
-					for(i=0; item = items[i++];) {
-						ar.push(this.getItemHtml(item[this.conf.fieldId], this.mapName(this.conf.fieldName, item)));
-					}
-			}
-			else if (typeof items[0] !== 'object') for(i=0; item = items[i++];) ar.push(this.getItemHtml(item, item)); 			// using 1D array
-			else for(i=0; item = items[i++];) ar.push(this.getItemHtml(item[this.conf.fieldId], item[this.conf.fieldName]));	// name is a string
-			if (ar.length) this.menu.append('<ul class="menu-items">'+ar.join('')+'</ul>');										// replace the list
+			if (typeof fName === 'function' || (typeof fName === 'string' && fName.indexOf('{')>-1)) 							// name is a function or a template
+				for(i=0; item = items[i++];) ar.push(this.getItemHtml(item[fId], this.mapName(fName, item), item));
+			else if (typeof items[0] !== 'object') for(i=0; item = items[i++];) ar.push(this.getItemHtml(item, item, item));	// using 1D array
+			else for(i=0; item = items[i++];) ar.push(this.getItemHtml(item[fId], item[fName], item));							// name is a string
+
+			if (ar.length)
+				this.menu.append('<ul class="menu-items' + this.sidebarCls + '">'+ar.join('')+'</ul>');			// replace the list
+
 			this.items = items;																									// store items
 		}
 		this.adjustPosition();
@@ -438,19 +459,52 @@ var DropDown = Class.extend({
 
 	,noItems : function(items){ this.menu.html('<span class="loading-error">No items</span>'); }
 	,loadingError : function(items){ this.menu.html('<span class="loading-error">Loading error</span>'); }
-	,filterHtml : function(){ return '<div class="menu-filter"><span class="search-icon"></span><input type="text" class="menu-filter-text"/></div>'; }
 
-	,getHtml : function(conf){
-		return '<a class="button" href="#"><span class="expander"></span><input type="hidden" name="' + conf.name + '" />'+
-				'<span class="text">'+ (conf.emptyText.length ? conf.emptyText : '' ) + '</span>'+
-			'</a><div class="menu"></div>';
+	,filterHtml : function(){
+		var _html = '<div class="menu-filter' + this.sidebarCls + '"><div class="menu-filter-inner">';
+			if (this.conf.showSidebar) _html += '<span class="menu-item-aside">Search</span>';
+			_html += '<span class="search-icon"></span>';
+			_html += '<input type="text" class="menu-filter-text"/>';
+		_html += '</div></div>';
+		return _html;
 	}
 
-	,getItemHtml : function(id, name){
-		var cls = (name == this.conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-'+id);
-		return '<li class="menu-item '+cls+'" data-idval="'+id+'" data-val="'+name+'">'+
-					'<span class="menu-item-name">'+name+'</span>'+
-				'</li>';
+	,getHtml : function(conf){
+		var _html = '<a class="button" href="#">';
+			_html += '<span class="expander"></span>';
+			_html += '<input type="hidden" name="' + conf.name + '" />';
+			_html += '<span class="text">'+ (conf.emptyText.length ? conf.emptyText : '' ) + '</span>';
+		_html += '</a>';
+		if (conf.showSidebar === true) _html += '<div class="menu menu-with-sidebar"></div>';
+		else _html += '<div class="menu"></div>';
+
+		return _html;
+	}
+
+	/**
+	 * Returns a HTML for a single item
+	 * @param  {int/string} id	item ID
+	 * @param  {string} name	item name (can be "generated" from function or template)
+	 * @param  {object} item	item object
+	 * @return {string}			HTML markup
+	 */
+	,getItemHtml : function(id, name, item){
+		var _html = '', sidebar = '', cls = [];
+
+		if (typeof item === 'object'){
+			if (item.cls && item.cls.length) cls.push(item.cls);
+			if (item.ignoreFilter === true) cls.push('ignore-filter');
+			if (item.sidebarText || item.sidebarCls){
+				sidebar = '<span class="menu-item-aside '+(item.sidebarCls || '')+'">'+(item.sidebarText || '')+'</span>';
+			}
+		}
+		cls.push(name == this.conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-'+id);
+
+		_html += '<li class="menu-item '+cls.join(' ')+'" data-idval="'+id+'" data-val="'+name+'">';
+			_html += sidebar;
+			_html += '<span class="menu-item-name">'+name+'</span>';
+		_html += '</li>';
+		return _html;
 	}
 
 	,mapName : function(name, rec){

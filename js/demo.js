@@ -7,11 +7,33 @@
 		dd[2] = new DropDown({ target: 'dropdown2', action: ddAction, defaultValue: 1,
 			items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }]
 		});
-		dd[3] = new DropDown({ target: 'dropdown3', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu', action: ddAction, isExpanded: true });
-		dd[4] = new MultiSelect({ target: 'dropdown4', defaultText: 'Items', emptyText: 'All Items', action: ddAction });
+		dd[3] = new MultiSelect({ target: 'dropdown3', defaultText: 'Items', emptyText: 'All Items', action: ddAction });
+		dd[4] = new DropDown({ target: 'dropdown4', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu', action: ddAction });
+
+		dd[5] = new DropDown({ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu', action: ddAction, showSidebar: true,
+			items: [
+				{ id: 10, name: 'Option 10', cls:'menu-header', ignoreFilter: true, sidebarText: 'Group 10' },
+				{ id: 11, name: 'Option 11' },
+				{ id: 12, name: 'Option 12' },
+				{ id: 13, name: 'Option 13' },
+				{ id: 14, name: 'Option 14' },
+				{ id: 15, name: 'Option 15' },
+				{ id: 20, name: 'Option 20', cls:'menu-header', ignoreFilter: true, sidebarText: 'Group 20' },
+				{ id: 21, name: 'Option 21' },
+				{ id: 22, name: 'Option 22' },
+				{ id: 23, name: 'Option 23' },
+				{ id: 24, name: 'Option 24' },
+				{ id: 25, name: 'Option 25' },
+			]
+		});
+
+		App.Publish('log', ['Widgets initialised' ]);
 	},
 
-	destroyWidgets = function(){ for (var i = dd.length; --i ;) dd[i].destroy(); dd[i] = null; },
+	destroyWidgets = function(){
+		for (var i = dd.length; --i ;) dd[i].destroy(); dd[i] = null;
+		App.Publish('log', ['Widgets destroyed' ]);
+	},
 
 
 	//select = function(d){ d.select(_$.rand(0, d.items.length+1)); },
@@ -43,11 +65,12 @@
 	btnAction = function(){
 		var btn = $(this), msg = '',
 			action = btn.data('action'),
-			idx = btn.closest('tr').data('idx');
+			idx = btn.closest('tr').index();
 		if (!dd[idx]) return;
 		switch(action){
 			case 'getValue': msg = 'value: <b>' + dd[idx].getValue() + '</b>'; break;
 			case 'getIdValue': msg = 'ID value: <b>' + dd[idx].getIdValue() + '</b>'; break;
+			case 'getTextValue': msg = 'Text value: <b>' + dd[idx].getTextValue() + '</b>'; break;
 			case 'reset': msg = 'reset'; dd[idx].reset(); break;
 			case 'replaceList': msg = 'list replaced'; replaceList(dd[idx]); break;
 		}

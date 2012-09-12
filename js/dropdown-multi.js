@@ -24,7 +24,7 @@ var MultiSelect = DropDown.extend({
 		else {
 			var i, item, ar = [];
 			if (items.length > 10) this.menu.append(this.filterHtml());															// add filter to long lists
-			this.menu.append('<ul class="menu-select">' + this.getItemHtml(-1, 'Select All') + '</ul>');						// add "Select All" option
+			this.menu.append('<ul class="menu-select'+this.sidebarCls+'">' + this.getItemHtml(-1, 'Select All') + '</ul>');						// add "Select All" option
 			if (typeof this.conf.fieldName === 'function' || 																	// name is a function
 				(typeof this.conf.fieldName === 'string' && this.conf.fieldName.indexOf('{')>-1)								// or a template
 				){
@@ -34,7 +34,7 @@ var MultiSelect = DropDown.extend({
 			}
 			else if (typeof items[0] !== 'object') for(i=0; item = items[i++];) ar.push(this.getItemHtml(item, item)); 			// using 1D array
 			else for(i=0; item = items[i++];) ar.push(this.getItemHtml(item[this.conf.fieldId], item[this.conf.fieldName]));	// name is a string
-			if (ar.length) this.menu.append('<ul class="menu-items">'+ar.join('')+'</ul>');										// replace the list
+			if (ar.length) this.menu.append('<ul class="menu-items' + this.sidebarCls + '">'+ar.join('')+'</ul>');										// replace the list
 			this.items = items;																									// store items
 		}
 		this.adjustPosition();
@@ -49,10 +49,10 @@ var MultiSelect = DropDown.extend({
 		return  (id === -1 ?
 			'<li class="menu-item menu-item-all menu-item-checked" data-id="#select-all">' :
 			'<li class="menu-item menu-item-checked menu-item-'+id+'" data-id="'+id+'" data-val="'+name+'" >') +
-			'<span class="menu-item-icon"></span><span class="menu-item-name">'+name+'</span></li>';
+			'<span class="menu-item-tick"></span><span class="menu-item-name">'+name+'</span></li>';
 	}
 	,getApplyHtml : function(){
-		return '<ul class="menu-apply"><li class="menu-item" data-id="#apply"><span class="menu-item-icon"></span><span class="menu-item-name">Apply</span></li></ul>';
+		return '<ul class="menu-apply'+this.sidebarCls+'"><li class="menu-item" data-id="#apply"><span class="menu-item-tick"></span><span class="menu-item-name">Apply</span></li></ul>';
 	}
 
 	/**
@@ -245,10 +245,11 @@ var MultiSelect = DropDown.extend({
 
 	,adjustPosition : function(){
 		this._super();
-		var newH, mn = this.menu, mnItems = mn.find('.menu-items');
+		var newH, mn = this.menu, mnItems = mn.find('.menu-items'),
+			pdng = parseInt(mnItems.css('paddingTop'), 10) + parseInt(mnItems.css('paddingBottom'), 10);
 		mnItems.height('auto');																									// reset height to default
-		newH = mn.height() - 10;
-		if (mn.find('.menu-filter').length) newH -= mn.find('.menu-filter').outerHeight() + 20;
+		newH = mn.height() - pdng;																								// subtract ul top+bottom padding
+		if (mn.find('.menu-filter').length) newH -= mn.find('.menu-filter').outerHeight();
 		if (mn.find('.menu-select').length) newH -= mn.find('.menu-select').outerHeight();
 		if (mn.find('.menu-apply').length)  newH -= mn.find('.menu-apply').outerHeight();
 		mnItems.height(newH);
