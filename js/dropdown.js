@@ -279,12 +279,12 @@ var DropDown = Class.extend({
 	}
 
 	,adjustSidebar : function(){
-		var mn = this.menu.find('.has-sidebar'), items, maxW = 0, i = 0, item = null, padL = 0;
+		var mn = this.menu.find('.has-sidebar'), items, maxW = 20, i = 0, item = null, padL = 0;
 		if (!mn.length) return;
 		items = mn.find('.menu-item-aside').width('auto');
 		for (; item = items[i++] ;) maxW = Math.max(maxW, $(item).outerWidth());
 		padL = parseInt(items.css('padding-left'), 10);
-		this.menu.find('.has-sidebar').css('padding-left', maxW)
+		this.menu.find('.has-sidebar').css('padding-left', maxW);
 		items.outerWidth(maxW).css('margin-left', -(maxW + padL));																// include all asides
 	}
 
