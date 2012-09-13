@@ -7,10 +7,11 @@
 		dd[2] = new DropDown({ target: 'dropdown2', action: ddAction, defaultValue: 1,
 			items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }]
 		});
-		dd[3] = new MultiSelect({ target: 'dropdown3', defaultText: 'Items', emptyText: 'All Items', action: ddAction });
+		dd[3] = new MultiSelect({ target: 'dropdown3', defaultText: 'Items', emptyText: 'All Items', action: ddAction, showSidebar: true, menuAlign: 'right' });
 		dd[4] = new DropDown({ target: 'dropdown4', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu', action: ddAction });
 
 		dd[5] = new DropDown({ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu', action: ddAction, showSidebar: true,
+			menuAlign: 'right',
 			items: [
 				{ id: 10, name: 'Option 10', cls:'menu-header', ignoreFilter: true, sidebarText: 'Group 10' },
 				{ id: 11, name: 'Option 11' },

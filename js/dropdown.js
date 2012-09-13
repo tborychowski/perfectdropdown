@@ -29,6 +29,7 @@ var DropDown = Class.extend({
 				menuAlign: 'left',																								// if menu is longer than button - this can make it align to the right
 				cls: '',																										// additional class for the dropdown (without menu)
 				menuCls: '',																									// additional class for the menu (menu is rendered to the body)
+				iconCls: '',																									// if present - an icon will be added to the dropdown button
 				action: function(v,rec,el){},
 				scope: window,
 				value: null,
@@ -70,6 +71,7 @@ var DropDown = Class.extend({
 		if (this.conf.menuCls) this.menu.addClass(this.conf.menuCls);
 		if (this.conf.disabled) this.disable();
 		if (this.conf.defaultText && this.conf.defaultText.length && !this.conf.isStatic) this.label.html(this.conf.defaultText);
+		if (this.conf.items && this.conf.items.length) this.replaceList(this.conf.items);										// use the data store provided in the config
 		if (this.conf.value !== undefined && this.conf.value !== null){
 			var c = this.conf, v = c.value, fid = v[c.fieldId], fin = v[c.fieldName];
 			if ($.type(v) === 'object' && fid && fin) this.setValue(fid, fin);													// set single value, e.g. {id:1, name:'item1'}
@@ -78,7 +80,6 @@ var DropDown = Class.extend({
 		else {
 			if (this.conf.url || !this.conf.items) this.reset();																// if no list - put correct label
 		}
-		if (this.conf.items && this.conf.items.length) this.replaceList(this.conf.items);										// use the data store provided in the config
 	}
 
 	/**
@@ -217,7 +218,7 @@ var DropDown = Class.extend({
 		if (this.conf.disabled) return;
 		if (this.isExpanded) return;
 		this.collapseAll();
-		var self = this, ul = this.menu.find('ul'), lis = this.menu.find('ul li');
+		var self = this, ul = this.menu.find('.menu-items'), lis = ul.find('.menu-item');
 		this.menu.css('min-width', this.el.width());																			// min menu width is the dropdown width
 		if (!ul.length || !lis.length){																							// load list
 			this.menu.html('<ul><li class="loading">Loading...</li></ul>');
@@ -225,23 +226,24 @@ var DropDown = Class.extend({
 			else if (this.conf.url && this.conf.url.length) this.loadList();													// load data from the given url
 			else this.noItems();
 		}
-		this.el.addClass('expanded');
+
 		this.menu.show();																										// show the menu
+		this.el.addClass('expanded');
 		this.isExpanded=true;
 		this.adjustPosition();
-		setTimeout(function(){																									// add document.onclick action with delay so it doesn't hide the menu before showing it
-			$(document).on('mousedown touchstart DOMMouseScroll mousewheel',$.proxy(self.documentClick, self));
-			$(document).on('keyup', $.proxy(self.documentClick, self));
-			$(window).one('resize',$.proxy(self.documentClick, self));
+		setTimeout(function(){
+			$(document).on('mousedown touchstart keyup', $.proxy(self.documentClick, self));
+			$(window).one('resize', $.proxy(self.documentClick, self));
 			if (!this.isTouch) self.menu.find('.menu-filter-text').focus();
-		},100);
+		}, 10);
 		if (!this.isTouch) this.menu.find('.menu-filter-text').focus();
 	}
 
 	,adjustPosition : function(){
 		if (!this.isExpanded) return;
+		this.adjustSidebar();																									// adjust sidebar width first
 		this.menu.height('auto');
-		this.menu.find('ul').height('auto');
+		this.menu.find('.menu-items').height('auto');
 		var off = this.el.offset(),
 			elH = this.el.height(), elW = this.el.width(),
 			menuH = this.menu.height(), menuW = this.menu.outerWidth(),
@@ -270,12 +272,12 @@ var DropDown = Class.extend({
 			my = off.top - menuH - 2;
 		}
 		else this.menu.removeClass('menu-top');
+
 		this.menu.css({ left: mx, top: my });
 
 		menuH -= parseInt(mnItems.css('paddingTop'), 10) + parseInt(mnItems.css('paddingBottom'), 10);							// subtract ul top+bottom padding
 		if (this.menu.find('.menu-filter').length) menuH -=  this.menu.find('.menu-filter').outerHeight();
 		this.menu.find('.menu-items').height(menuH);
-		this.adjustSidebar();
 	}
 
 	,adjustSidebar : function(){
@@ -292,9 +294,9 @@ var DropDown = Class.extend({
 		if (!this.isExpanded) return;
 		if (e) e.stopPropagation();
 		this.menu.hide();
-		this.clearFilter();																										// if menu has a filter - clear it
 		this.el.removeClass('expanded');
 		this.isExpanded=false;
+		this.clearFilter();																										// if menu has a filter - clear it
 		this.button.focus();
 		$(document).off('mousedown DOMMouseScroll mousewheel keyup', this.documentClick);
 		$(window).off('resize', this.documentClick);
@@ -470,8 +472,10 @@ var DropDown = Class.extend({
 	}
 
 	,getHtml : function(conf){
-		var _html = '<a class="button" href="#">';
+		var hasIcon = (conf.iconCls && conf.iconCls.length), _html = '';
+		_html = '<a class="button' + (hasIcon?' icon-button':'') + '" href="#">';
 			_html += '<span class="expander"></span>';
+			if (hasIcon) _html += '<span class="icon ' + conf.iconCls + '"></span>';
 			_html += '<input type="hidden" name="' + conf.name + '" />';
 			_html += '<span class="text">'+ (conf.emptyText.length ? conf.emptyText : '' ) + '</span>';
 		_html += '</a>';
