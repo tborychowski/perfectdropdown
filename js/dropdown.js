@@ -285,7 +285,7 @@ var DropDown = Class.extend({
 		if (!mn.length) return;
 		items = mn.find('.menu-item-aside').width('auto');
 		for (; item = items[i++] ;) maxW = Math.max(maxW, $(item).outerWidth());
-		padL = parseInt(items.css('padding-left'), 10);
+		padL = parseInt(items.closest('.menu-item').css('padding-left'), 10);
 		this.menu.find('.has-sidebar').css('padding-left', maxW);
 		items.outerWidth(maxW).css('margin-left', -(maxW + padL));																// include all asides
 	}
@@ -544,7 +544,7 @@ var DropDown = Class.extend({
 		actionName = target.attr('data-val');
 		if (actionId === undefined) return;
 		this.collapse(e);
-		if (this.conf.isStatic !== true) this.setValue(actionId, actionName);
+		this.setValue(actionId, actionName);
 		if (this.conf.action) this.conf.action.call(this.conf.scope, actionId, this.selectedItem, this);
 	}
 

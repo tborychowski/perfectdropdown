@@ -8,7 +8,9 @@
 			items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }]
 		});
 		dd[3] = new MultiSelect({ target: 'dropdown3', defaultText: 'Items', emptyText: 'All Items', action: ddAction, showSidebar: true, menuAlign: 'right' });
-		dd[4] = new DropDown({ target: 'dropdown4', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu', action: ddAction });
+		dd[4] = new DropDown({ target: 'dropdown4', isStatic: true, emptyText: 'User Menu', action: ddAction,
+			items: [ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ],
+		});
 
 		dd[5] = new DropDown({ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu', action: ddAction, showSidebar: true,
 			menuAlign: 'right',
@@ -60,6 +62,7 @@
 
 	ddAction = function(actionId, selectedItem, dd){
 		var idx = dd.conf.name.substr(-1);
+		log(selectedItem)
 		App.Publish('log', ['Dropdown ' + idx + ' <b>' + actionId + '</b> was selected' ]);
 	},
 
