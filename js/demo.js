@@ -13,20 +13,20 @@
 		});
 
 		dd[5] = new DropDown({ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu', action: ddAction, showSidebar: true,
-			menuAlign: 'right',
 			items: [
-				{ id: 10, name: 'Option 10', cls:'menu-header', ignoreFilter: true, sidebarText: 'Group 10' },
-				{ id: 11, name: 'Option 11' },
-				{ id: 12, name: 'Option 12' },
-				{ id: 13, name: 'Option 13' },
-				{ id: 14, name: 'Option 14' },
-				{ id: 15, name: 'Option 15' },
-				{ id: 20, name: 'Option 20', cls:'menu-header', ignoreFilter: true, sidebarText: 'Group 20' },
-				{ id: 21, name: 'Option 21' },
-				{ id: 22, name: 'Option 22' },
-				{ id: 23, name: 'Option 23' },
-				{ id: 24, name: 'Option 24' },
-				{ id: 25, name: 'Option 25' },
+				{ id: 10, name: 'Option 10', group: 'Group 10', isHeader: true },
+				{ id: 11, name: 'Option 11', group: 'Group 10' },
+				{ id: 12, name: 'Option 12', group: 'Group 10' },
+				{ id: 13, name: 'Option 13', group: 'Group 10' },
+				{ id: 14, name: 'Option 14', group: 'Group 10' },
+				{ id: 15, name: 'Option 15', group: 'Group 10' },
+
+				{ id: 20, name: 'Option 20', group: 'Group 20', isHeader: true },
+				{ id: 21, name: 'Option 21', group: 'Group 20' },
+				{ id: 22, name: 'Option 22', group: 'Group 20' },
+				{ id: 23, name: 'Option 23', group: 'Group 20' },
+				{ id: 24, name: 'Option 24', group: 'Group 20' },
+				{ id: 25, name: 'Option 25', group: 'Group 20' },
 			]
 		});
 
