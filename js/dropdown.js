@@ -7,7 +7,6 @@
  * var dd2 = new DropDown({ target: $('.selector'), defaultText: 'Please select', items: [1,2,3], value: 3 });
  *
  * //TODO: improve documentation
- * //TODO: isExpanded = remove?
  *
  */
 
@@ -137,7 +136,7 @@ var DropDown = Class.extend({
 			})
 			.on('click', '.menu-filter .search-icon', $.proxy(this.clearFilter, this))											// menu filter clear-icon
 
-			.on('mouseenter', 'li', function(e){
+			.on('mouseover', 'li', function(e){
 				self.menu.find('.focused').removeClass('focused');
 				self.focused = $(this).addClass('focused');
 			});
@@ -235,6 +234,7 @@ var DropDown = Class.extend({
 		menuH -= parseInt(mnItems.css('paddingTop'), 10) + parseInt(mnItems.css('paddingBottom'), 10);							// subtract ul top+bottom padding
 		if (this.menu.find('.menu-filter').length) menuH -=  this.menu.find('.menu-filter').outerHeight();
 		this.menu.find('.menu-items').height(menuH);
+		delete this.highlightObj;
 	}
 
 	,adjustSidebar : function(){
@@ -274,35 +274,34 @@ var DropDown = Class.extend({
 	 * off {int}		[-10 | -1 | 0 | 1 | 10] highlight item that is +-x to the current one (0 = first; -1 = prev, 1=next, etc)
 	 */
 	,highlightItem : function(off){
-		if (!this.isExpanded){ this.expand(); return; }
-		if (!this.menu || !this.menu.find('.menu-items') || !this.menu.find('.menu-items').length) return;						// no menu items
+		if (!this.isExpanded) return this.expand();
+
+		if (!this.highlightObj) this.highlightObj = {																			// cache some elements
+			items : this.menu.find('.menu-item:visible'),
+			mn : this.menu.find('.menu-items')[0]
+		};
+		var items = this.highlightObj.items, mn = this.highlightObj.mn, oT = null;
+
 		off = off || 0;
-		var mn = this.menu.find('.menu-items')[0], items = this.menu.find('.menu-item:visible');
+		if (!items || !items.length) return;																					// no menu items
 		if (!this.focused || !this.focused.length) this.focused = items.first().addClass('focused');
 
-		var oT = null,
-			cItem = this.focused, cIdx = items.index(cItem[0]),																	// current item
-			nIdx = cIdx+off, nItem = items.eq(nIdx);																			// new item
+		var cItem = this.focused, cIdx = items.index(cItem[0]), nIdx = cIdx+off, nItem = items.eq(nIdx);						// // current item, new item
 
-		switch(off){
-			case 0: oT = 0; break;																								// highlight first item
-			case 1 : 																											// arrow down (next)
-			case 10: 																											// page down
-					if (!nItem || !nItem.length) nItem = items.last();															// out of index -> highlight last item
-					oT = nItem[0].offsetTop + nItem[0].offsetHeight - mn.offsetHeight;
-					if (mn.scrollTop >= oT) oT = null;
-					break;
-
-			case -1 : 																											// arrow up (previous)
-			case -10: 																											// page up
-					if (cIdx == 0) nItem = null; 																				// current item is first = focus filter
-					else {
-						if (nIdx < 0) nItem = items.first();																	// index is negative - highlight first item
-						oT = nItem[0].offsetTop;
-						if (mn.scrollTop <= oT) oT = null;
-					}
-					break;
+		if (off < 0){
+			if (cIdx == 0) nItem = null; 																						// current item is first = focus filter
+			else {
+				if (nIdx < 0) nItem = items.first();																			// index is negative - highlight first item
+				oT = nItem[0].offsetTop;
+				if (mn.scrollTop <= oT) oT = null;
+			}
 		}
+		else if (off > 0){
+			if (!nItem || !nItem.length) nItem = items.last();																	// out of index -> highlight last item
+			oT = nItem[0].offsetTop + nItem[0].offsetHeight - mn.offsetHeight;
+			if (mn.scrollTop >= oT) oT = null;
+		}
+
 
 		if (nItem && nItem.length){
 			this.button.focus();																								// focus dropdown button
@@ -416,28 +415,33 @@ var DropDown = Class.extend({
 			inp = filter.find('.menu-filter-text'),
 			ul = this.menu.find('.menu-items'),
 			items = ul.find('.menu-item'),
-			i=0, item, reg;
+			i=0, item, itemStr;
 
-		if (!filter.length) return;
 		this.menu.find('.no-results').remove();
+		if (!filter.length) return;
 
 		if (typeof key !== 'string') key = inp.val();
 		inp.val(key);
-		reg = new RegExp(key, 'i');
 		filter.toggleClass('menu-filter-dirty', !!key.length);
 		for(; item = items[i++] ;){
 			item = $(item);
-			if (reg.test(item.attr('data-val')) === true || reg.test(item.attr('data-group')) === true) item.show();
+			itemStr = item.attr('data-group') + item.attr('data-val');
+			if (this.filterTest(itemStr, key)) item.show();
 			else item.hide();
 		}
 
-		items.not('.menu-header').filter(':visible')														// show headers for all visible items
-			.each(function(){ $(this).prevAll('.menu-header:first').show(); });
+		items.not('.menu-header').filter(':visible').each(function(){ $(this).prevAll('.menu-header:first').show(); });			// show headers for all visible items
 
-		if (!items.filter(':visible').length) ul.append('<li class="no-results">No items found!</li>');
+		if (this.isExpanded && !items.filter(':visible').length) ul.append('<li class="no-results">No items found!</li>');
 
 		inp.focus();
 		this.adjustPosition();
+		delete this.highlightObj;
+	}
+	,filterTest : function(itemStr, keyword){
+		var words1 = keyword.trim().split(' ').sort(), words2 = words1.slice().reverse(),
+			reg = new RegExp('(' + words1.join('.*') + '|' + words2.join('.*') + ')', 'i');
+		return reg.test(itemStr) === true;
 	}
 	,clearFilter : function(){ this.filter(''); }
 
@@ -473,6 +477,7 @@ var DropDown = Class.extend({
 		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.label.html(this.conf.emptyText);
 		else this.select(0);
 		if (!this.isTouch) this.menu.find('.menu-filter-text').focus();
+		delete this.highlightObj;
 	}
 
 	,noItems : function(items){ this.menu.html('<span class="loading-error">No items</span>'); }
