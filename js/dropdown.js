@@ -13,9 +13,13 @@
 var DropDown = Class.extend({
 	init : function(conf){
 
+
 		if (typeof conf.target === 'string'){
 			var oldDD = $('#' + conf.target);
 			if (oldDD.is('.dropdown')) oldDD.data('dropdown').destroy();
+		}
+		else if (typeof conf.target === 'object' && conf.target.hasClass('dropdown')){
+			conf.target.data('dropdown').destroy();
 		}
 
 		var defaults = {
@@ -50,12 +54,12 @@ var DropDown = Class.extend({
 	,initComponent : function(){
 		if (typeof this.conf.target == 'string') this.conf.target = '#' + this.conf.target;
 		this.el = $(this.conf.target);
+		this.originalEl = this.el.clone();																						// store for destroy()
 		if (this.el.is('input')) {
 			var inp = this.el[0];
 			this.conf.name = inp.name;
 			if (!this.conf.id && inp.id) this.conf.id = inp.id;
 			if (!this.conf.value && this.el.val()) this.conf.value = this.el.val();
-			this.originalInput = this.el.clone();																				// store for destroy()
 			this.el = $('<div>').replaceAll(this.el);
 		}
 		this.el.addClass('dropdown '+this.conf.cls).html(this.getHtml(this.conf));
@@ -147,7 +151,7 @@ var DropDown = Class.extend({
 				self.focused = $(this).addClass('focused');
 			});
 
-		this.el.on('destroyed', $.proxy(this.destroy, this) );
+		this.el.one('destroyed', $.proxy(this.destroy, this) );
 	}
 
 	/**
@@ -155,15 +159,12 @@ var DropDown = Class.extend({
 	 * requires jquery plugin "destroyed" for this function to be called automatically
 	 */
 	,destroy : function(e){
+		if (!this.el || !this.el.length) return;
 		this.collapse();
 		if (this.menu && this.menu.length) this.menu.remove();
-		if (this.originalInput && this.originalInput.length) {
-			if (!this.conf.isStatic) this.originalInput.val(this.getIdValue());
-			this.originalInput.insertAfter(this.el);
-		}
-		else if (this.input && this.input.length){
-			this.input.attr('id', this.conf.id)[0].type='text';
-			this.input.insertAfter(this.el);
+		if (this.originalEl && this.originalEl.length) {
+			if (!this.conf.isStatic && this.originalEl.is('input')) this.originalEl.val(this.getIdValue());
+			this.originalEl.insertAfter(this.el);
 		}
 		this.el.remove();
 	}
