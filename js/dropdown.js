@@ -13,7 +13,7 @@
 var DropDown = Class.extend({
 	init : function(conf){
 
-		if (typeof conf.target == 'string'){
+		if (typeof conf.target === 'string'){
 			var oldDD = $('#' + conf.target);
 			if (oldDD.is('.dropdown')) oldDD.data('dropdown').destroy();
 		}
@@ -107,11 +107,17 @@ var DropDown = Class.extend({
 			}, '.button');
 
 
-		if (this.label.is('input')) this.el.on({
-			focus: function(e){ self.expand(e); return false; },
-			click: function(e){ self.expand(e); return false; },
-			change: function(e){ if (!e.target.value) self.input.val(''); return false; }										// if text input empty - clear the value
-		}, '.text');
+		//XXX: should this still be needed
+		/*
+		if (this.label.is('input')) {
+			this.el.on({
+				focus: function(e){ self.expand(e); return false; },
+				click: function(e){ self.expand(e); return false; },
+				change: function(e){ if (!e.target.value) self.input.val(''); return false; }										// if text input empty - clear the value
+			}, '.text');
+		}
+		*/
+
 
 		this.menu
 			.on({
@@ -426,7 +432,7 @@ var DropDown = Class.extend({
 		for(; item = items[i++] ;){
 			item = $(item);
 			itemStr = item.attr('data-group') + item.attr('data-val');
-			if (this.filterTest(itemStr, key)) item.show();
+			if (this.filterMatch(itemStr, key)) item.show();
 			else item.hide();
 		}
 
@@ -438,12 +444,23 @@ var DropDown = Class.extend({
 		this.adjustPosition();
 		delete this.highlightObj;
 	}
-	,filterTest : function(itemStr, keyword){
-		var words1 = keyword.trim().split(' ').sort(), words2 = words1.slice().reverse(),
-			reg = new RegExp('(' + words1.join('.*') + '|' + words2.join('.*') + ')', 'i');
-		return reg.test(itemStr) === true;
+
+	/**
+	 * Returns true if all words in "keyword" are found within the "itemStr" string
+	 */
+	,filterMatch : function(itemStr, keyword){
+	    var words = keyword.split(' '), i = 0, w, reg;
+	    for(; w = words[i++] ;){
+	        reg = new RegExp(w, 'ig');
+	        if (reg.test(itemStr) === false) return false;
+	        itemStr = itemStr.replace(reg, '');
+	    }
+	    return true;
 	}
+
+
 	,clearFilter : function(){ this.filter(''); }
+
 
 	/**
 	 * Populates the dropdown with a given list
