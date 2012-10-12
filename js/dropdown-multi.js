@@ -51,7 +51,7 @@ var MultiSelect = DropDown.extend({
 			'<li class="menu-item menu-item-checked menu-item-' + id + '" data-id="' + id + '" data-val="' + name + '" >') +
 			'<span class="menu-item-tick"></span><span class="menu-item-name">' + name + '</span></li>';
 	},
-	
+
 	getApplyHtml : function () {
 		return '<ul class="menu-apply' + this.sidebarCls + '"><li class="menu-item" data-id="#apply"><span class="menu-item-tick"></span><span class="menu-item-name">Apply</span></li></ul>';
 	},
@@ -64,7 +64,7 @@ var MultiSelect = DropDown.extend({
 		e.preventDefault();
 		if (this.el.hasClass('dropdown-disabled')) return;
 		var actionName, target = $(e.target), noItemsSelected = true, checked = null;
-		if (e.type == 'keydown') target = this.focused;
+		if (e.type === 'keydown') target = this.focused;
 		else target = $(e.target);
 		if (!target) return;
 		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
@@ -72,7 +72,7 @@ var MultiSelect = DropDown.extend({
 
 		if (actionName === undefined) return;
 
-		if (actionName == '#apply') {
+		if (actionName === '#apply') {
 			if (target.closest('.no-items-selected').length) return;															// disable "Apply" when no items selected
 			this.applySelected();
 			this.collapse(e);
@@ -81,7 +81,7 @@ var MultiSelect = DropDown.extend({
 		else {
 			var check = target.hasClass('menu-item-checked');
 
-			if (actionName == '#select-all') {																					// if "select all" clicked
+			if (actionName === '#select-all') {																					// if "select all" clicked
 				noItemsSelected = check;																						// no items selected - don't show "Apply" menu
 				if (check) this.selectNone();																					// select none
 				else this.selectAll();																							// or all
@@ -102,7 +102,7 @@ var MultiSelect = DropDown.extend({
 					target.toggleClass('menu-item-checked', !check);
 
 					checked = this.menu.find('.menu-items .menu-item-checked');
-					if (checked.length == 1) this.label.html(checked.data('val'));
+					if (checked.length === 1) this.label.html(checked.data('val'));
 					else if (checked.length === 0) {
 						this.label.html('No ' + this.conf.defaultText);
 						this.menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
@@ -122,7 +122,7 @@ var MultiSelect = DropDown.extend({
 				if (ih > mh) mn.scrollTop(ih - mh);
 			}
 			// if checked items == all items - select all
-			if (this.menu.find('.menu-items .menu-item').length == this.menu.find('.menu-items .menu-item-checked').length) this.selectAll();
+			if (this.menu.find('.menu-items .menu-item').length === this.menu.find('.menu-items .menu-item-checked').length) this.selectAll();
 		}
 	},
 
@@ -161,7 +161,7 @@ var MultiSelect = DropDown.extend({
 		else this.setValue([-1], 'All ' + this.conf.defaultText);
 	},
 
-	setValue : function (ids, name) {
+	setValue : function (ids, name) {																							/*jshint eqeqeq:false */
 		if (ids === undefined || ids === null || ids === '') return false;
 		this.value = ids;
 		this.selectAll();
@@ -176,13 +176,13 @@ var MultiSelect = DropDown.extend({
 				this.menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 
 				if (items.length) {
-					if (items.length == il) this.selectAll();																	// if checked items == all items -> select all
+					if (items.length === il) this.selectAll();																	// if checked items == all items -> select all
 					else {
 						this.selectNone();
 						for (; i < il; i++) items.filter('.menu-item-' + ids[i]).addClass('menu-item-checked');
 
 						var checked = items.filter('.menu-item-checked');
-						if (checked.length == 1) this.label.html(checked.data('val'));
+						if (checked.length === 1) this.label.html(checked.data('val'));
 						else if (checked.length === 0) this.selectNone();
 						else {
 							this.label.html('Multiple ' + this.conf.defaultText);
@@ -212,7 +212,7 @@ var MultiSelect = DropDown.extend({
 	getTextValue : function () { return this.label.html(); },
 
 
-	replaceList : function (items) {
+	replaceList : function (items) {																							/*jshint eqeqeq:false */
 		var val = this.getValue();
 		if (!items) this.loadingError();
 		else this.populate(items);
