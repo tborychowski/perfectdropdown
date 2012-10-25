@@ -6,8 +6,6 @@
  * var dd1 = new DropDown({ target: 'myInputId' });
  * var dd2 = new DropDown({ target: $('.selector'), defaultText: 'Please select', items: [1,2,3], value: 3 });
  *
- * //TODO: improve documentation
- *
  */
 
 var DropDown = Class.extend({
@@ -52,7 +50,7 @@ var DropDown = Class.extend({
 	 * Initialize DropDown components
 	 */
 	initComponent : function () {
-		if (typeof this.conf.target == 'string') this.conf.target = '#' + this.conf.target;
+		if (typeof this.conf.target === 'string') this.conf.target = '#' + this.conf.target;
 		this.el = $(this.conf.target);
 		this.originalEl = this.el.clone();																						// store for destroy()
 		if (this.el.is('input')) {
@@ -88,7 +86,7 @@ var DropDown = Class.extend({
 	/**
 	 * Initialize DropDown events
 	 */
-	initEvents : function () {
+	initEvents : function () {																									/*jshint white: false */
 		var self = this;
 		this.el.on({
 				mousedown: function (e) { self.toggle.call(self, e); },
@@ -97,47 +95,17 @@ var DropDown = Class.extend({
 				blur: function (e) { self.button.removeClass('focused'); },
 				keydown: function (e) {																							// launch action on enter
 					switch (e.keyCode) {
-					case 32 :																									// space
-					case 13 :																									// enter
-						self.action.call(self, e);
-						break;
-					case 27 :																									// enter
-						self.collapse.call(self, e);
-						break;
-					case  9 :																									// tab
-						self.collapse.call(self, e);
-						break;
-					case 38 :																									// down arrow
-						e.preventDefault();
-						self.highlightItem.call(self, -1);
-						break;
-					case 40 :																									// down arrow
-						e.preventDefault();
-						self.highlightItem.call(self, 1);
-						break;
-					case 33 :																									// page up
-						e.preventDefault();
-						self.highlightItem.call(self, -10);
-						break;
-					case 34 :																									// page down
-						e.preventDefault();
-						self.highlightItem.call(self, 10);
-						break;
+						case 32 :																								// space
+						case 13 : self.action.call(self, e); break;																// enter
+						case 27 : self.collapse.call(self, e); break;															// esc
+						case  9 : self.collapse.call(self, e); break;															// tab
+						case 38 : e.preventDefault(); self.highlightItem.call(self, -1); break;									// down arrow
+						case 40 : e.preventDefault(); self.highlightItem.call(self, 1); break;									// down arrow
+						case 33 : e.preventDefault(); self.highlightItem.call(self, -10); break;								// page up
+						case 34 : e.preventDefault(); self.highlightItem.call(self, 10); break;									// page down
 					}
 				}
 			}, '.button');
-
-
-		//XXX: should this still be needed
-		/*
-		if (this.label.is('input')) {
-			this.el.on({
-				focus: function (e) { self.expand(e); return false; },
-				click: function (e) { self.expand(e); return false; },
-				change: function (e) { if (!e.target.value) self.input.val(''); return false; }									// if text input empty - clear the value
-			}, '.text');
-		}
-		*/
 
 
 		this.menu
@@ -152,13 +120,13 @@ var DropDown = Class.extend({
 				self.menu.find('.focused').removeClass('focused');
 			})
 			.on('keydown', '.menu-filter-text', function (e) {																	// if down key - select first item on list
-				if (e.keyCode == 27) if (!this.value.length) self.collapse.call(self);											// if Esc and value is empty - close menu
-				if (e.keyCode == 40) { e.preventDefault(); self.highlightItem.call(self); }										// down arrow
-				if (e.keyCode == 34) { e.preventDefault(); self.highlightItem.call(self); }										// page down
+				if (e.keyCode === 27) if (!this.value.length) self.collapse.call(self);											// if Esc and value is empty - close menu
+				if (e.keyCode === 40) { e.preventDefault(); self.highlightItem.call(self); }									// down arrow
+				if (e.keyCode === 34) { e.preventDefault(); self.highlightItem.call(self); }									// page down
 
 			})
 			.on('keyup', '.menu-filter-text', function (e) {																	// menu filter
-				if (e.keyCode == 27 && this.value.length) this.value = '';														// first Esc - clears the filter
+				if (e.keyCode === 27 && this.value.length) this.value = '';														// first Esc - clears the filter
 				self.filter.call(self, this.value);
 			})
 			.on('click', '.menu-filter .search-icon', $.proxy(this.clearFilter, this))											// menu filter clear-icon
@@ -356,7 +324,7 @@ var DropDown = Class.extend({
 	 * @param id		id of the item on the dropdown list
 	 * @param name		label for a dropdown button
 	 */
-	setValue : function (id, name) {
+	setValue : function (id, name) {																							/*jshint eqeqeq: false */
 		if (id === undefined) id = '';
 		this.input.val(id);																										// set input value
 		this.selectedItem = this.focused = null;
@@ -416,7 +384,7 @@ var DropDown = Class.extend({
 		$.ajax({ url: this.conf.url, type: 'post', context: this, dataType: 'json', data: this.conf.params })
 		.fail(function (xhr, status, err) { this.loadingError(); })
 		.done(function (items, status, xhr) {
-			if (!items || items.result == 'error') this.loadingError();
+			if (!items || items.result === 'error') this.loadingError();
 			else this.populate(items);
 			var val = this.getIdValue();
 			if (val !== undefined) this.setValue(val);
@@ -562,7 +530,7 @@ var DropDown = Class.extend({
 				sidebar = '<span class="menu-item-aside ' + (item.sidebarCls || '') + '">' + (item.sidebarText || '') + '</span>';
 			}
 		}
-		cls.push(name == this.conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-' + id);
+		cls.push(name === this.conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-' + id);
 
 		_html += '<li class="menu-item ' + cls.join(' ') + '" data-idval="' + id + '" data-val="' + name + '" data-group="' + group + '">';
 		_html += sidebar;
@@ -581,8 +549,8 @@ var DropDown = Class.extend({
 					match = /\{(\w+)\}/i.exec(name);
 				}
 			}
-			else if ($.type(rec) == 'array') name = rec[0];
-			else if ($.type(rec) == 'object') name = rec[name];
+			else if ($.type(rec) === 'array') name = rec[0];
+			else if ($.type(rec) === 'object') name = rec[name];
 			else name = rec;
 		}
 		return name;
@@ -596,7 +564,7 @@ var DropDown = Class.extend({
 	action : function (e) {
 		if (this.conf.disabled) return;
 		var actionId, actionName, target;
-		if (e.type == 'keydown') target = this.focused;
+		if (e.type === 'keydown') target = this.focused;
 		else target = $(e.target);
 		if (!target) return;
 		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
@@ -630,7 +598,7 @@ var DropDown = Class.extend({
 	 * Document click handler - expand function adds it, collapse - removes; It hides the menu when clicked elsewhere
 	 */
 	documentClick : function (e) {
-		if (e.type == 'keyup') { if (!e.keyCode || e.keyCode != 27) return; }
+		if (e.type === 'keyup') { if (!e.keyCode || e.keyCode !== 27) return; }
 		var tar = $(e.target);
 		if (tar.parents('.menu').length || tar.hasClass('menu')) return;
 		this.collapse();
