@@ -13,7 +13,7 @@
 		var prototype = new this();
 		initializing = false;
 		for (var name in prop) {																								// Copy the properties over onto the new prototype
-			prototype[name] = typeof prop[name] == "function" && typeof _super[name] == "function" && fnTest.test(prop[name]) ?	// Check if we're overwriting an existing function
+			prototype[name] = typeof prop[name] === 'function' && typeof _super[name] === 'function' && fnTest.test(prop[name]) ?// Check if we're overwriting an existing function
 			(function (name, fn) {
 				return function () {
 					var tmp = this._super;
