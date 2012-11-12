@@ -1,5 +1,5 @@
 /**
- * DropDown component v2.1 (2012-08-25)
+ * DropDown component v2.1.1 (2012-11-12)
  * @author Tom
  *
  * sample usage:
@@ -243,6 +243,7 @@ var DropDown = Class.extend({
 		if (!this.isExpanded) return;
 		if (e) e.stopPropagation();
 		this.menu.hide();
+		this.menu.find('.focused').removeClass('focused');
 		this.el.removeClass('expanded');
 		this.isExpanded = false;
 		this.clearFilter();																										// if menu has a filter - clear it
@@ -331,7 +332,7 @@ var DropDown = Class.extend({
 		this.menu.find('.selected').removeClass('selected focused');
 		if (id !== '' && this.items && this.items.length) {																		// list available -> select item on list
 			this.focused = this.menu.find('.menu-item-id-' + id);
-			if (!this.conf.isStatic) this.focused.addClass('selected focused');													// selec item
+			if (!this.conf.isStatic) this.focused.addClass('selected');															// selec item
 			for (var i = 0, item; item = this.items[i++] ;)
 				if (id == (typeof item === 'object' ? item[this.conf.fieldId] : item)) {
 					this.selectedItem = item;
