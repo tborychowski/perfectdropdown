@@ -9,9 +9,8 @@
  */
 
 var DropDown = Class.extend({
+
 	init : function (conf) {
-
-
 		if (typeof conf.target === 'string') {
 			var oldDD = $('#' + conf.target);
 			if (oldDD.is('.dropdown')) oldDD.data('dropdown').destroy();
@@ -340,14 +339,14 @@ var DropDown = Class.extend({
 				}
 			if (!name && this.selectedItem) name = this.mapName(this.conf.fieldName, this.selectedItem);
 			if (!this.conf.isStatic) {
-				name = ('' + name).replace(/&amp;/g, '&').replace(/&/g, '&amp;');													// encode all & to &amp; for IE
-				this.label.html(name);																							// set caption to item name
+				name = ('' + name).replace(/&/g, '&amp;');																		// encode all & to &amp; for IE
+				this.label.html(name);
 			}
 		}
 		else {
 			name = name || (id === '' ? this.conf.defaultText || '' : id);														// if no name, set to id (if id not null) or to defaultText or to ''
 			if (!this.conf.isStatic) {																							// no list -> set value "in blind"
-				name = ('' + name).replace(/&amp;/g, '&').replace(/&/g, '&amp;');												// encode all & to &amp; for IE
+				name = ('' + name).replace(/&/g, '&amp;');																		// encode all & to &amp; for IE
 				this.label.html(name);
 			}
 		}
@@ -387,8 +386,8 @@ var DropDown = Class.extend({
 		.done(function (items, status, xhr) {
 			if (!items || items.result === 'error') this.loadingError();
 			else this.populate(items);
-			var val = this.getIdValue();
-			if (val !== undefined) this.setValue(val);
+//			var val = this.getIdValue();
+//			if (val !== undefined) this.setValue(val);
 		});
 	},
 
@@ -396,9 +395,9 @@ var DropDown = Class.extend({
 		var val = this.getIdValue();
 		if (!items) this.loadingError();
 		else this.populate(items);
-		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
-		else if (val !== undefined && val !== '') this.setValue(val);
-		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.label.html(this.conf.emptyText);
+//		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
+//		else if (val !== undefined && val !== '') this.setValue(val);
+//		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.label.html(this.conf.emptyText);
 	},
 
 	clearList : function () { this.menu.find('ul').remove(); },
@@ -554,7 +553,15 @@ var DropDown = Class.extend({
 			else if ($.type(rec) === 'object') name = rec[name];
 			else name = rec;
 		}
-		return name;
+		return this.decodeEntities(name);
+	},
+
+	decodeEntities : function (str) {
+		if (!str) return '';
+		if (('' + str).indexOf('&') === -1) return str;
+		var d = document.createElement('div');
+		d.innerHTML = str;
+		return d.innerText || d.textContent;
 	},
 
 
@@ -592,7 +599,6 @@ var DropDown = Class.extend({
 		this.el.removeClass('dropdown-disabled');
 		this.conf.disabled = false;
 	},
-
 
 
 	/**
