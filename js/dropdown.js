@@ -1,5 +1,5 @@
 /**
- * DropDown component v2.1.1 (2012-11-12)
+ * DropDown component v2.1 (2012-08-25)
  * @author Tom
  *
  * sample usage:
@@ -31,14 +31,14 @@ var DropDown = Class.extend({
 				menuCls: '',																									// additional class for the menu (menu is rendered to the body)
 				iconCls: '',																									// if present - an icon will be added to the dropdown button
 				action: function (v, rec, el) {},
-				scope: window,
+				scope: null,
 				value: null,
 				defaultValue: null,
-				items: null,
+				items: [],
 				isStatic: false,																								// if true - don't change the button label (name)
 				disabled: false																									// init as disabled
 			};
-		this.conf = $.extend({}, defaults, conf);
+		this.conf = $.extend(true, {}, defaults, conf);
 		this.isTouch = navigator.userAgent.match(/iPhone|iPod|iPad/ig);
 		this.initComponent();
 		this.initEvents();
@@ -64,6 +64,7 @@ var DropDown = Class.extend({
 		this.menu = this.el.find('.menu').appendTo('body');																		// move menu to body, so it does show on top of everything
 		this.label = this.el.find('.text');
 		this.input = this.el.find('input[type=hidden]').val('');																// empty the value auto added from cache
+		this.items = this.conf.items;
 
 		this.sidebarCls = (this.conf.showSidebar ? ' has-sidebar' : '');
 
@@ -72,6 +73,7 @@ var DropDown = Class.extend({
 		if (this.conf.disabled) this.disable();
 		if (this.conf.defaultText && this.conf.defaultText.length && !this.conf.isStatic) this.label.html(this.conf.defaultText);
 		if (this.conf.items && this.conf.items.length) this.replaceList(this.conf.items);										// use the data store provided in the config
+		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
 		if (this.conf.value !== undefined && this.conf.value !== null) {
 			var c = this.conf, v = c.value, fid = v[c.fieldId], fin = v[c.fieldName];
 			if ($.type(v) === 'object' && fid && fin) this.setValue(fid, fin);													// set single value, e.g. {id:1, name:'item1'}
@@ -242,7 +244,6 @@ var DropDown = Class.extend({
 		if (!this.isExpanded) return;
 		if (e) e.stopPropagation();
 		this.menu.hide();
-		this.menu.find('.focused').removeClass('focused');
 		this.el.removeClass('expanded');
 		this.isExpanded = false;
 		this.clearFilter();																										// if menu has a filter - clear it
@@ -252,7 +253,7 @@ var DropDown = Class.extend({
 	},
 
 	/**
-	 * STATIC. Collapses all opened dropdowns' menus.
+	 * STATIC. Collapses all opened dropdown menus.
 	 */
 	collapseAll : function () {
 		$('.dropdown.expanded').each(function (idx, el) {$(el).data('dropdown').collapse(); });
@@ -331,13 +332,16 @@ var DropDown = Class.extend({
 		this.menu.find('.selected').removeClass('selected focused');
 		if (id !== '' && this.items && this.items.length) {																		// list available -> select item on list
 			this.focused = this.menu.find('.menu-item-id-' + id);
-			if (!this.conf.isStatic) this.focused.addClass('selected');															// selec item
-			for (var i = 0, item; item = this.items[i++] ;)
-				if (id == (typeof item === 'object' ? item[this.conf.fieldId] : item)) {
-					this.selectedItem = item;
-					break;
-				}
+			if (this.focused.length) {
+				if (!this.conf.isStatic) this.focused.addClass('selected focused');												// select item
+				for (var i = 0, item; item = this.items[i++] ;)
+					if (id == (typeof item === 'object' ? item[this.conf.fieldId] : item)) {
+						this.selectedItem = item;
+						break;
+					}
+			}
 			if (!name && this.selectedItem) name = this.mapName(this.conf.fieldName, this.selectedItem);
+			else if (!name) name = id;
 			if (!this.conf.isStatic) {
 				name = ('' + name).replace(/&/g, '&amp;');																		// encode all & to &amp; for IE
 				this.label.html(name);
@@ -467,10 +471,9 @@ var DropDown = Class.extend({
 			else if (typeof items[0] !== 'object') for (i = 0; item = items[i++];) ar.push(this.getItemHtml(item, item, item));	// using 1D array
 			else for (i = 0; item = items[i++];) ar.push(this.getItemHtml(item[fId], item[fName], item));						// name is a string
 
-			if (ar.length)
-				this.menu.append('<ul class="menu-items' + this.sidebarCls + '">' + ar.join('') + '</ul>');						// replace the list
+			if (ar.length) this.menu.append('<ul class="menu-items' + this.sidebarCls + '">' + ar.join('') + '</ul>');			// replace the list
 
-			this.items = items;																									// store items
+			this.items = items || [];																							// store items
 		}
 		this.adjustPosition();
 
@@ -581,7 +584,7 @@ var DropDown = Class.extend({
 		if (actionId === undefined) return;
 		this.collapse(e);
 		this.setValue(actionId, actionName);
-		if (this.conf.action) this.conf.action.call(this.conf.scope, actionId, this.selectedItem, this);
+		if (this.conf.action) this.conf.action.call(this.conf.scope || this.conf.action, actionId, this.selectedItem, this);
 	},
 
 
