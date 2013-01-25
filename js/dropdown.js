@@ -594,12 +594,14 @@ var DropDown = Class.extend({
 	disable : function (reset) {
 		if (reset) this.setValue();
 		this.el.addClass('dropdown-disabled');
+		this.el.find('input').prop('disabled', true);
 		this.conf.disabled = true;
 	},
 
 	enable : function (reset) {
 		if (reset) this.setValue();
 		this.el.removeClass('dropdown-disabled');
+		this.el.find('input').prop('disabled', false);
 		this.conf.disabled = false;
 	},
 
