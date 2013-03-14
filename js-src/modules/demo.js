@@ -1,10 +1,11 @@
-(function($, window){
+(function ($, window) {
+	'use strict';
 	/*global App: false */
 
 	var dd = [],
 
 
-	initWidgets = function(){
+	initWidgets = function () {
 		dd[1] = new window.XDropDown({ target: 'dropdown1', defaultText: 'Not selected', action: ddAction });
 		dd[2] = new window.XDropDown({ target: 'dropdown2', action: ddAction, defaultValue: 1,
 			items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }]
@@ -37,7 +38,7 @@
 		App.Publish('log', ['Widgets initialised' ]);
 	},
 
-	destroyWidgets = function(){
+	destroyWidgets = function () {
 		for (var i = dd.length; --i ;) {
 			dd[i].destroy();
 			dd[i] = null;
@@ -46,9 +47,9 @@
 	},
 
 
-	//select = function(d){ d.select(_$.rand(0, d.items.length+1)); },
+	//select = function (d){ d.select(_$.rand(0, d.items.length+1)); },
 
-	replaceList = function(dd){
+	replaceList = function (dd) {
 		var list = [
 			{id: 1, name: 'item 1' },
 			{id: 2, name: 'item 2' },
@@ -67,30 +68,41 @@
 	},
 
 
-	ddAction = function(actionId, selectedItem, dd){
+	ddAction = function (actionId, selectedItem, dd) {
 		var idx = dd.config.name.substr(-1);
 		App.Publish('log', ['Dropdown ' + idx + ' <b>' + actionId + '</b> was selected' ]);
 	},
 
-	btnAction = function(){
-		/*jshint white: false */
+	btnAction = function () {
 		var btn = $(this), msg = '',
 			action = btn.data('action'),
 			idx = btn.closest('tr').index();
 
 		if (!dd[idx]) return;
 		switch (action) {
-			case 'getValue': msg = 'value: <b>' + dd[idx].value + '</b>'; break;
-			case 'getIdValue': msg = 'ID value: <b>' + dd[idx].idValue + '</b>'; break;
-			case 'getTextValue': msg = 'Text value: <b>' + dd[idx].getTextValue() + '</b>'; break;
-			case 'reset': msg = 'reset'; dd[idx].reset(); break;
-			case 'replaceList': msg = 'list replaced'; replaceList(dd[idx]); break;
+		case 'getValue':
+			msg = 'value: <b>' + dd[idx].value + '</b>';
+			break;
+		case 'getIdValue':
+			msg = 'ID value: <b>' + dd[idx].idValue + '</b>';
+			break;
+		case 'getTextValue':
+			msg = 'Text value: <b>' + dd[idx].getTextValue() + '</b>';
+			break;
+		case 'reset':
+			msg = 'reset';
+			dd[idx].reset();
+			break;
+		case 'replaceList':
+			msg = 'list replaced';
+			replaceList(dd[idx]);
+			break;
 		}
 
-		App.Publish('log', ['Dropdown '+idx+': ' + msg ]);
+		App.Publish('log', ['Dropdown ' + idx + ': ' + msg ]);
 	},
 
-	initDemo = function(){
+	initDemo = function () {
 		$('.btn').on('click', btnAction);
 
 		$('#btnInit').on('click', initWidgets);
@@ -102,8 +114,5 @@
 
 
 	App.Subscribe('app/ready', initDemo);
-
-
-	return {};
 
 }(jQuery, this));

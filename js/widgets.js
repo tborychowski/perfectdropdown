@@ -124,7 +124,7 @@ window.XDropDown = function (conf) {
 	 * off {int}		[-10 | -1 | 0 | 1 | 10] highlight item that is +-x to the current one (0 = first; -1 = prev, 1=next, etc)
 	 */
 	_highlightItem = function (off) {
-		//jshint onevar: false
+		/*jshint onevar: false */
 		if (!_isExpanded) return _expand();
 
 		if (!_highlightObj)
@@ -249,6 +249,17 @@ window.XDropDown = function (conf) {
 	},
 
 
+	_enable = function () {
+		_el.removeClass('dropdown-disabled');
+		_el.find('input').prop('disabled', false);
+		_conf.disabled = false;
+	},
+
+	_disable = function () {
+		_el.addClass('dropdown-disabled');
+		_el.find('input').prop('disabled', true);
+		_conf.disabled = true;
+	},
 
 	/**
 	 * Document click handler - expand function adds it, collapse - removes; It hides the menu when clicked elsewhere
@@ -353,7 +364,7 @@ window.XDropDown = function (conf) {
 	 * @param name		label for a dropdown button
 	 */
 	_setValue = function (id, name) {
-		//jshint eqeqeq: false
+		/*jshint eqeqeq: false */
 		if (id === undefined) id = '';
 
 		// set input value
@@ -422,7 +433,7 @@ window.XDropDown = function (conf) {
 	 * Load list from the server
 	 */
 	_loadList = function () {
-		//jshint unused: false
+		/*jshint unused: false */
 		if (!_conf.url) return;
 		$.ajax({ url: _conf.url, type: 'post', context: this, dataType: 'json', data: _conf.params })
 		.fail(function (xhr, status, err) { _loadingError(); })
@@ -476,7 +487,7 @@ window.XDropDown = function (conf) {
 	 * @param emptyString	empty string to display when nothing is selected
 	 */
 	_populate = function (items) {
-		//jshint onevar: false
+		/*jshint onevar: false */
 		_menu.html('');
 		if (!items || !items.length) _noItems();
 		else {
@@ -597,7 +608,7 @@ window.XDropDown = function (conf) {
 	 * Initialize DropDown components
 	 */
 	_initComponent = function () {
-		//jshint onevar: false
+		/*jshint onevar: false */
 
 		if (typeof _conf.target === 'string') _conf.target = '#' + _conf.target;
 		_el = $(_conf.target);
@@ -650,7 +661,7 @@ window.XDropDown = function (conf) {
 	 * Initialize DropDown events
 	 */
 	_initEvents = function () {
-		//jshint white: false
+		/*jshint white: false */
 
 		_el.on({
 			mousedown: function (e) { _toggle(e); },
@@ -663,7 +674,7 @@ window.XDropDown = function (conf) {
 					case 32 :																	// space
 					case 13 : _action(e); break;												// enter
 
-					case 27 : 																	// esc
+					case 27 :																	// esc
 					case  9 : _collapse(e); break;												// tab
 
 					case 38 : e.preventDefault(); _highlightItem(-1); break;					// down arrow
@@ -789,12 +800,7 @@ window.XDropDown = function (conf) {
 		enabled: {
 			enumerable: true,
 			get: function () { return _el.hasClass('dropdown-disabled'); },
-			set: function (v) {
-				v = (v === true);
-				_el.toggleClass('dropdown-disabled', v);
-				_el.find('input').prop('disabled', !v);
-				_conf.disabled = !v;
-			}
+			set: function (v) { if (v === true) _enable(); else _disable(); }
 		},
 
 		destroy: { enumerable: true, value: _destroy }

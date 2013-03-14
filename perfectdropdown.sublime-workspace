@@ -1,0 +1,1401 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"console",
+				"console.	console.log()"
+			],
+			[
+				"last",
+				"last_entry_date"
+			],
+			[
+				"up",
+				"updateNofitication"
+			],
+			[
+				"it",
+				"items2"
+			],
+			[
+				"work_t",
+				"work_type_id"
+			],
+			[
+				"column",
+				"columnChart"
+			],
+			[
+				"colum",
+				"columnChartContainer"
+			],
+			[
+				"ui-sele",
+				"ui-selectee"
+			],
+			[
+				"td-",
+				"td-worktype"
+			],
+			[
+				"start",
+				"xStartRow"
+			],
+			[
+				"str",
+				"stripTagsOnPaste"
+			],
+			[
+				"fl",
+				"float"
+			],
+			[
+				"newP",
+				"newPass1"
+			],
+			[
+				"cu",
+				"currentPass"
+			],
+			[
+				"uniq",
+				"array_unique"
+			],
+			[
+				"for",
+				"for	for-(improved)"
+			],
+			[
+				"load",
+				"loadUsersHours"
+			],
+			[
+				"over",
+				"overflow-y"
+			],
+			[
+				"list",
+				"list-style"
+			],
+			[
+				"toda",
+				"todayStr"
+			],
+			[
+				"tex",
+				"text-decoration"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"bgc",
+				"bgc	background-color"
+			],
+			[
+				"copie",
+				"CopiedData"
+			],
+			[
+				"Copied",
+				"CopiedPattern"
+			],
+			[
+				"Copie",
+				"CopiedData"
+			],
+			[
+				"cont",
+				"containerH"
+			],
+			[
+				"fo",
+				"dateFormat"
+			],
+			[
+				"sho",
+				"shoudStay"
+			],
+			[
+				"curre",
+				"currentDate"
+			],
+			[
+				"clea",
+				"clear"
+			],
+			[
+				"clear",
+				"clearItems"
+			],
+			[
+				"desc",
+				"description"
+			],
+			[
+				"des",
+				"description"
+			],
+			[
+				"count",
+				"countD"
+			],
+			[
+				"coun",
+				"countP"
+			],
+			[
+				"selection",
+				"selectionChanged"
+			],
+			[
+				"ga",
+				"gradient"
+			],
+			[
+				"back",
+				"background"
+			],
+			[
+				"un",
+				"unselectAll"
+			],
+			[
+				"en",
+				"entry"
+			],
+			[
+				"jso",
+				"json_decode"
+			],
+			[
+				"onSe",
+				"onSelected"
+			],
+			[
+				"weekda",
+				"weekday-collapsed"
+			],
+			[
+				"wee",
+				"weekYear"
+			],
+			[
+				"we",
+				"weekYear"
+			],
+			[
+				"col",
+				"color"
+			],
+			[
+				"_",
+				"_formatDate"
+			],
+			[
+				"_fo",
+				"_formatDateShort"
+			],
+			[
+				"ba",
+				"background-repeat"
+			],
+			[
+				"change",
+				"changeTo"
+			],
+			[
+				"format",
+				"formatDate"
+			],
+			[
+				"empt",
+				"emptyDay"
+			],
+			[
+				"get",
+				"getDayHtml"
+			],
+			[
+				"type",
+				"typeof"
+			],
+			[
+				"week",
+				"weekday-collapsed"
+			],
+			[
+				"exp",
+				"expandDay"
+			],
+			[
+				"border",
+				"border-bottom"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"pad",
+				"padding"
+			],
+			[
+				"paddin",
+				"padding-right"
+			],
+			[
+				"te",
+				"text-decoration"
+			],
+			[
+				"ent",
+				"entries"
+			],
+			[
+				"fun",
+				"function"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "index.html",
+			"settings":
+			{
+				"buffer_size": 2742,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/User/_builder.sublime-build",
+	"command_palette":
+	{
+		"height": 213.0,
+		"selected_items":
+		[
+			[
+				"save",
+				"Project: Save As"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"list pa",
+				"Package Control: List Packages"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"fetch",
+				"Fetch: File"
+			],
+			[
+				"edit",
+				"Project: Edit"
+			],
+			[
+				"format",
+				"Format: Javascript"
+			],
+			[
+				"project",
+				"Project: Edit"
+			],
+			[
+				"remove packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"editp",
+				"Zen Coding: Move caret to next edit point"
+			],
+			[
+				"edit ",
+				"Project: Edit"
+			],
+			[
+				"upgrade",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"Package Control: list",
+				"Package Control: List Packages"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 498.0
+	},
+	"console":
+	{
+		"height": 153.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/Projects/perfectdropdown/js/jquery.min.js",
+		"/D/Projects/worklog/worklog/gruntfile.js",
+		"/D/Projects/worklog/worklog/web-src/js/modules/calendar.js",
+		"/D/Projects/worklog/worklog/web-src/js/jquery-plugins/jquery.tooltip.js",
+		"/D/Projects/perfecttooltip/js/jquery.tooltip.js",
+		"/D/Projects/worklog/worklog/watch.cmd",
+		"/D/Projects/worklog/worklog/web-src/js/widgets/dropdown.js",
+		"/D/Projects/worklog/worklog/web-src/js/utils.js",
+		"/D/Projects/worklog/worklog/web-src/js/modules/stats.js",
+		"/D/Projects/worklog/worklog/web-src/js/modules/admin-users.js",
+		"/D/Projects/worklog/worklog/web-src/js/jquery-plugins/jquery.daterangepicker.js",
+		"/D/Projects/worklog/worklog/web-src/js/jquery-plugins/jquery.datepicker.js",
+		"/D/Archiwum/Sublime Text 2.0.1/Data/Packages/User/SublimeLinter.sublime-settings",
+		"/D/Projects/worklog/worklog/web-src/js/jquery-plugins/jquery.itoggle.js",
+		"/D/Projects/worklog/worklog/web-src/js/jquery-plugins/jquery.formparams.js",
+		"/D/Projects/worklog/worklog/web-src/js/widgets/toaster.js",
+		"/D/Projects/worklog/worklog/web-src/js/modules/clipboard.js",
+		"/D/Projects/worklog/worklog/web-src/js/date.js",
+		"/D/Projects/worklog/worklog/web-src/js/app.js",
+		"/D/Projects/worklog/worklog/gruntfile-old.js",
+		"/D/Archiwum/unix/TCCLE13/tcstart.btm",
+		"/D/Projects/worklog/worklog/package.json",
+		"/D/Projects/worklog/worklog/web-src/js/modules/admin-projects.js",
+		"/D/Projects/worklog/worklog/application/views/home/admin.blade.php",
+		"/D/Projects/worklog/worklog/application/models/Charts.php",
+		"/D/Projects/worklog/worklog/application/models/Project.php",
+		"/D/Projects/worklog/worklog/.gitignore",
+		"/D/Projects/perfecttooltip/index.html",
+		"/D/Projects/worklog/worklog/web-src/styl/modules/main.styl",
+		"/D/Projects/worklog/worklog/web-src/js/modules/main.js",
+		"/D/Projects/worklog/worklog/web-src/js/modules/admin-types.js",
+		"/D/Projects/worklog/worklog/web-src/styl/widgets/itoggle.styl",
+		"/D/Projects/worklog/worklog/web-src/styl/modules/sidebar.styl",
+		"/D/Projects/worklog/worklog/web-src/js/modules/log.js",
+		"/D/Projects/worklog/worklog/web-src/styl/app.styl",
+		"/D/Projects/worklog/worklog/web-src/styl/widgets/dropdown.styl",
+		"/D/Projects/worklog/worklog/application/views/home/index.blade.php",
+		"/D/Projects/worklog/worklog/application/models/Entry.php",
+		"/D/Projects/worklog/worklog/application/controllers/incomplete.php",
+		"/D/Projects/worklog/worklog/application/controllers/project.php",
+		"/D/Projects/worklog/worklog/application/models/Day.php",
+		"/D/Projects/worklog/worklog/application/routes.php",
+		"/D/Projects/worklog/worklog/web-src/styl/widgets/tooltip.styl",
+		"/D/Projects/worklog/worklog/web-src/styl/widgets/tooltip.css",
+		"/D/Projects/worklog/worklog/application/models/UserProject.php",
+		"/D/Projects/worklog/worklog/application/controllers/userproject.php",
+		"/D/Projects/worklog/worklog/application/models/ProjectLog.php",
+		"/D/Projects/worklog/worklog/application/controllers/projectlog.php",
+		"/D/Projects/worklog/worklog/web-src/js/modules/projects.js",
+		"/D/Projects/worklog/worklog/web-src/styl/_lib.styl",
+		"/D/Projects/worklog/worklog/web-src/styl/modules/clipboard.styl",
+		"/D/Archiwum/Sublime Text 2.0.1/Data/Packages/User/Emmet.sublime-settings",
+		"/D/Archiwum/Sublime Text 2.0.1/Data/Packages/User/Default (Windows).sublime-keymap",
+		"/D/Projects/worklog/worklog/application/views/home/stats.blade.php",
+		"/D/Projects/worklog/worklog/application/controllers/charts.php",
+		"/D/Projects/worklog/worklog/application/models/WorkType.php",
+		"/D/Projects/worklog/worklog/laravel/helpers.php",
+		"/D/Projects/worklog/worklog/web-src/styl/_iconfont.styl",
+		"/D/Projects/worklog/worklog/application/views/home/log.blade.php",
+		"/D/Projects/worklog/worklog/web-src/styl/widgets/nanoscroller.styl",
+		"/D/Projects/worklog/worklog/web-src/js/jquery-plugins/jquery.nanoscroller.js",
+		"/D/Projects/worklog/worklog/web-src/js/modules/login.js",
+		"/D/Projects/worklog/worklog/application/views/home/menu.blade.php",
+		"/D/Projects/worklog/worklog/application/models/User.php",
+		"/D/Projects/worklog/worklog/application/controllers/user.php",
+		"/D/Projects/worklog/worklog/application/controllers/projectLog.php",
+		"/D/Projects/worklog/worklog/application/controllers/userProject.php",
+		"/D/Projects/worklog/worklog/application/controllers/workType.php",
+		"/D/Projects/worklog/worklog/application/views/home/login.blade.php",
+		"/D/Projects/worklog/worklog/web-src/styl/modules/login.styl",
+		"/D/Projects/worklog/worklog/application/controllers/home.php",
+		"/D/Projects/worklog/worklog/web-src/build/grunt.js",
+		"/D/Projects/worklog/worklog/web-src/styl/_reset.styl",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/log.js",
+		"/D/Projects/WorkLog4/worklog4/application/models/ProjectLog.php",
+		"/D/Projects/WorkLog4/worklog4/application/controllers/projectLog.php",
+		"/D/Projects/WorkLog4/worklog4/laravel/response.php",
+		"/D/Projects/WorkLog4/worklog4/application/routes.php",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/app.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/utils.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/styl/modules/sidebar.styl",
+		"/D/Projects/WorkLog4/worklog4/application/views/home/log.blade.php",
+		"/D/Projects/WorkLog4/worklog4/application/models/ExportLog.php",
+		"/D/Projects/WorkLog4/worklog4/application/controllers/exportLog.php",
+		"/C/Users/Tomek/Desktop/12.xls",
+		"/D/Projects/WorkLog4/worklog4/application/models/JSON.php",
+		"/D/Projects/WorkLog4/worklog4/application/controllers/home.php",
+		"/D/Projects/WorkLog4/worklog4/application/controllers/base.php",
+		"/D/Projects/WorkLog4/worklog4/application/controllers/day.php",
+		"/D/Projects/WorkLog4/worklog4/application/models/User.php",
+		"/D/Projects/WorkLog4/worklog4/application/models/Entry.php",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/stats.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/login.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/modules.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/widgets.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/app.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/lib/jquery-ui-1.10.0.custom.min.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/lib/jquery-migrate-1.0.0.min.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/lib/jquery-1.9.0.min.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/lib/bootstrap.min.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/lib/date.min.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/main.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/styl/modules/main.styl",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/widgets/dropdown.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/projects.js",
+		"/D/Projects/WorkLog4/worklog4/laravel/vendor/Symfony/Component/HttpFoundation/RequestMatcherInterface.php",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/clipboard.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/styl/_conf.styl",
+		"/D/Projects/WorkLog4/worklog4/application/models/Day.php",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/calendar.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/styl/app.styl",
+		"/D/Projects/WorkLog4/worklog4/web-src/styl/widgets/daterangepicker.styl",
+		"/D/Projects/WorkLog4/worklog4/web-src/styl/modules/clipboard.styl",
+		"/D/Projects/WorkLog4/worklog4/application/models/WorkType.php",
+		"/D/Projects/WorkLog4/worklog4/application/models/Project.php",
+		"/D/Projects/WorkLog4/worklog4/application/views/home/index.blade.php",
+		"/D/Projects/WorkLog4/worklog4/public/js/lib/time.min.js",
+		"/D/Projects/WorkLog4/worklog4/public/js/lib/jquery-ui-1.9.1.custom.min.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/clipboard-old.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/admin-types.js",
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/admin-users.js",
+		"/D/Projects/WorkLog4/worklog4/application/views/home/admin.blade.php",
+		"/D/Projects/WorkLog4/worklog4/application/models/UserProject.php",
+		"/D/Projects/WorkLog4/worklog4/application/controllers/workType.php",
+		"/C/Users/Tomek/Desktop/index.htm",
+		"/D/Projects/WorkLog4/worklog4/application/views/home/stats.blade.php",
+		"/D/Projects/WorkLog4/worklog4/laravel/asset.php",
+		"/D/Projects/WorkLog4/worklog4/web-src/styl/widgets/datepicker.styl"
+	],
+	"find":
+	{
+		"height": 37.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"*.js",
+			"*.php",
+			"*.styl",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"dontHideOnTooltipHover",
+			"jshint",
+			"\n		",
+			"jshint",
+			"switch (",
+			"switch",
+			"case",
+			"$",
+			"Sort",
+			"sort",
+			"Sort",
+			"sort",
+			"Sort",
+			"sort",
+			"Sort",
+			"sort",
+			"Sort",
+			"sort",
+			"Sort",
+			"sort",
+			"showMoreColumns",
+			"count(",
+			"join(",
+			"select",
+			"actionHandler",
+			"center",
+			"vertical-align",
+			"selectionChanged",
+			"day-collapsed",
+			"onKeyDown",
+			"dd",
+			"uisele",
+			".selectable",
+			"selectable",
+			"inedit",
+			"limitChars",
+			"onKeyDown",
+			"limitChars",
+			"th",
+			"lastEntryDate",
+			"showNulls",
+			"date",
+			"day.",
+			"-tip-size",
+			", ",
+			",  ",
+			", ",
+			"{",
+			"}",
+			": ",
+			"days.length",
+			"onDateChange",
+			"changeDate",
+			"$fromDate",
+			"$toDate",
+			"auth",
+			"date",
+			"ev",
+			"onKeyUp",
+			"onKeyDown",
+			"items",
+			"onKeyDown",
+			"unquote",
+			"s(",
+			"padd",
+			"padding",
+			"type",
+			"padding",
+			"clip",
+			"creampaper",
+			".font-icon",
+			"title: { text",
+			"worktypes",
+			"get_worktypes",
+			"project",
+			"$projects",
+			"projectId",
+			"Input::json(true)",
+			"column",
+			"worktype",
+			"column.",
+			"container",
+			"columnChart",
+			"loadmain",
+			"loadMain",
+			"HTML",
+			"id",
+			"userHours",
+			"userId",
+			"userHours",
+			"$p",
+			"projects",
+			"user_id",
+			"user",
+			"users2",
+			"$users",
+			"$u",
+			"eloquent",
+			"selectionChanged",
+			"ui-selectee",
+			"initSelect",
+			"initcom",
+			"onProjectSelect",
+			"onWorktypeSelect",
+			": ",
+			"\".\"",
+			"\"\"",
+			"\" \"",
+			"function(",
+			"limitChars",
+			"readDay",
+			"onKeyDown",
+			"keyup",
+			"limitChars",
+			"redrawDay",
+			"loadDay",
+			"footer",
+			"getDayHtml",
+			"getDayContentHtml",
+			"td-desc",
+			"readDay",
+			"redrawDay",
+			".td-description",
+			"getDayHtml",
+			"limitChars",
+			"log",
+			"keyup",
+			"onKeyDown"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"_documentClick",
+			"_decodeEntities",
+			"_mapName",
+			"_highlightItem",
+			"_adjustPosition",
+			"_getItemHtml",
+			"_getHtml",
+			"_filterHtml",
+			"_populate",
+			"_selectedItem",
+			"_self.",
+			"_self",
+			"_self.",
+			"_highlightObj",
+			"_focused",
+			"_isExpanded",
+			"_originalEl",
+			"_items",
+			"_input",
+			"_label",
+			"_menu",
+			"_button",
+			".font-icon-",
+			"'",
+			") {",
+			"function (",
+			" || ",
+			"'",
+			") {",
+			"function ("
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "index.html",
+					"settings":
+					{
+						"buffer_size": 2742,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2588,
+								2588
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": false,
+								"box-sizing": false,
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": false,
+								"ids": false,
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"is_xml": false,
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"bitwise": true,
+								"boss": true,
+								"browser": true,
+								"eqeqeq": true,
+								"immed": true,
+								"indent": 4.0,
+								"jquery": true,
+								"latedef": true,
+								"maxlen": 130.0,
+								"noarg": true,
+								"noempty": true,
+								"nonew": true,
+								"onevar": true,
+								"quotmark": true,
+								"smarttabs": true,
+								"trailing": true,
+								"unused": true,
+								"white": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+								"css": "C:\\Program Files\\nodejs\\node.exe",
+								"html": "C:\\Program Files\\nodejs\\node.exe",
+								"javascript": "C:\\Program Files\\nodejs\\node.exe"
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"JSON": "javascript",
+								"jQueryJavaScript": "javascript"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1386.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 37.0
+	},
+	"input":
+	{
+		"height": 37.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 172.0
+	},
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"toolt",
+				"web-src/js/jquery-plugins/jquery.tooltip.js"
+			],
+			[
+				"cale",
+				"web-src/js/modules/calendar.js"
+			],
+			[
+				"dropdow",
+				"web-src/js/widgets/dropdown.js"
+			],
+			[
+				"util",
+				"web-src/js/utils.js"
+			],
+			[
+				"stats",
+				"web-src/js/modules/stats.js"
+			],
+			[
+				"admus",
+				"web-src/js/modules/admin-users.js"
+			],
+			[
+				"dateran",
+				"web-src/js/jquery-plugins/jquery.daterangepicker.js"
+			],
+			[
+				"tool",
+				"web-src/js/jquery-plugins/jquery.tooltip.js"
+			],
+			[
+				"clip",
+				"web-src/js/modules/clipboard.js"
+			],
+			[
+				"datepi",
+				"web-src/js/jquery-plugins/jquery.datepicker.js"
+			],
+			[
+				"formpara",
+				"web-src/js/jquery-plugins/jquery.formparams.js"
+			],
+			[
+				"date",
+				"web-src/js/date.js"
+			],
+			[
+				"app",
+				"web-src/js/app.js"
+			],
+			[
+				"adbl",
+				"application/views/home/admin.blade.php"
+			],
+			[
+				"adpro",
+				"web-src/js/modules/admin-projects.js"
+			],
+			[
+				"chart",
+				"application/models/Charts.php"
+			],
+			[
+				"project",
+				"application/models/Project.php"
+			],
+			[
+				"maist",
+				"web-src/styl/modules/main.styl"
+			],
+			[
+				"main",
+				"web-src/js/modules/main.js"
+			],
+			[
+				"adminu",
+				"web-src/js/modules/admin-users.js"
+			],
+			[
+				"adminpr",
+				"web-src/js/modules/admin-projects.js"
+			],
+			[
+				"admin",
+				"web-src/js/modules/admin-types.js"
+			],
+			[
+				"admin-pr",
+				"web-src/js/modules/admin-projects.js"
+			],
+			[
+				"utils",
+				"web-src/js/utils.js"
+			],
+			[
+				"itogg",
+				"web-src/js/jquery-plugins/jquery.itoggle.js"
+			],
+			[
+				"ito",
+				"web-src/styl/widgets/itoggle.styl"
+			],
+			[
+				"sidest",
+				"web-src/styl/modules/sidebar.styl"
+			],
+			[
+				"mains",
+				"web-src/styl/modules/main.styl"
+			],
+			[
+				"log.j",
+				"web-src/js/modules/log.js"
+			],
+			[
+				"sideba",
+				"web-src/styl/modules/sidebar.styl"
+			],
+			[
+				"side",
+				"web-src/styl/modules/sidebar.styl"
+			],
+			[
+				"dropd",
+				"web-src/styl/widgets/dropdown.styl"
+			],
+			[
+				"appst",
+				"web-src/styl/app.styl"
+			],
+			[
+				"blade",
+				"application/views/home/index.blade.php"
+			],
+			[
+				"calen",
+				"web-src/js/modules/calendar.js"
+			],
+			[
+				"incom",
+				"application/controllers/incomplete.php"
+			],
+			[
+				"entry",
+				"application/models/Entry.php"
+			],
+			[
+				"adproject",
+				"web-src/js/modules/admin-projects.js"
+			],
+			[
+				"char",
+				"application/models/Charts.php"
+			],
+			[
+				"day",
+				"application/models/Day.php"
+			],
+			[
+				"route",
+				"application/routes.php"
+			],
+			[
+				"proj",
+				"application/controllers/project.php"
+			],
+			[
+				"projec",
+				"application/controllers/project.php"
+			],
+			[
+				"entr",
+				"application/models/Entry.php"
+			],
+			[
+				"cal",
+				"web-src/js/modules/calendar.js"
+			],
+			[
+				"inco",
+				"application/controllers/incomplete.php"
+			],
+			[
+				"tooltp",
+				"web-src/js/jquery-plugins/jquery.tooltip.js"
+			],
+			[
+				"indexb",
+				"application/views/home/index.blade.php"
+			],
+			[
+				"rout",
+				"application/routes.php"
+			],
+			[
+				"sidebla",
+				"application/views/home/index.blade.php"
+			],
+			[
+				"clipb",
+				"web-src/styl/modules/clipboard.styl"
+			],
+			[
+				"lib",
+				"web-src/styl/_lib.styl"
+			],
+			[
+				"_li",
+				"web-src/styl/_lib.styl"
+			],
+			[
+				"sidea",
+				"web-src/styl/modules/sidebar.styl"
+			],
+			[
+				"sideb",
+				"application/views/home/index.blade.php"
+			],
+			[
+				"projects",
+				"web-src/js/modules/projects.js"
+			],
+			[
+				"statsbla",
+				"application/views/home/stats.blade.php"
+			],
+			[
+				"mainst",
+				"web-src/styl/modules/main.styl"
+			],
+			[
+				"mainsty",
+				"web-src/styl/modules/main.styl"
+			],
+			[
+				"statsb",
+				"application/views/home/stats.blade.php"
+			],
+			[
+				"log.js",
+				"web-src/js/modules/log.js"
+			],
+			[
+				"statsj",
+				"web-src/js/modules/stats.js"
+			],
+			[
+				"helper",
+				"laravel/helpers.php"
+			],
+			[
+				"rou",
+				"application/routes.php"
+			],
+			[
+				"projectlog",
+				"application/models/ProjectLog.php"
+			],
+			[
+				"fon",
+				"web-src/styl/_iconfont.styl"
+			],
+			[
+				"mai",
+				"web-src/styl/modules/main.styl"
+			],
+			[
+				"main.s",
+				"web-src/styl/modules/main.styl"
+			],
+			[
+				"daterange",
+				"web-src/js/jquery-plugins/jquery.daterangepicker.js"
+			],
+			[
+				"stats.j",
+				"web-src/js/modules/stats.js"
+			],
+			[
+				"logbla",
+				"application/views/home/log.blade.php"
+			],
+			[
+				"log",
+				"web-src/js/modules/log.js"
+			],
+			[
+				"icon",
+				"web-src/styl/_iconfont.styl"
+			],
+			[
+				"font",
+				"web-src/styl/_iconfont.styl"
+			],
+			[
+				"homebl",
+				"application/views/home/index.blade.php"
+			],
+			[
+				"nano",
+				"web-src/styl/widgets/nanoscroller.styl"
+			],
+			[
+				"nanos",
+				"web-src/js/jquery-plugins/jquery.nanoscroller.js"
+			],
+			[
+				"clib",
+				"web-src/js/modules/clipboard.js"
+			],
+			[
+				"logjs",
+				"web-src/js/modules/log.js"
+			],
+			[
+				"mainl",
+				"web-src/styl/modules/main.styl"
+			],
+			[
+				"menublade",
+				"application/views/home/menu.blade.php"
+			],
+			[
+				"menu",
+				"application/views/home/menu.blade.php"
+			],
+			[
+				"main.bla",
+				"application/views/home/admin.blade.php"
+			],
+			[
+				"projectlo",
+				"application/controllers/projectLog.php"
+			],
+			[
+				"main.le",
+				"application/views/home/admin.blade.php"
+			],
+			[
+				"adminuser",
+				"web-src/js/modules/admin-users.js"
+			],
+			[
+				"project.js",
+				"web-src/js/modules/projects.js"
+			],
+			[
+				"projectl",
+				"application/controllers/projectLog.php"
+			],
+			[
+				"loginbla",
+				"application/views/home/login.blade.php"
+			],
+			[
+				"login.s",
+				"web-src/styl/modules/login.styl"
+			],
+			[
+				"respons",
+				"laravel/response.php"
+			],
+			[
+				"projectlog.p",
+				"application/models/ProjectLog.php"
+			],
+			[
+				"userst",
+				"web-src/styl/modules/sidebar.styl"
+			],
+			[
+				"logblad",
+				"application/views/home/log.blade.php"
+			],
+			[
+				"drop",
+				"web-src/js/widgets/dropdown.js"
+			],
+			[
+				"projs.j",
+				"web-src/js/modules/projects.js"
+			],
+			[
+				"_",
+				"web-src/styl/_conf.styl"
+			],
+			[
+				"ent",
+				"application/models/Entry.php"
+			],
+			[
+				"range",
+				"web-src/styl/widgets/daterangepicker.styl"
+			],
+			[
+				"home",
+				"application/controllers/home.php"
+			],
+			[
+				"cli",
+				"web-src/js/modules/clipboard-old.js"
+			],
+			[
+				"main.js",
+				"web-src/js/modules/main.js"
+			],
+			[
+				"users.js",
+				"web-src/js/modules/admin-users.js"
+			],
+			[
+				"adminb",
+				"application/views/home/admin.blade.php"
+			],
+			[
+				"r",
+				"application/routes.php"
+			],
+			[
+				"logb",
+				"application/views/home/log.blade.php"
+			],
+			[
+				"ass",
+				"laravel/asset.php"
+			],
+			[
+				"main.",
+				"web-src/js/modules/main.js"
+			],
+			[
+				"dropdo",
+				"web-src/js/widgets/dropdown.js"
+			],
+			[
+				"main.l",
+				"web-src/styl/modules/main.styl"
+			],
+			[
+				"logbl",
+				"application/views/home/log.blade.php"
+			],
+			[
+				"fluent",
+				"laravel/fluent.php"
+			],
+			[
+				"eloq",
+				"laravel/auth/drivers/eloquent.php"
+			],
+			[
+				"admi",
+				"application/views/home/admin.blade.php"
+			],
+			[
+				"user",
+				"application/models/User.php"
+			],
+			[
+				"datejs",
+				"public/js/lib/date.js"
+			],
+			[
+				"cald",
+				"web-src/js/modules/calendar.js"
+			],
+			[
+				"darange",
+				"web-src/styl/widgets/daterangepicker.styl"
+			],
+			[
+				"datepic",
+				"web-src/styl/widgets/datepicker.styl"
+			],
+			[
+				"calenda",
+				"web-src/js/modules/calendar.js"
+			],
+			[
+				"sidebar",
+				"web-src/styl/modules/sidebar.styl"
+			],
+			[
+				"logst",
+				"web-src/styl/login/login.styl"
+			],
+			[
+				"calend",
+				"web-src/js/modules/calendar.js"
+			],
+			[
+				"log.bla",
+				"application/views/home/log.blade.php"
+			],
+			[
+				"dropdown",
+				"web-src/js/widgets/dropdown.js"
+			],
+			[
+				"log.",
+				"web-src/js/modules/log.js"
+			],
+			[
+				"adm",
+				"web-src/js/modules/admin-projects.js"
+			],
+			[
+				"adu",
+				"web-src/js/modules/admin-users.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 214.0,
+	"status_bar_visible": true
+}
