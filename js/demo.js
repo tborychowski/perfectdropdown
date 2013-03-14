@@ -1,18 +1,22 @@
-(function($){
+(function($, window){
+	/*global App: false */
+
 	var dd = [],
 
 
 	initWidgets = function(){
-		dd[1] = new DropDown({ target: 'dropdown1', defaultText: 'Not selected', action: ddAction });
-		dd[2] = new DropDown({ target: 'dropdown2', action: ddAction, defaultValue: 1,
+		dd[1] = new window.XDropDown({ target: 'dropdown1', defaultText: 'Not selected', action: ddAction });
+		dd[2] = new window.XDropDown({ target: 'dropdown2', action: ddAction, defaultValue: 1,
 			items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }]
 		});
-		dd[3] = new MultiSelect({ target: 'dropdown3', defaultText: 'Items', emptyText: 'All Items', action: ddAction, showSidebar: true, menuAlign: 'right' });
-		dd[4] = new DropDown({ target: 'dropdown4', isStatic: true, emptyText: 'User Menu', action: ddAction,
-			items: [ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ],
+		//dd[3] = new window.MultiSelect({ target: 'dropdown3', defaultText: 'Items',
+		//	emptyText: 'All Items', action: ddAction, showSidebar: true, menuAlign: 'right' });
+		dd[4] = new window.XDropDown({ target: 'dropdown4', isStatic: true, emptyText: 'User Menu', action: ddAction,
+			items: [ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ]
 		});
 
-		dd[5] = new DropDown({ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu', action: ddAction, showSidebar: true,
+		dd[5] = new window.XDropDown({ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu',
+			action: ddAction, showSidebar: true,
 			items: [
 				{ id: 10, name: 'Option 10', group: 'Group 10', isHeader: true },
 				{ id: 11, name: 'Option 11', group: 'Group 10' },
@@ -26,7 +30,7 @@
 				{ id: 22, name: 'Option 22', group: 'Group 20' },
 				{ id: 23, name: 'Option 23', group: 'Group 20' },
 				{ id: 24, name: 'Option 24', group: 'Group 20' },
-				{ id: 25, name: 'Option 25', group: 'Group 20' },
+				{ id: 25, name: 'Option 25', group: 'Group 20' }
 			]
 		});
 
@@ -34,7 +38,10 @@
 	},
 
 	destroyWidgets = function(){
-		for (var i = dd.length; --i ;) dd[i].destroy(); dd[i] = null;
+		for (var i = dd.length; --i ;) {
+			dd[i].destroy();
+			dd[i] = null;
+		}
 		App.Publish('log', ['Widgets destroyed' ]);
 	},
 
@@ -56,24 +63,25 @@
 			{id: 11, name: 'item 11' },
 			{id: 12, name: 'item 12' }
 		];
-		if (dd) dd.replaceList(list);
+		if (dd) dd.items = list;
 	},
 
 
 	ddAction = function(actionId, selectedItem, dd){
-		var idx = dd.conf.name.substr(-1);
-		log(selectedItem)
+		var idx = dd.config.name.substr(-1);
 		App.Publish('log', ['Dropdown ' + idx + ' <b>' + actionId + '</b> was selected' ]);
 	},
 
 	btnAction = function(){
+		/*jshint white: false */
 		var btn = $(this), msg = '',
 			action = btn.data('action'),
 			idx = btn.closest('tr').index();
+
 		if (!dd[idx]) return;
-		switch(action){
-			case 'getValue': msg = 'value: <b>' + dd[idx].getValue() + '</b>'; break;
-			case 'getIdValue': msg = 'ID value: <b>' + dd[idx].getIdValue() + '</b>'; break;
+		switch (action) {
+			case 'getValue': msg = 'value: <b>' + dd[idx].value + '</b>'; break;
+			case 'getIdValue': msg = 'ID value: <b>' + dd[idx].idValue + '</b>'; break;
 			case 'getTextValue': msg = 'Text value: <b>' + dd[idx].getTextValue() + '</b>'; break;
 			case 'reset': msg = 'reset'; dd[idx].reset(); break;
 			case 'replaceList': msg = 'list replaced'; replaceList(dd[idx]); break;
@@ -83,7 +91,7 @@
 	},
 
 	initDemo = function(){
-		$('.btn').on('click', btnAction);																						// Init button click events
+		$('.btn').on('click', btnAction);
 
 		$('#btnInit').on('click', initWidgets);
 		$('#btnDestroy').on('click', destroyWidgets);
@@ -98,4 +106,4 @@
 
 	return {};
 
-}(jQuery));
+}(jQuery, this));
