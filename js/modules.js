@@ -45,17 +45,22 @@
 
 
 	initWidgets = function () {
-		dd[1] = new window.XDropDown({ target: 'dropdown1', defaultText: 'Not selected', action: ddAction });
-		dd[2] = new window.XDropDown({ target: 'dropdown2', action: ddAction, defaultValue: 1,
+		dd = [];
+
+		dd[0] = new window.XDropDown({ target: 'dropdown1', defaultText: 'Not selected', action: ddAction });
+
+		dd[1] = new window.XDropDown({ target: 'dropdown2', action: ddAction, defaultValue: 1,
 			items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }]
 		});
-		//dd[3] = new window.MultiSelect({ target: 'dropdown3', defaultText: 'Items',
-		//	emptyText: 'All Items', action: ddAction, showSidebar: true, menuAlign: 'right' });
-		dd[4] = new window.XDropDown({ target: 'dropdown4', isStatic: true, emptyText: 'User Menu', action: ddAction,
+
+		dd[2] = new window.XMultiSelect({ target: 'dropdown3', defaultText: 'Items',
+			emptyText: 'All Items', action: ddAction, showSidebar: true, menuAlign: 'right' });
+
+		dd[3] = new window.XDropDown({ target: 'dropdown4', isStatic: true, emptyText: 'User Menu', action: ddAction,
 			items: [ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ]
 		});
 
-		dd[5] = new window.XDropDown({ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu',
+		dd[4] = new window.XDropDown({ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu',
 			action: ddAction, showSidebar: true,
 			items: [
 				{ id: 10, name: 'Option 10', group: 'Group 10', isHeader: true },
@@ -75,10 +80,12 @@
 		});
 
 		App.Publish('log', ['Widgets initialised' ]);
+
+		return dd;
 	},
 
 	destroyWidgets = function () {
-		for (var i = dd.length; --i ;) {
+		for (var i = dd.length; --i >= 0;) {
 			dd[i].destroy();
 			dd[i] = null;
 		}
@@ -103,38 +110,39 @@
 			{id: 11, name: 'item 11' },
 			{id: 12, name: 'item 12' }
 		];
-		if (dd) dd.items = list;
+		if (dd) dd.setItems(list);
 	},
 
 
 	ddAction = function (actionId, selectedItem, dd) {
-		var idx = dd.config.name.substr(-1);
+		var idx = dd.getConfig().name.substr(-1);
 		App.Publish('log', ['Dropdown ' + idx + ' <b>' + actionId + '</b> was selected' ]);
 	},
 
 	btnAction = function () {
 		var btn = $(this), msg = '',
 			action = btn.data('action'),
-			idx = btn.closest('tr').index();
+			idx = btn.closest('tr').index() - 1,
+			d = dd[idx];
 
-		if (!dd[idx]) return;
+		if (!d) return;
 		switch (action) {
 		case 'getValue':
-			msg = 'value: <b>' + dd[idx].value + '</b>';
+			msg = 'value: <b>' + d.getValue() + '</b>';
 			break;
 		case 'getIdValue':
-			msg = 'ID value: <b>' + dd[idx].idValue + '</b>';
+			msg = 'ID value: <b>' + d.getIdValue() + '</b>';
 			break;
 		case 'getTextValue':
-			msg = 'Text value: <b>' + dd[idx].getTextValue() + '</b>';
+			msg = 'Text value: <b>' + d.getTextValue() + '</b>';
 			break;
 		case 'reset':
 			msg = 'reset';
-			dd[idx].reset();
+			d.reset();
 			break;
 		case 'replaceList':
 			msg = 'list replaced';
-			replaceList(dd[idx]);
+			replaceList(d);
 			break;
 		}
 
@@ -147,7 +155,7 @@
 		$('#btnInit').on('click', initWidgets);
 		$('#btnDestroy').on('click', destroyWidgets);
 
-		initWidgets();
+		window.dd = initWidgets();
 	};
 
 

@@ -263,14 +263,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "index.html",
-			"settings":
-			{
-				"buffer_size": 2315,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "Packages/User/_builder.sublime-build",
 	"command_palette":
@@ -364,6 +356,14 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Tom/Desktop/dropdown-multi.js",
+		"/D/Projects/_mini_projects/perfectdropdown/js-src/widgets/dropdown.js",
+		"/D/Projects/_mini_projects/perfectdropdown/js-src/modules/demo.js",
+		"/D/Projects/_mini_projects/perfectdropdown/less/dropdown.less",
+		"/D/Projects/_mini_projects/perfectdropdown/tests/multiselect.js",
+		"/D/Projects/_mini_projects/perfectdropdown/tests/dropdown.js",
+		"/D/Projects/_mini_projects/perfectdropdown/tests/index.html",
+		"/D/Projects/_mini_projects/perfectdropdown/index.html",
 		"/D/Projects/perfectdropdown/js/jquery.min.js",
 		"/D/Projects/worklog/worklog/gruntfile.js",
 		"/D/Projects/worklog/worklog/web-src/js/modules/calendar.js",
@@ -483,15 +483,7 @@
 		"/D/Projects/WorkLog4/worklog4/public/js/lib/time.min.js",
 		"/D/Projects/WorkLog4/worklog4/public/js/lib/jquery-ui-1.9.1.custom.min.js",
 		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/clipboard-old.js",
-		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/admin-types.js",
-		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/admin-users.js",
-		"/D/Projects/WorkLog4/worklog4/application/views/home/admin.blade.php",
-		"/D/Projects/WorkLog4/worklog4/application/models/UserProject.php",
-		"/D/Projects/WorkLog4/worklog4/application/controllers/workType.php",
-		"/C/Users/Tomek/Desktop/index.htm",
-		"/D/Projects/WorkLog4/worklog4/application/views/home/stats.blade.php",
-		"/D/Projects/WorkLog4/worklog4/laravel/asset.php",
-		"/D/Projects/WorkLog4/worklog4/web-src/styl/widgets/datepicker.styl"
+		"/D/Projects/WorkLog4/worklog4/web-src/js/modules/admin-types.js"
 	],
 	"find":
 	{
@@ -513,6 +505,57 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"log",
+			"_initComponent",
+			"_getIdValue",
+			"_setValue",
+			"_reset",
+			".populate",
+			"reset",
+			".reset",
+			"all-items-selected",
+			"v",
+			"c",
+			"all-items-selected",
+			"this.",
+			"this.value",
+			"_menu.find('.menu-items')",
+			"');",
+			"pdng",
+			"newH",
+			"mn",
+			"_populate",
+			"replaceList",
+			" this",
+			"self",
+			" this",
+			"this",
+			"this.",
+			"this",
+			"_focused",
+			"applySelected",
+			"selectedItems",
+			"_selectedItems",
+			"this.",
+			": function",
+			"this.",
+			"this.el",
+			"_action",
+			"collapseall",
+			"dd[idx]",
+			"sidebarCls",
+			"10",
+			"equal",
+			"DropDown",
+			"d.items",
+			"d.items = ",
+			"d.items.",
+			"d.value,",
+			"d.value = ",
+			".value",
+			".idValue",
+			"jshint",
+			"enumerable: true,",
 			"dontHideOnTooltipHover",
 			"jshint",
 			"\n		",
@@ -589,58 +632,7 @@
 			"get_worktypes",
 			"project",
 			"$projects",
-			"projectId",
-			"Input::json(true)",
-			"column",
-			"worktype",
-			"column.",
-			"container",
-			"columnChart",
-			"loadmain",
-			"loadMain",
-			"HTML",
-			"id",
-			"userHours",
-			"userId",
-			"userHours",
-			"$p",
-			"projects",
-			"user_id",
-			"user",
-			"users2",
-			"$users",
-			"$u",
-			"eloquent",
-			"selectionChanged",
-			"ui-selectee",
-			"initSelect",
-			"initcom",
-			"onProjectSelect",
-			"onWorktypeSelect",
-			": ",
-			"\".\"",
-			"\"\"",
-			"\" \"",
-			"function(",
-			"limitChars",
-			"readDay",
-			"onKeyDown",
-			"keyup",
-			"limitChars",
-			"redrawDay",
-			"loadDay",
-			"footer",
-			"getDayHtml",
-			"getDayContentHtml",
-			"td-desc",
-			"readDay",
-			"redrawDay",
-			".td-description",
-			"getDayHtml",
-			"limitChars",
-			"log",
-			"keyup",
-			"onKeyDown"
+			"projectId"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -688,110 +680,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "index.html",
-					"settings":
-					{
-						"buffer_size": 2315,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"csslint_options":
-							{
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"is_xml": false,
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"bitwise": true,
-								"boss": true,
-								"browser": true,
-								"camelcase": true,
-								"eqeqeq": true,
-								"immed": true,
-								"indent": 4,
-								"jquery": true,
-								"latedef": true,
-								"maxlen": 130,
-								"newcap": true,
-								"noarg": true,
-								"noempty": true,
-								"nonew": true,
-								"onevar": true,
-								"quotmark": true,
-								"smarttabs": true,
-								"trailing": true,
-								"undef": true,
-								"unused": true,
-								"white": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": true,
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-								"html": "C:\\Program Files\\nodejs\\node.exe",
-								"javascript": "C:\\Program Files\\nodejs\\node.exe"
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"JSON": "javascript",
-								"jQueryJavaScript": "javascript"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -840,6 +730,14 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"demo",
+				"js-src/modules/demo.js"
+			],
+			[
+				"drop",
+				"less/dropdown.less"
+			],
 			[
 				"toolt",
 				"web-src/js/jquery-plugins/jquery.tooltip.js"
@@ -1217,10 +1115,6 @@
 				"application/views/home/log.blade.php"
 			],
 			[
-				"drop",
-				"web-src/js/widgets/dropdown.js"
-			],
-			[
 				"projs.j",
 				"web-src/js/modules/projects.js"
 			],
@@ -1347,10 +1241,6 @@
 			[
 				"adm",
 				"web-src/js/modules/admin-projects.js"
-			],
-			[
-				"adu",
-				"web-src/js/modules/admin-users.js"
 			]
 		],
 		"width": 0.0
