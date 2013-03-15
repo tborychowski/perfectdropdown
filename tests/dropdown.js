@@ -25,76 +25,84 @@ module('DropDown - Simple', {
 
 test('Init', function () { notEqual(d, null, 'Should not be null'); });
 
-test('Default value', function () { equal(d.value, defV, 'Should have a default value'); });
 
-test('Set/Get/Reset value (no list)', function () {
-	deepEqual(d.items, [], 'List should be empty');
-	equal(d.items.length, 0, 'List length should be 0');
-
-	d.value = 1;
-	equal(d.value, 1, 'Value should be 1');
-
-	d.value = 10;
-	equal(d.value, 10, 'Value should be 10');
-
-	d.reset();
-	equal(d.idValue, defV, 'Value shoud be ' + defV);
-	equal(d.value, defV, 'Name shoud be "' + defV + '"');
-
-	d.select(3);
-	equal(d.idValue, defV, 'Value shoud be ' + defV);
-	equal(d.value, defV, 'Name shoud be "' + defV + '"');
+test('Default value', function () {
+	equal(d.getValue(), defV, 'Should have a default value');
 });
 
-test('Set/Get/Reset value (list is a simple array)', function () {
-	d.items = simpleList;
 
-	deepEqual(d.items, simpleList, 'Replace list with [1,2,3,4,5]');
-	equal(d.items.length, simpleList.length, 'List length should be ' + simpleList.length);
+test('Set/Get/Reset value (no list)', function () {
+	deepEqual(d.getItems(), [], 'List should be empty');
+	equal(d.getItems().length, 0, 'List length should be 0');
 
-	d.value = v = 1;
-	equal(d.value, v, 'Value shoud be ' + v);
-	equal(d.idValue, v, 'ID value shoud be ' + v);
+	d.setValue(1);
+	equal(d.getValue(), 1, 'Value should be 1');
 
-	d.value = v = 10;
-	equal(d.value, v, 'Value shoud be ' + v);
-	equal(d.idValue, v, 'ID value shoud be ' + v);
+	d.setValue(10);
+	equal(d.getValue(), 10, 'Value should be 10');
 
 	d.reset();
-	equal(d.idValue, defV, 'Value shoud be ' + defV);
-	equal(d.value, defV, 'Name shoud be "' + defV + '"');
+	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+
+	d.select(3);
+	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+});
+
+
+test('Set/Get/Reset value (list is a simple array)', function () {
+	d.setItems(simpleList);
+
+	deepEqual(d.getItems(), simpleList, 'Replace list with [1,2,3,4,5]');
+	equal(d.getItems().length, simpleList.length, 'List length should be ' + simpleList.length);
+
+	v = 1;
+	d.setValue(v);
+	equal(d.getValue(), v, 'Value shoud be ' + v);
+	equal(d.getIdValue(), v, 'ID value shoud be ' + v);
+
+	v = 10;
+	d.setValue(v);
+	equal(d.getValue(), v, 'Value shoud be ' + v);
+	equal(d.getIdValue(), v, 'ID value shoud be ' + v);
+
+	d.reset();
+	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
 
 	v = simpleList[3];
 	d.select(3);
-	equal(d.idValue, v, 'Value shoud be ' + v);
-	equal(d.value, v, 'Name shoud be "' + v + '"');
+	equal(d.getIdValue(), v, 'Value shoud be ' + v);
+	equal(d.getValue(), v, 'Name shoud be "' + v + '"');
 });
 
-test('Set/Get/Reset value (list is an array of objects)', function () {
-	d.items = objectList;
 
-	deepEqual(d.items, objectList, 'Replace list with array of objects');
-	equal(d.items.length, objectList.length, 'List length should be ' + objectList.length);
+test('Set/Get/Reset value (list is an array of objects)', function () {
+	d.setItems(objectList);
+
+	deepEqual(d.getItems(), objectList, 'Replace list with array of objects');
+	equal(d.getItems().length, objectList.length, 'List length should be ' + objectList.length);
 
 	v = objectList[2];
-	d.value = v.id;
-	equal(d.idValue, v.id, 'Value shoud be ' + v.id);
-	equal(d.value, v.name, 'Name shoud be "' + v.name + '"');
+	d.setValue(v.id);
+	equal(d.getIdValue(), v.id, 'Value shoud be ' + v.id);
+	equal(d.getValue(), v.name, 'Name shoud be "' + v.name + '"');
 
 	v = objectList[4];
-	d.value = v.id;
-	equal(d.idValue, v.id, 'Value shoud be ' + v.id);
-	equal(d.value, v.name, 'Name shoud be "' + v.name + '"');
+	d.setValue(v.id);
+	equal(d.getIdValue(), v.id, 'Value shoud be ' + v.id);
+	equal(d.getValue(), v.name, 'Name shoud be "' + v.name + '"');
 
 
 	d.reset();
-	equal(d.idValue, defV, 'Value shoud be ' + defV);
-	equal(d.value, defV, 'Name shoud be "' + defV + '"');
+	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
 
 	v = objectList[3];
 	d.select(3);
-	equal(d.idValue, v.id, 'Value shoud be ' + v.id);
-	equal(d.value, v.name, 'Name shoud be "' + v.name + '"');
+	equal(d.getIdValue(), v.id, 'Value shoud be ' + v.id);
+	equal(d.getValue(), v.name, 'Name shoud be "' + v.name + '"');
 });
 
 
@@ -119,30 +127,30 @@ module('DropDown - Complex', {
 test('Set/Get/Reset value (list is an array of objects)', function () {
 	var eV = '';
 
-	deepEqual(d.items, complexObjectList, 'Replace list with array of objects');
-	equal(d.items.length, complexObjectList.length, 'List length should be ' + complexObjectList.length);
+	deepEqual(d.getItems(), complexObjectList, 'Replace list with array of objects');
+	equal(d.getItems().length, complexObjectList.length, 'List length should be ' + complexObjectList.length);
 
 	v = complexObjectList[2];
-	d.value = v.itemId;
-	equal(d.idValue, v.itemId, 'Value shoud be ' + v.itemId);
+	d.setValue(v.itemId);
+	equal(d.getIdValue(), v.itemId, 'Value shoud be ' + v.itemId);
 	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
-	equal(d.value, eV, 'Name shoud be "' + eV + '"');
+	equal(d.getValue(), eV, 'Name shoud be "' + eV + '"');
 
 	v = complexObjectList[4];
-	d.value = v.itemId;
-	equal(d.idValue, v.itemId, 'Value shoud be ' + v.itemId);
+	d.setValue(v.itemId);
+	equal(d.getIdValue(), v.itemId, 'Value shoud be ' + v.itemId);
 	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
-	equal(d.value, eV, 'Name shoud be "' + eV + '"');
+	equal(d.getValue(), eV, 'Name shoud be "' + eV + '"');
 
 
 	d.reset();
-	equal(d.idValue, defV, 'Value shoud be ' + defV);
-	equal(d.value, defV, 'Name shoud be "' + defV + '"');
+	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
 
 
 	v = complexObjectList[3];
 	d.select(3);
-	equal(d.idValue, v.itemId, 'Value shoud be ' + v.itemId);
+	equal(d.getIdValue(), v.itemId, 'Value shoud be ' + v.itemId);
 	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
-	equal(d.value, eV, 'Name shoud be "' + eV + '"');
+	equal(d.getValue(), eV, 'Name shoud be "' + eV + '"');
 });

@@ -42,7 +42,7 @@ window.XDropDown = function (conf) {
 		cls: '',									// additional class for the dropdown (without menu)
 		menuCls: '',								// additional class for the menu (menu is rendered to the body)
 		iconCls: '',								// if present - an icon will be added to the dropdown button
-		action: function (v, rec) {},
+		action: null,								// e.g. action: function (v, rec) {},
 		value: null,
 		defaultValue: null,
 		items: [],
@@ -661,26 +661,43 @@ window.XDropDown = function (conf) {
 	 * Initialize DropDown events
 	 */
 	_initEvents = function () {
-		/*jshint white: false */
-
 		_el.on({
 			mousedown: function (e) { _toggle(e); },
 			// don't hash the addressbar
 			click: function () { return false; },
 			focus: function () { _button.addClass('focused'); },
 			blur: function () { _button.removeClass('focused'); },
-			keydown: function (e) {																// launch action on enter
+			keydown: function (e) {
 				switch (e.keyCode) {
-					case 32 :																	// space
-					case 13 : _action(e); break;												// enter
+				case 32 : // space
+				case 13 : // enter
+					_action(e);
+					break;
 
-					case 27 :																	// esc
-					case  9 : _collapse(e); break;												// tab
+				case 27 : // esc
+				case  9 : // tab
+					_collapse(e);
+					break;
 
-					case 38 : e.preventDefault(); _highlightItem(-1); break;					// down arrow
-					case 40 : e.preventDefault(); _highlightItem(1); break;						// down arrow
-					case 33 : e.preventDefault(); _highlightItem(-10); break;					// page up
-					case 34 : e.preventDefault(); _highlightItem(10); break;					// page down
+				case 38 : // down arrow
+					e.preventDefault();
+					_highlightItem(-1);
+					break;
+
+				case 40 : // down arrow
+					e.preventDefault();
+					_highlightItem(1);
+					break;
+
+				case 33 : // page up
+					e.preventDefault();
+					_highlightItem(-10);
+					break;
+
+				case 34 : // page down
+					e.preventDefault();
+					_highlightItem(10);
+					break;
 				}
 			}
 		}, '.button');
@@ -763,48 +780,82 @@ window.XDropDown = function (conf) {
 	/*** INIT *******************************************************************************************************************/
 
 
+	_this = {
+		getEl: function () { return _el; },
+
+		getItems: function () { return _conf.items; },
+		setItems: _populate,
+
+		getConfig: function () { return _conf; },
+		setConfig: function (cfg) { $.extend(_conf, cfg || {}); },
+
+		getValue: _getValue,
+		setValue: _setValue,
+
+		getIdValue: _getIdValue,
+		setIdValue: _setValue,
+		select: _select,
+		reset: _reset,
+
+		show: _el.show,
+		hide: _el.hide,
+
+		isEnabled: function () { return _el.hasClass('dropdown-disabled'); },
+		enable: _enable,
+		disable: _disable,
+
+		destroy: _destroy
+	};
 
 
-	Object.defineProperties(_this, {
-		el: {
-			enumerable: true,
-			get: function () { return _el; }
-		},
-		items: { enumerable: true,
-			get: function () { return _conf.items; },
-			set: _populate
-		},
-		config: { enumerable: true,
-			get: function () { return _conf; },
-			set: function (cfg) { $.extend(_conf, cfg || {}); }
-		},
-		value: { enumerable: true,
-			get: _getValue,
-			set: _setValue
-		},
-		idValue: { enumerable: true,
-			get: _getIdValue,
-			set: _setValue
-		},
-		select: { enumerable: true, value: _select },
+	if (Object.defineProperties) { // nice api awaiting IE8's death...
+		Object.defineProperties(_this, {
+			el: {
+				enumerable: true,
+				get: function () { return _el; }
+			},
+			items: { enumerable: true,
+				get: function () { return _conf.items; },
+				set: _populate
+			},
+			config: { enumerable: true,
+				get: function () { return _conf; },
+				set: function (cfg) { $.extend(_conf, cfg || {}); }
+			},
+			value: { enumerable: true,
+				get: _getValue,
+				set: _setValue
+			},
+			idValue: { enumerable: true,
+				get: _getIdValue,
+				set: _setValue
+			},
+			select: { enumerable: true, value: _select },
+			reset: { enumerable: true, value: _reset },
 
-		reset: { enumerable: true, value: _reset },
+			show: { enumerable: true, value: function () { _el.show(); }},
+			hide: { enumerable: true, value: function () { _el.hide(); }},
 
-		hidden: { enumerable: true,
-			get: function () { return _el.is(':visible'); },
-			set: function (v) { if (v === true) _el.hide(); else _el.show(); }
-		},
-		show: { enumerable: true, value: function () { _el.show(); }},
-		hide: { enumerable: true, value: function () { _el.hide(); }},
+			enable: { enumerable: true, value: _enable },
+			disable: { enumerable: true, value: _disable },
 
-		enabled: {
-			enumerable: true,
-			get: function () { return _el.hasClass('dropdown-disabled'); },
-			set: function (v) { if (v === true) _enable(); else _disable(); }
-		},
+			enabled: {
+				enumerable: true,
+				get: function () { return _el.hasClass('dropdown-disabled'); },
+				set: function (v) { if (v === true) _enable(); else _disable(); }
+			},
 
-		destroy: { enumerable: true, value: _destroy }
-	});
+			destroy: { enumerable: true, value: _destroy }
+		});
+	}
+
 
 	return _init(conf);
+};
+
+
+
+window.XMultiSelect = function (conf) {
+	conf.multiselect = true;
+	return new window.XDropDown(conf);
 };
