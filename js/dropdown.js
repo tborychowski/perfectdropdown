@@ -314,6 +314,8 @@ var DropDown = Class.extend({
 	 * Sets the value to 0 & defaultText
 	 */
 	reset : function () {
+		this.selectedItem = this.focused = null;
+		this.menu.find('.selected,.focused').removeClass('selected focused');
 		if (this.conf.defaultValue) this.setValue(this.conf.defaultValue);
 		else if (this.conf.defaultText && this.conf.defaultText.length) this.setValue('', this.conf.defaultText);
 		else if (this.conf.emptyText && this.conf.emptyText.length && !this.conf.isStatic) this.setValue('', this.conf.emptyText);
@@ -329,7 +331,7 @@ var DropDown = Class.extend({
 		if (id === undefined) id = '';
 		this.input.val(id);																										// set input value
 		this.selectedItem = this.focused = null;
-		this.menu.find('.selected').removeClass('selected focused');
+		this.menu.find('.selected,.focused').removeClass('selected focused');
 		if (id !== '' && this.items && this.items.length) {																		// list available -> select item on list
 			this.focused = this.menu.find('.menu-item-id-' + id);
 			if (this.focused.length) {
