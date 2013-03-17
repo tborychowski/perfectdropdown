@@ -266,12 +266,14 @@ window.XDropDown = function (conf) {
 		if (actionId === undefined) return;
 		_collapse(e);
 		_setValue(actionId, actionName);
-		if (_conf.action) _conf.action.call(_this, actionId, _selectedItem);
+		if (_conf.action) _conf.action.call(_this, actionId, _selectedItem, _this);
 	},
 
 	multiselectAction = function (e) {
 		/*jshint onevar: false */
 		e.preventDefault();
+
+
 		if (_el.hasClass('dropdown-disabled')) return;
 		var actionName, target = $(e.target), noItemsSelected = true, checked = null;
 		if (e.type === 'keydown') target = _focused;
@@ -279,7 +281,7 @@ window.XDropDown = function (conf) {
 
 		if (!target) return;
 		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
-		actionName = target.data('id');
+		actionName = target.data('idval');
 
 		if (actionName === undefined) return;
 
@@ -836,7 +838,7 @@ window.XDropDown = function (conf) {
 
 	_getApplyHtml = function () {
 		return '<ul class="menu-apply' + (_conf.showSidebar ? ' has-sidebar' : '') + '">' +
-			'<li class="menu-item" data-id="#apply"><span class="menu-item-tick"></span>' +
+			'<li class="menu-item" data-idval="#apply"><span class="menu-item-tick"></span>' +
 			'<span class="menu-item-name">Apply</span></li></ul>';
 	},
 

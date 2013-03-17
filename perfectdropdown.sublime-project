@@ -1,9 +1,0 @@
-{
-	"folders":
-	[
-		{
-			"path": "D:/Projects/_mini_projects/perfectdropdown",
-			"folder_exclude_patterns": [ "node_modules", "js", "css", "img" ]
-		}
-	]
-}
