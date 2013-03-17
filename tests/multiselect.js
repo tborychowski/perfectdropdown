@@ -1,5 +1,8 @@
 /*global module: false, test: false, notEqual: false, equal: false, deepEqual: false */
-var defV = 'Select', d = null, v = null,
+var multiDefautlValue = [],
+	multiDefaultCaption = 'No items',
+	multipleItems = 'Multiple items',
+	d = null, v = null,
 	simpleList = [1, 2, 3, 4, 5],
 	objectList = [
 		{ id: 1, name: 'item 1'},
@@ -18,16 +21,20 @@ var defV = 'Select', d = null, v = null,
 
 
 module('MultiSelect - Simple', {
-	setup: function () { d = new window.XMultiSelect({ target: 'ddtarget', defaultValue: defV }); },
+	setup: function () {
+		d = new window.XMultiSelect({ target: 'ddtarget', defaultValue: multiDefautlValue, defaultText: 'items' });
+	},
 	teardown: function () { d.destroy(); }
 });
 
 
-test('Init', function () { notEqual(d, null, 'Should not be null'); });
+test('Init', function () {
+	notEqual(d, null, 'Should not be null');
+});
 
 
 test('Default value', function () {
-	equal(d.getValue(), defV, 'Should have a default value');
+	deepEqual(d.getValue(), multiDefautlValue, 'Should have a default value');
 });
 
 
@@ -44,12 +51,12 @@ test('Set/Get/Reset value (no list)', function () {
 	deepEqual(d.getValue(), v, 'Value should be ' + v);
 
 	d.reset();
-	deepEqual(d.getIdValue(), defV, 'Value shoud be ' + defV);
-	deepEqual(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+	deepEqual(d.getValue(), multiDefautlValue, 'Value shoud be ' + multiDefautlValue);
+	equal(d.getCaption(), multiDefaultCaption, 'Name shoud be "' + multiDefaultCaption + '"');
 
 	d.select(3);
-	deepEqual(d.getIdValue(), defV, 'Value shoud be ' + defV);
-	deepEqual(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+	deepEqual(d.getValue(), multiDefautlValue, 'Value shoud be ' + multiDefautlValue);
+	equal(d.getCaption(), multiDefaultCaption, 'Name shoud be "' + multiDefaultCaption + '"');
 });
 
 
@@ -63,19 +70,99 @@ test('Set/Get/Reset value (list is a simple array)', function () {
 	v = [1, 2, 3];
 	d.setValue(v);
 	deepEqual(d.getValue(), v, 'Value shoud be ' + v);
-	deepEqual(d.getIdValue(), v, 'ID value shoud be ' + v);
+	equal(d.getCaption(), multipleItems, 'ID value shoud be ' + multipleItems);
 
 	v = [1, 4, 6];
 	d.setValue(v);
 	deepEqual(d.getValue(), v, 'Value shoud be ' + v);
-	deepEqual(d.getIdValue(), v, 'ID value shoud be ' + v);
+	equal(d.getCaption(), multipleItems, 'ID value shoud be ' + multipleItems);
 
 	d.reset();
-	deepEqual(d.getIdValue(), defV, 'Value shoud be ' + defV);
-	deepEqual(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+	deepEqual(d.getValue(), multiDefautlValue, 'Value shoud be ' + multiDefautlValue);
+	equal(d.getCaption(), multiDefaultCaption, 'Name shoud be "' + multiDefaultCaption + '"');
 
-	v = simpleList[3];
+	v = [ simpleList[2] ];
 	d.select(3);
-	deepEqual(d.getIdValue(), v, 'Value shoud be ' + v);
-	deepEqual(d.getValue(), v, 'Name shoud be "' + v + '"');
+	deepEqual(d.getValue(), v, 'Value shoud be ' + v);
+	equal(d.getCaption(), simpleList[2], 'Name shoud be "' + simpleList[2] + '"');
+});
+
+
+test('Set/Get/Reset value (list is an array of objects)', function () {
+	d.setItems(objectList);
+
+	deepEqual(d.getItems(), objectList, 'Replace list with array of objects');
+	equal(d.getItems().length, objectList.length, 'List length should be ' + objectList.length);
+
+	v = objectList[2];
+	d.setValue([v.id]);
+	deepEqual(d.getValue(), [v.id], 'Value shoud be ' + [v.id]);
+	equal(d.getCaption(), v.name, 'Name shoud be "' + v.name + '"');
+
+	v = objectList[4];
+	d.setValue([v.id]);
+	deepEqual(d.getValue(), [v.id], 'Value shoud be ' + [v.id]);
+	equal(d.getCaption(), v.name, 'Name shoud be "' + v.name + '"');
+
+
+	d.reset();
+	deepEqual(d.getValue(), multiDefautlValue, 'Value shoud be ' + multiDefautlValue);
+	equal(d.getCaption(), multiDefaultCaption, 'Name shoud be "' + multiDefaultCaption + '"');
+
+	v = [ objectList[2].id ];
+	d.select(3);
+	deepEqual(d.getValue(), v, 'Value shoud be ' + v);
+	equal(d.getCaption(), objectList[2].name, 'Name shoud be "' + objectList[2].name + '"');
+});
+
+
+
+
+module('DropDown - Complex', {
+	setup: function () {
+		d = new window.XMultiSelect({
+			target: 'ddtarget',
+			defaultValue: multiDefautlValue,
+			items: complexObjectList,
+			defaultText: 'items',
+			fieldId: 'itemId',
+			fieldName: '{itemName} ({itemId} - {itemCode})'
+		});
+	},
+	teardown: function () { d.destroy(); }
+});
+
+
+test('Set/Get/Reset value (list is an array of objects)', function () {
+	var eV = '';
+
+	deepEqual(d.getItems(), complexObjectList, 'Replace list with array of objects');
+	equal(d.getItems().length, complexObjectList.length, 'List length should be ' + complexObjectList.length);
+
+	v = complexObjectList[2];
+	d.setValue(v.itemId);
+	deepEqual(d.getValue(), [v.itemId], 'Value shoud be ' + [v.itemId]);
+
+	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
+	equal(d.getCaption(), eV, 'Name shoud be "' + eV + '"');
+
+	v = complexObjectList[4];
+	d.setValue(v.itemId);
+	deepEqual(d.getValue(), [v.itemId], 'Value shoud be ' + [v.itemId]);
+
+	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
+	equal(d.getCaption(), eV, 'Name shoud be "' + eV + '"');
+
+
+	d.reset();
+	deepEqual(d.getValue(), multiDefautlValue, 'Value shoud be ' + multiDefautlValue);
+	equal(d.getCaption(), multiDefaultCaption, 'Name shoud be "' + multiDefaultCaption + '"');
+
+
+	v = complexObjectList[2];
+	d.select(3);
+	deepEqual(d.getValue(), [v.itemId], 'Value shoud be ' + [v.itemId]);
+
+	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
+	equal(d.getCaption(), eV, 'Name shoud be "' + eV + '"');
 });

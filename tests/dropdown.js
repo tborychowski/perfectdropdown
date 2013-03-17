@@ -1,5 +1,5 @@
 /*global module: false, test: false, notEqual: false, equal: false, deepEqual: false */
-var defV = 'Select', d = null, v = null,
+var defV, d = null, v = null,
 	simpleList = [1, 2, 3, 4, 5],
 	objectList = [
 		{ id: 1, name: 'item 1'},
@@ -42,12 +42,12 @@ test('Set/Get/Reset value (no list)', function () {
 	equal(d.getValue(), 10, 'Value should be 10');
 
 	d.reset();
-	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
-	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+	equal(d.getValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getCaption(), '', 'Name shoud be ""');
 
 	d.select(3);
-	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
-	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+	equal(d.getValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getCaption(), '', 'Name shoud be ""');
 });
 
 
@@ -68,13 +68,13 @@ test('Set/Get/Reset value (list is a simple array)', function () {
 	equal(d.getIdValue(), v, 'ID value shoud be ' + v);
 
 	d.reset();
-	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
-	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+	equal(d.getValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getIdValue(), '', 'Name shoud be ""');
 
 	v = simpleList[3];
 	d.select(3);
-	equal(d.getIdValue(), v, 'Value shoud be ' + v);
-	equal(d.getValue(), v, 'Name shoud be "' + v + '"');
+	equal(d.getValue(), v, 'Value shoud be ' + v);
+	equal(d.getIdValue(), v, 'Name shoud be "' + v + '"');
 });
 
 
@@ -86,23 +86,23 @@ test('Set/Get/Reset value (list is an array of objects)', function () {
 
 	v = objectList[2];
 	d.setValue(v.id);
-	equal(d.getIdValue(), v.id, 'Value shoud be ' + v.id);
-	equal(d.getValue(), v.name, 'Name shoud be "' + v.name + '"');
+	equal(d.getValue(), v.id, 'Value shoud be ' + v.id);
+	equal(d.getCaption(), v.name, 'Name shoud be "' + v.name + '"');
 
 	v = objectList[4];
 	d.setValue(v.id);
-	equal(d.getIdValue(), v.id, 'Value shoud be ' + v.id);
-	equal(d.getValue(), v.name, 'Name shoud be "' + v.name + '"');
+	equal(d.getValue(), v.id, 'Value shoud be ' + v.id);
+	equal(d.getCaption(), v.name, 'Name shoud be "' + v.name + '"');
 
 
 	d.reset();
-	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
-	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+	equal(d.getValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getCaption(), '', 'Name shoud be ""');
 
 	v = objectList[3];
 	d.select(3);
-	equal(d.getIdValue(), v.id, 'Value shoud be ' + v.id);
-	equal(d.getValue(), v.name, 'Name shoud be "' + v.name + '"');
+	equal(d.getValue(), v.id, 'Value shoud be ' + v.id);
+	equal(d.getCaption(), v.name, 'Name shoud be "' + v.name + '"');
 });
 
 
@@ -132,25 +132,29 @@ test('Set/Get/Reset value (list is an array of objects)', function () {
 
 	v = complexObjectList[2];
 	d.setValue(v.itemId);
-	equal(d.getIdValue(), v.itemId, 'Value shoud be ' + v.itemId);
+	equal(d.getValue(), v.itemId, 'Value shoud be ' + v.itemId);
+
 	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
-	equal(d.getValue(), eV, 'Name shoud be "' + eV + '"');
+	equal(d.getCaption(), eV, 'Name shoud be "' + eV + '"');
+
 
 	v = complexObjectList[4];
 	d.setValue(v.itemId);
 	equal(d.getIdValue(), v.itemId, 'Value shoud be ' + v.itemId);
+
 	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
-	equal(d.getValue(), eV, 'Name shoud be "' + eV + '"');
+	equal(d.getCaption(), eV, 'Name shoud be "' + eV + '"');
 
 
 	d.reset();
-	equal(d.getIdValue(), defV, 'Value shoud be ' + defV);
-	equal(d.getValue(), defV, 'Name shoud be "' + defV + '"');
+	equal(d.getValue(), defV, 'Value shoud be ' + defV);
+	equal(d.getCaption(), '', 'Name shoud be ""');
 
 
 	v = complexObjectList[3];
 	d.select(3);
-	equal(d.getIdValue(), v.itemId, 'Value shoud be ' + v.itemId);
+	equal(d.getValue(), v.itemId, 'Value shoud be ' + v.itemId);
+
 	eV = v.itemName + ' (' + v.itemId + ' - ' + v.itemCode + ')';
-	equal(d.getValue(), eV, 'Name shoud be "' + eV + '"');
+	equal(d.getCaption(), eV, 'Name shoud be "' + eV + '"');
 });

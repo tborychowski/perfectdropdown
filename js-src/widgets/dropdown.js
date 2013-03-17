@@ -5,6 +5,13 @@
  * sample usage:
  * var dd1 = new DropDown({ target: 'myInputId' });
  * var dd2 = new DropDown({ target: $('.selector'), defaultText: 'Please select', items: [1,2,3], value: 3 });
+ * var dd2 = new DropDown({
+ *    target: $('.selector'),
+ *    defaultText: 'Please select',
+ *    items: [1,2,3],
+ *    value: [1, 3],
+ *    multiselect: true
+ * });
  *
  */
 
@@ -46,8 +53,8 @@ window.XDropDown = function (conf) {
 
 		multiselect: false,							// if true - render checkboxes, apply, etc
 		action: null,								// e.g. action: function (v, rec) {},
-		value: null,
-		defaultValue: null,
+		value: null,								// pre-selected value
+		defaultValue: null,							// default value - will be set after reset
 		items: [],
 		isStatic: false,							// if true - don't change the button label (name)
 		disabled: false								// init as disabled
@@ -62,63 +69,48 @@ window.XDropDown = function (conf) {
 	_adjustPosition = function () {
 		if (!_isExpanded) return;
 
+		var mnItems = _menu.find('.menu-items'),
+			btnOff = _el.offset(),
+			btn = { left: btnOff.left, top: btnOff.top, width: _el.width(), height: _el.height() },
+			win = { height: $(window).innerHeight(), scrollTop: $(window).scrollTop() },
+			menu = { left : btn.left, top : btn.top + btn.height, width : _menu.outerWidth(), minHeight: 100, margin: 20 };
+
 		// first: adjust sidebar width
 		_adjustSidebar();
-		_menu.height('auto');
-		_menu.find('.menu-items').height('auto');
-		var off = _el.offset(),
-			elH = _el.height(), elW = _el.width(),
-			menuH = _menu.height(), menuW = _menu.outerWidth(),
-			winH = $(window).innerHeight(), mx = off.left, my = off.top + elH, menuMinH = 100,
-			mnItems = _menu.find('.menu-items');
+		_menu.height('auto').removeClass('menu-top');
+		mnItems.height('auto');
+		menu.height = menu.autoHeight = _menu.height();
 
-		if (_conf.menuAlign === 'right')  mx -= menuW - elW;
+		if (_conf.menuAlign === 'right')  menu.left -= menu.width - btn.width;
 
 		// if menu higher than screen - shorten it
-		if (menuH > menuMinH && my + menuH + 20 > winH) {
-			menuH = winH - my - 20;
-			menuH = menuH > menuMinH ? menuH : menuMinH;
-			_menu.height(menuH);
+		if (menu.top + menu.height + menu.margin > win.height + win.scrollTop) {
+			menu.height = win.height - menu.top - menu.margin + win.scrollTop;
+			if (menu.height < menu.minHeight) menu.height = menu.minHeight;
 		}
 
 		// move menu above the target
-		if (my + menuH > winH) {
+		if (menu.top + menu.height + menu.margin > win.height + win.scrollTop) {
 			_menu.addClass('menu-top');
-			_menu.height('auto');
-			_menu.find('.menu-items').height('auto');
-			menuH = _menu.height();
-			if (menuH > winH - elH - 20) { menuH = winH - elH - 20; _menu.height(menuH); }
-			if (menuH + 20 > off.top) {
-				menuH = off.top - 20;
-				menuH = menuH > menuMinH ? menuH : menuMinH;
-				_menu.height(menuH);
-			}
-			my = off.top - menuH - 2;
-		}
-		else _menu.removeClass('menu-top');
+			menu.height = menu.autoHeight;
 
-		_menu.css({ left: mx, top: my });
+			// if menu higher than screen - shorten it
+			if (menu.height > btn.top - win.scrollTop - menu.margin) {
+				menu.height = btn.top - win.scrollTop - menu.margin;
+				if (menu.height < menu.minHeight) menu.height = menu.minHeight;
+			}
+			menu.top = btn.top - menu.height - 2;
+		}
+
+		_menu.css({ left: menu.left, top: menu.top, height: menu.height });
 
 		// subtract ul top+bottom padding
-		menuH -= parseInt(mnItems.css('paddingTop'), 10) + parseInt(mnItems.css('paddingBottom'), 10);
-		if (_menu.find('.menu-filter').length) menuH -=  _menu.find('.menu-filter').outerHeight();
+		menu.height -= parseInt(mnItems.css('paddingTop'), 10) + parseInt(mnItems.css('paddingBottom'), 10);
+		if (_menu.find('.menu-filter').length) menu.height -=  _menu.find('.menu-filter').outerHeight();
+		if (_menu.find('.menu-select').length) menu.height -= _menu.find('.menu-select').outerHeight();
+		if (_menu.find('.menu-apply').length)  menu.height -= _menu.find('.menu-apply').outerHeight();
 
-
-		if (_conf.multiselect === true) {
-			// reset height to default
-			mnItems.height('auto');
-
-			// subtract ul top+bottom padding
-			menuH -= parseInt(mnItems.css('paddingTop'), 10) + parseInt(mnItems.css('paddingBottom'), 10);
-			if (_menu.find('.menu-filter').length) menuH -= _menu.find('.menu-filter').outerHeight();
-			if (_menu.find('.menu-select').length) menuH -= _menu.find('.menu-select').outerHeight();
-			if (_menu.find('.menu-apply').length)  menuH -= _menu.find('.menu-apply').outerHeight();
-			mnItems.height(menuH);
-		}
-		else {
-			_menu.find('.menu-items').height(menuH);
-		}
-
+		mnItems.height(menu.height);
 		_highlightObj = null;
 	},
 
@@ -254,104 +246,92 @@ window.XDropDown = function (conf) {
 	 */
 	_action = function (e) {
 		if (_conf.disabled) return;
-		if (_conf.multiselect === true) return multiselectAction(e);
+		if (_el.hasClass('dropdown-disabled')) return;
 
 		var actionId, actionName, target;
 		if (e.type === 'keydown') target = _focused;
 		else target = $(e.target);
 		if (!target) return;
+
 		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
-		actionId = target.attr('data-idval');
-		actionName = target.attr('data-val');
+		actionId = target.data('id');
 		if (actionId === undefined) return;
-		_collapse(e);
-		_setValue(actionId, actionName);
-		if (_conf.action) _conf.action.call(_this, actionId, _selectedItem, _this);
-	},
 
-	multiselectAction = function (e) {
-		/*jshint onevar: false */
-		e.preventDefault();
-
-
-		if (_el.hasClass('dropdown-disabled')) return;
-		var actionName, target = $(e.target), noItemsSelected = true, checked = null;
-		if (e.type === 'keydown') target = _focused;
-		else target = $(e.target);
-
-		if (!target) return;
-		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
-		actionName = target.data('idval');
-
-		if (actionName === undefined) return;
-
-		if (actionName === '#apply') {
-			// disable "Apply" when no items selected
-			if (target.closest('.no-items-selected').length) return;
-			_applySelected();
+		if (_conf.multiselect !== true) {
+			actionName = target.data('name');
 			_collapse(e);
-			_conf.action.call(_conf.action, _getValue(), _selectedItems, _this);
+			_setValue(actionId, actionName);
+			if (_conf.action) _conf.action.call(_this, actionId, _selectedItem, _this);
 		}
 		else {
-			var check = target.hasClass('menu-item-checked');
-			if (actionName === '#select-all') {								// if "select all" clicked
-				noItemsSelected = check;									// no items selected - don't show "Apply" menu
-				if (check) _selectNone();									// select none
-				else _selectAll();											// or all
+			/*jshint onevar: false */
+			e.preventDefault();
+			var check, noItemsSelected, checked;
+
+			if (actionId === '#apply') {
+				// disable "Apply" when no items selected
+				if (target.closest('.no-items-selected').length) return;
+				_applySelected();
+				_collapse(e);
+				_conf.action.call(_conf.action, _getValue(), _selectedItems, _this);
 			}
 			else {
-				if (_menu.hasClass('all-items-selected')) {					// if "all items" is selected
-					_unselectAll();											// unselect "all items" and "select" all items
-					target.removeClass('menu-item-checked');				// except target
-					checked = _menu.find('.menu-items .menu-item-checked');
-					if (checked.length === 0) {
-						_label.html('No ' + _conf.defaultText);
-						_menu
-							.removeClass('all-items-selected multiple-items-selected')
-							.addClass('no-items-selected');
-					}
-
-					// no items selected - don't show "Apply" menu
-					noItemsSelected = (checked.length === 0);
+				check = target.hasClass('menu-item-checked');
+				if (actionId === '#select-all') {								// if "select all" clicked
+					noItemsSelected = check;									// no items selected - don't show "Apply" menu
+					if (check) _selectNone();									// select none
+					else _selectAll();											// or all
 				}
 				else {
-					_menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
-					target.toggleClass('menu-item-checked', !check);
+					if (_menu.hasClass('all-items-selected')) {					// if "all items" is selected
+						_unselectAll();											// unselect "all items" and "select" all items
+						target.removeClass('menu-item-checked');				// except target
+						checked = _menu.find('.menu-items .menu-item-checked');
+						if (checked.length === 0) {
+							_label.html('No ' + _conf.defaultText);
+							_menu
+								.removeClass('all-items-selected multiple-items-selected')
+								.addClass('no-items-selected');
+						}
 
-					checked = _menu.find('.menu-items .menu-item-checked');
-					if (checked.length === 1) _label.html(checked.data('val'));
-					else if (checked.length === 0) {
-						_label.html('No ' + _conf.defaultText);
-						_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
+						// no items selected - don't show "Apply" menu
+						noItemsSelected = (checked.length === 0);
 					}
-					else _label.html('Multiple ' + _conf.defaultText);
+					else {
+						_menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
+						target.toggleClass('menu-item-checked', !check);
 
-					// no items selected - don't show "Apply" menu
-					noItemsSelected = (checked.length === 0);
+						checked = _menu.find('.menu-items .menu-item-checked');
+						if (checked.length === 1) _label.html(checked.data('id'));
+						else if (checked.length === 0) {
+							_label.html('No ' + _conf.defaultText);
+							_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
+						}
+						else _label.html('Multiple ' + _conf.defaultText);
+
+						// no items selected - don't show "Apply" menu
+						noItemsSelected = (checked.length === 0);
+					}
+				}
+
+				// add "apply" menu
+				if (!_menu.find('.menu-apply').length && !noItemsSelected) {
+					_menu.append(_getApplyHtml());
+					_adjustPosition();
+					// scroll item into view
+					var mn = target.closest('.menu-items'), mh = mn.innerHeight(),
+						it = target.position().top, ih = target.outerHeight(true) + it;
+					if (it <= 0) mn.scrollTop(-it);
+					if (ih > mh) mn.scrollTop(ih - mh);
+				}
+				// if checked items == all items - select all
+				if (_menu.find('.menu-items .menu-item').length === _menu.find('.menu-items .menu-item-checked').length) {
+					_selectAll();
 				}
 			}
-
-			// add "apply" menu
-			if (!_menu.find('.menu-apply').length && !noItemsSelected) {
-				_menu.append(_getApplyHtml());
-				_adjustPosition();
-
-				var mn = target.closest('.menu-items'),
-					mh = mn.innerHeight(),
-					it = target.position().top,
-					ih = target.outerHeight(true) + it;
-
-				if (it <= 0) mn.scrollTop(-it);
-				if (ih > mh) mn.scrollTop(ih - mh);
-			}
-			// if checked items == all items - select all
-			if (_menu.find('.menu-items .menu-item').length === _menu.find('.menu-items .menu-item-checked').length) {
-				_selectAll();
-			}
 		}
+
 	},
-
-
 
 
 	_enable = function () {
@@ -464,6 +444,8 @@ window.XDropDown = function (conf) {
 		if (!_isExpanded) return;
 		if (e) e.stopPropagation();
 		_menu.hide();
+		_menu.find('.menu-apply').remove();
+		_setValue(_conf.value);
 		_el.removeClass('expanded');
 		_isExpanded = false;
 
@@ -500,7 +482,8 @@ window.XDropDown = function (conf) {
 		else if (_conf.multiselect === true) _setValue([-1], 'All ' + (_conf.defaultText || 'items'));
 		else if (_conf.defaultText && _conf.defaultText.length) _setValue('', _conf.defaultText);
 		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _setValue('', _conf.emptyText);
-		else _select(0);
+		else _setValue();
+		//else _select(0);
 	},
 
 
@@ -512,21 +495,20 @@ window.XDropDown = function (conf) {
 	 */
 	_setValue = function (id, name) {
 		/*jshint eqeqeq: false */
-		if (id === undefined) id = '';
 
-		if (_conf.multiselect === true) {
-			_setMultiSelectValue(id, name);
-			return _this;
-		}
+		if (_conf.multiselect === true) return _setMultiSelectValue(id, name);
 
-		// set input value
-		_input.val(id);
+		_conf.value = id;
+		if (id === undefined || id === null) id = '';
+
+		_input.val(id);	// set input value
+
 		_selectedItem = _focused = null;
 		_menu.find('.selected,.focused').removeClass('selected focused');
-		if (id !== '' && _conf.items && _conf.items.length) {									// list available -> select item
+		if (id !== '' && _conf.items && _conf.items.length) {								// list available -> select item
 			_focused = _menu.find('.menu-item-id-' + id);
 			if (_focused.length) {
-				if (!_conf.isStatic) _focused.addClass('selected focused');			// select item
+				if (!_conf.isStatic) _focused.addClass('selected focused');					// select item
 				for (var i = 0, item; item = _conf.items[i++] ;)
 					if (id == (typeof item === 'object' ? item[_conf.fieldId] : item)) {
 						_selectedItem = item;
@@ -555,10 +537,11 @@ window.XDropDown = function (conf) {
 	_setMultiSelectValue = function (ids, name) {
 		/*jshint eqeqeq:false */
 
-		if (ids === undefined || ids === null || ids === '') return false;
-		_conf.value = ids;
-		_selectAll();
+		if (ids === undefined || ids === null || ids === '') return;
+
 		if ($.type(ids) !== 'array') ids = [ids];
+		_conf.value = ids;
+
 		if (ids.length === 1 && ids[0] == -1) _selectAll();
 		else {
 			var items = _menu.find('.menu-items .menu-item'), i = 0, il = ids.length, checked;
@@ -573,10 +556,10 @@ window.XDropDown = function (conf) {
 					if (items.length === il) _selectAll();
 					else {
 						_selectNone();
-						for (; i < il; i++) items.filter('.menu-item-' + ids[i]).addClass('menu-item-checked');
+						for (; i < il; i++) items.filter('.menu-item-id-' + ids[i]).addClass('menu-item-checked');
 
 						checked = items.filter('.menu-item-checked');
-						if (checked.length === 1) _label.html(checked.data('val'));
+						if (checked.length === 1) _label.html(checked.data('name'));
 						else if (checked.length === 0) _selectNone();
 						else {
 							_label.html('Multiple ' + _conf.defaultText);
@@ -604,19 +587,21 @@ window.XDropDown = function (conf) {
 	 */
 	_select = function (idx) {
 		var item = _menu.find('.menu-item').eq(idx || 0);
-		if (item.length) _setValue(item.attr('data-idval'), item.attr('data-val'));
+		if (item.length) _setValue(item.data('id'), item.data('name'));
 	},
 
 
 	/**
 	 * Returns the selected (text) value
 	 */
-	_getValue = function () { return _label.text(); },
+	_getValue = function () { return _conf.value; },
 
 	/**
 	 * Returns the selected option "id"
 	 */
 	_getIdValue = function () { return _input.val(); },
+
+	_getCaption = function () { return _label.text(); },
 
 
 
@@ -671,7 +656,7 @@ window.XDropDown = function (conf) {
 		filter.toggleClass('menu-filter-dirty', !!key.length);
 		for (; item = items[i++] ;) {
 			item = $(item);
-			itemStr = item.attr('data-group') + item.attr('data-val');
+			itemStr = item.data('group') + item.data('name');
 			if (_filterMatch(itemStr, key)) item.show();
 			else item.hide();
 		}
@@ -825,7 +810,7 @@ window.XDropDown = function (conf) {
 				id = '#select-all';
 			}
 		}
-		_html += '<li class="menu-item ' + cls.join(' ') + '" data-idval="' + id + '" data-val="' + name + '" ' +
+		_html += '<li class="menu-item ' + cls.join(' ') + '" data-id="' + id + '" data-name="' + name + '" ' +
 				'data-group="' + group + '">';
 
 		_html += sidebar;
@@ -838,7 +823,7 @@ window.XDropDown = function (conf) {
 
 	_getApplyHtml = function () {
 		return '<ul class="menu-apply' + (_conf.showSidebar ? ' has-sidebar' : '') + '">' +
-			'<li class="menu-item" data-idval="#apply"><span class="menu-item-tick"></span>' +
+			'<li class="menu-item" data-id="#apply"><span class="menu-item-tick"></span>' +
 			'<span class="menu-item-name">Apply</span></li></ul>';
 	},
 
@@ -990,7 +975,7 @@ window.XDropDown = function (conf) {
 				if (e.keyCode === 27 && this.value.length) this.value = '';						// first Esc - clears filter
 				_filter(this.value);
 			})
-			.on('click', '.menu-filter .search-icon', $.proxy(_clearFilter, this))				// menu filter clear-icon
+			.on('click', '.menu-filter .search-icon', _clearFilter)				// menu filter clear-icon
 
 			.on('mouseover', 'li', function () {
 				_menu.find('.focused').removeClass('focused');
@@ -1051,7 +1036,8 @@ window.XDropDown = function (conf) {
 		setValue: _setValue,
 
 		getIdValue: _getIdValue,
-		setIdValue: _setValue,
+		getCaption: _getCaption,
+
 		select: _select,
 		reset: _reset,
 
@@ -1084,10 +1070,8 @@ window.XDropDown = function (conf) {
 				get: _getValue,
 				set: _setValue
 			},
-			idValue: { enumerable: true,
-				get: _getIdValue,
-				set: _setValue
-			},
+			idValue: { enumerable: true, get: _getIdValue },
+
 			select: { enumerable: true, value: _select },
 			reset: { enumerable: true, value: _reset },
 
