@@ -22,7 +22,7 @@ var multiDefautlValue = [],
 
 module('MultiSelect - Simple', {
 	setup: function () {
-		d = new window.XMultiSelect({ target: 'ddtarget', defaultValue: multiDefautlValue, defaultText: 'items' });
+		d = new window.MultiSelect({ target: 'ddtarget', defaultValue: multiDefautlValue, defaultText: 'items' });
 	},
 	teardown: function () { d.destroy(); }
 });
@@ -118,9 +118,9 @@ test('Set/Get/Reset value (list is an array of objects)', function () {
 
 
 
-module('DropDown - Complex', {
+module('MultiSelect - Complex', {
 	setup: function () {
-		d = new window.XMultiSelect({
+		d = new window.MultiSelect({
 			target: 'ddtarget',
 			defaultValue: multiDefautlValue,
 			items: complexObjectList,

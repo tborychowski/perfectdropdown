@@ -15,7 +15,7 @@
  *
  */
 
-window.XDropDown = function (conf) {
+window.DropDown = function (conf) {
 	'use strict';
 
 	var
@@ -1097,7 +1097,7 @@ window.XDropDown = function (conf) {
 
 
 
-window.XMultiSelect = function (conf) {
+window.MultiSelect = function (conf) {
 	conf.multiselect = true;
-	return new window.XDropDown(conf);
+	return new window.DropDown(conf);
 };
