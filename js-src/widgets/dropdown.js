@@ -445,7 +445,7 @@ window.DropDown = function (conf) {
 		if (e) e.stopPropagation();
 		_menu.hide();
 		_menu.find('.menu-apply').remove();
-		_setValue(_conf.value);
+		if (_conf.value) _setValue(_conf.value);
 		_el.removeClass('expanded');
 		_isExpanded = false;
 
@@ -1028,6 +1028,11 @@ window.DropDown = function (conf) {
 
 		getItems: function () { return _conf.items; },
 		setItems: _populate,
+
+		/**
+		 * @deprecated (for backwards compatibility)
+		 */
+		replaceList: _populate,
 
 		getConfig: function () { return _conf; },
 		setConfig: function (cfg) { $.extend(_conf, cfg || {}); },
