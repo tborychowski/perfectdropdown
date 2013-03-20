@@ -69,14 +69,15 @@ window.DropDown = function (conf) {
 	_adjustPosition = function () {
 		if (!_isExpanded) return;
 
+		// first: adjust sidebar width
+		_adjustSidebar();
+
 		var mnItems = _menu.find('.menu-items'),
 			btnOff = _el.offset(),
 			btn = { left: btnOff.left, top: btnOff.top, width: _el.width(), height: _el.height() },
 			win = { height: $(window).innerHeight(), scrollTop: $(window).scrollTop() },
 			menu = { left : btn.left, top : btn.top + btn.height, width : _menu.outerWidth(), minHeight: 100, margin: 20 };
 
-		// first: adjust sidebar width
-		_adjustSidebar();
 		_menu.height('auto').removeClass('menu-top');
 		mnItems.height('auto');
 		menu.height = menu.autoHeight = _menu.height();
@@ -425,10 +426,10 @@ window.DropDown = function (conf) {
 			else _noItems();
 		}
 
-		// show the menu
-		_menu.show();
 		_el.addClass('expanded');
 		_isExpanded = true;
+		// show the menu
+		_menu.show();
 		_adjustPosition();
 		setTimeout(function () {
 			$(document).on('mousedown touchstart keyup', _documentClick);
@@ -722,7 +723,6 @@ window.DropDown = function (conf) {
 			// store items
 			_conf.items = items || [];
 		}
-		_adjustPosition();
 
 
 		var val = _getIdValue();
@@ -739,6 +739,7 @@ window.DropDown = function (conf) {
 			_reset();
 		}
 
+		_adjustPosition();
 
 		if (!_isTouch) _menu.find('.menu-filter-text').focus();
 		_highlightObj = null;
@@ -832,7 +833,7 @@ window.DropDown = function (conf) {
 	 * @param  {String} str  String to clear
 	 * @return {String}      cleared string
 	 */
-	_clrStr = function (str) { return str.replace(/[^\w\d\-]/g, ''); },
+	_clrStr = function (str) { return ('' + str).replace(/[^\w\d\-]/g, ''); },
 	/*** HTML *******************************************************************************************************************/
 
 
