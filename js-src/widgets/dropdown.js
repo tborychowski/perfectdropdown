@@ -1,5 +1,5 @@
 /**
- * DropDown component v3.0 (2013-03-13)
+ * DropDown component v3.0 (2013-03-17)
  * @author Tom
  *
  * sample usage:
@@ -506,7 +506,7 @@ window.DropDown = function (conf) {
 		_selectedItem = _focused = null;
 		_menu.find('.selected,.focused').removeClass('selected focused');
 		if (id !== '' && _conf.items && _conf.items.length) {								// list available -> select item
-			_focused = _menu.find('.menu-item-id-' + id);
+			_focused = _menu.find('.menu-item-id-' + _clrStr(id));
 			if (_focused.length) {
 				if (!_conf.isStatic) _focused.addClass('selected focused');					// select item
 				for (var i = 0, item; item = _conf.items[i++] ;)
@@ -556,7 +556,7 @@ window.DropDown = function (conf) {
 					if (items.length === il) _selectAll();
 					else {
 						_selectNone();
-						for (; i < il; i++) items.filter('.menu-item-id-' + ids[i]).addClass('menu-item-checked');
+						for (; i < il; i++) items.filter('.menu-item-id-' + _clrStr(ids[i])).addClass('menu-item-checked');
 
 						checked = items.filter('.menu-item-checked');
 						if (checked.length === 1) _label.html(checked.data('name'));
@@ -802,7 +802,7 @@ window.DropDown = function (conf) {
 				sidebar = '<span class="menu-item-aside ' + (item.sidebarCls || '') + '">' + (item.sidebarText || '') + '</span>';
 			}
 		}
-		cls.push(name === _conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-' + id);
+		cls.push(name === _conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-' + _clrStr(id));
 		if (_conf.multiselect === true) {
 			cls.push('menu-item-checked');
 			if (id === -1) {
@@ -827,6 +827,12 @@ window.DropDown = function (conf) {
 			'<span class="menu-item-name">Apply</span></li></ul>';
 	},
 
+	/**
+	 * Make string css-class usable, i.e. remove spaces, etc.
+	 * @param  {String} str  String to clear
+	 * @return {String}      cleared string
+	 */
+	_clrStr = function (str) { return str.replace(/[^\w\d\-]/g, ''); },
 	/*** HTML *******************************************************************************************************************/
 
 
