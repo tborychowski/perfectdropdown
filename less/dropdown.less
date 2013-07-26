@@ -1,4 +1,4 @@
-@import "_lib.less";
+@import "_lib";
 
 /*** DROPDOWN *******************************************************************************************************************/
 .dropdown { position: relative; cursor: default; float: left;
@@ -157,9 +157,9 @@
 .menu {
 	ul { font-size: 13px; }
 	.menu-filter-inner { padding: 20px 10px 10px; }
-	.menu-item { padding: 7px 25px 7px 15px; color: #08C;
+	.menu-item { padding: 7px 25px 7px 15px; color: #666;
 		&.selected  { color: #fff; background-color: #08C; text-shadow: 0 1px 0 rgba(0, 0, 0, .2); .shadow(inset 1px 0 0 rgba(0, 0, 0, .1), inset -1px 0 0 rgba(0, 0, 0, .1)); }
-		&:focus, &.focused { color: #005580; background-color: #eee; }
+		&:focus, &.focused { color: #333; background-color: #eee; }
 	}
 }
 

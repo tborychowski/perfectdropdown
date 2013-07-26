@@ -1,5 +1,5 @@
-Perfect Dropdown
-================
+Perfect Dropdown v2
+===================
 
 This is the Perfect Dropdown - a jQuery based, extensible component
 
