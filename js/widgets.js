@@ -1,5 +1,5 @@
 /**
- * DropDown component v4.0 (2013-07-26)
+ * XDropDown component v4.0 (2013-07-26)
  * @author Tom
  *
  * sample usage:
@@ -15,7 +15,7 @@
  *
  */
 
-window.DropDown4 = function (conf) {
+window.XDropDown4 = function (conf) {
 	'use strict';
 
 	var
@@ -1108,11 +1108,4 @@ window.DropDown4 = function (conf) {
 
 
 	return _init(conf);
-};
-
-
-
-window.MultiSelect4 = function (conf) {
-	conf.multiselect = true;
-	return new window.DropDown4(conf);
 };

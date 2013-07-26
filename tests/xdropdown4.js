@@ -1,5 +1,6 @@
 /*global module: false, test: false, notEqual: false, equal: false, deepEqual: false */
-var defV, d = null, v = null,
+var DropDown = window.XDropDown4,
+	defV, d = null, v = null,
 	simpleList = [1, 2, 3, 4, 5],
 	objectList = [
 		{ id: 1, name: 'item 1'},
@@ -18,7 +19,7 @@ var defV, d = null, v = null,
 
 
 module('DropDown - Simple', {
-	setup: function () { d = new window.DropDown4({ target: 'ddtarget', defaultValue: defV }); },
+	setup: function () { d = new DropDown({ target: 'ddtarget', defaultValue: defV }); },
 	teardown: function () { d.destroy(); }
 });
 
@@ -112,7 +113,7 @@ test('Set/Get/Reset value (list is an array of objects)', function () {
 
 module('DropDown - Complex', {
 	setup: function () {
-		d = new window.DropDown4({
+		d = new DropDown({
 			target: 'ddtarget',
 			defaultValue: defV,
 			items: complexObjectList,

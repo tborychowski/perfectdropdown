@@ -8,23 +8,23 @@
 	initWidgets = function () {
 		dd = [];
 
-		dd[0] = new window.DropDown4({ target: 'dropdown1', defaultText: 'Not selected', action: ddAction });
+		dd[0] = new window.XDropDown4({ target: 'dropdown1', defaultText: 'Not selected', action: ddAction });
 
-		dd[1] = new window.DropDown4({ target: 'dropdown2', action: ddAction, defaultValue: 1,
+		dd[1] = new window.XDropDown4({ target: 'dropdown2', action: ddAction, defaultValue: 1,
 			items: [{ id: 0, name: 'All items' }, { id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }]
 		});
 
-		dd[2] = new window.DropDown4({ target: 'dropdown3', defaultText: 'Items', multiselect: true,
+		dd[2] = new window.XDropDown4({ target: 'dropdown3', defaultText: 'Items', multiselect: true,
 			emptyText: 'All Items', action: ddAction, showSidebar: true, menuAlign: 'right' });
 
-		dd[3] = new window.DropDown4({ target: 'dropdown4', defaultText: 'Items', multiselect: true });
+		dd[3] = new window.XDropDown4({ target: 'dropdown4', defaultText: 'Items', multiselect: true });
 		replaceList(dd[3]);
 
-		dd[4] = new window.DropDown4({ target: 'dropdown5', isStatic: true, emptyText: 'User Menu', action: ddAction,
+		dd[4] = new window.XDropDown4({ target: 'dropdown5', isStatic: true, emptyText: 'User Menu', action: ddAction,
 			items: [ { id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' } ]
 		});
 
-		dd[5] = new window.DropDown4({ target: 'dropdown6', isStatic: true, emptyText: 'Custom Menu',
+		dd[5] = new window.XDropDown4({ target: 'dropdown6', isStatic: true, emptyText: 'Custom Menu',
 			action: ddAction, showSidebar: true,
 			items: [
 				{ id: 10, name: 'Option 10', group: 'Group 10', isHeader: true },
