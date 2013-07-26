@@ -1,5 +1,5 @@
 /**
- * DropDown component v3.0 (2013-03-17)
+ * DropDown component v4.0 (2013-07-26)
  * @author Tom
  *
  * sample usage:
@@ -15,7 +15,7 @@
  *
  */
 
-window.DropDown = function (conf) {
+window.DropDown4 = function (conf) {
 	'use strict';
 
 	var
@@ -53,6 +53,8 @@ window.DropDown = function (conf) {
 
 		multiselect: false,							// if true - render checkboxes, apply, etc
 		action: null,								// e.g. action: function (v, rec) {},
+													// if present - will show "Apply" button when selection changes
+
 		value: null,								// pre-selected value
 		defaultValue: null,							// default value - will be set after reset
 		items: [],
@@ -303,7 +305,7 @@ window.DropDown = function (conf) {
 						target.toggleClass('menu-item-checked', !check);
 
 						checked = _menu.find('.menu-items .menu-item-checked');
-						if (checked.length === 1) _label.html(checked.data('id'));
+						if (checked.length === 1) _label.html(checked.data('name') || checked.data('id'));
 						else if (checked.length === 0) {
 							_label.html('No ' + _conf.defaultText);
 							_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
@@ -316,7 +318,7 @@ window.DropDown = function (conf) {
 				}
 
 				// add "apply" menu
-				if (!_menu.find('.menu-apply').length && !noItemsSelected) {
+				if (!_menu.find('.menu-apply').length && !noItemsSelected && _conf.action) {
 					_menu.append(_getApplyHtml());
 					_adjustPosition();
 					// scroll item into view
@@ -325,6 +327,8 @@ window.DropDown = function (conf) {
 					if (it <= 0) mn.scrollTop(-it);
 					if (ih > mh) mn.scrollTop(ih - mh);
 				}
+				else if (!_conf.action) _applySelected();
+
 				// if checked items == all items - select all
 				if (_menu.find('.menu-items .menu-item').length === _menu.find('.menu-items .menu-item-checked').length) {
 					_selectAll();
@@ -480,7 +484,7 @@ window.DropDown = function (conf) {
 		_selectedItem = _focused = null;
 		_menu.find('.selected,.focused').removeClass('selected focused');
 		if (_conf.defaultValue) _setValue(_conf.defaultValue);
-		else if (_conf.multiselect === true) _setValue([-1], 'All ' + (_conf.defaultText || 'items'));
+		else if (_conf.multiselect === true) _setValue([], 'All ' + (_conf.defaultText || 'items'));
 		else if (_conf.defaultText && _conf.defaultText.length) _setValue('', _conf.defaultText);
 		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _setValue('', _conf.emptyText);
 		else _setValue();
@@ -543,7 +547,7 @@ window.DropDown = function (conf) {
 		if ($.type(ids) !== 'array') ids = [ids];
 		_conf.value = ids;
 
-		if (ids.length === 1 && ids[0] == -1) _selectAll();
+		if (!ids.length) _selectAll();
 		else {
 			var items = _menu.find('.menu-items .menu-item'), i = 0, il = ids.length, checked;
 
@@ -614,8 +618,7 @@ window.DropDown = function (conf) {
 			items = _menu.find('.menu-items .menu-item-checked'),
 			vals = [], i = 0, item;
 
-		if (all) vals.push(-1);
-		else for (; item = items[i++] ;) vals.push($(item).data('id'));
+		if (!all) for (; item = items[i++] ;) vals.push($(item).data('id'));
 		_conf.value = vals;
 	},
 	/*** VALUE ******************************************************************************************************************/
@@ -699,7 +702,7 @@ window.DropDown = function (conf) {
 
 			if (_conf.multiselect === true) {
 				// add "Select All" option
-				_menu.append('<ul class="menu-select' + sidebarCls + '">' + _getItemHtml(-1, 'Select All') + '</ul>');
+				_menu.append('<ul class="menu-select' + sidebarCls + '">' + _getItemHtml(null, 'Select All') + '</ul>');
 			}
 			else {
 				// add empty text as a 1st option
@@ -729,7 +732,7 @@ window.DropDown = function (conf) {
 		if (_conf.defaultValue) {
 			_setValue(_conf.defaultValue);
 		}
-		else if (val !== undefined && val !== '' && val !== -1) {
+		else if (val !== undefined && val !== '' && val !== []) {
 			_setValue(val);
 		}
 		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) {
@@ -806,7 +809,7 @@ window.DropDown = function (conf) {
 		cls.push(name === _conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-' + _clrStr(id));
 		if (_conf.multiselect === true) {
 			cls.push('menu-item-checked');
-			if (id === -1) {
+			if (id === null) {
 				cls.push('menu-item-all');
 				id = '#select-all';
 			}
@@ -1109,7 +1112,7 @@ window.DropDown = function (conf) {
 
 
 
-window.MultiSelect = function (conf) {
+window.MultiSelect4 = function (conf) {
 	conf.multiselect = true;
-	return new window.DropDown(conf);
+	return new window.DropDown4(conf);
 };

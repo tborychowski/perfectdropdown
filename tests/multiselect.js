@@ -1,6 +1,6 @@
 /*global module: false, test: false, notEqual: false, equal: false, deepEqual: false */
 var multiDefautlValue = [],
-	multiDefaultCaption = 'No items',
+	multiDefaultCaption = 'All items',
 	multipleItems = 'Multiple items',
 	d = null, v = null,
 	simpleList = [1, 2, 3, 4, 5],
@@ -22,7 +22,7 @@ var multiDefautlValue = [],
 
 module('MultiSelect - Simple', {
 	setup: function () {
-		d = new window.MultiSelect({ target: 'ddtarget', defaultValue: multiDefautlValue, defaultText: 'items' });
+		d = new window.DropDown4({ multiselect: true, target: 'ddtarget', defaultValue: multiDefautlValue, defaultText: 'items' });
 	},
 	teardown: function () { d.destroy(); }
 });
@@ -35,6 +35,7 @@ test('Init', function () {
 
 test('Default value', function () {
 	deepEqual(d.getValue(), multiDefautlValue, 'Should have a default value');
+	equal(d.getCaption(), multiDefaultCaption, 'Name shoud be "' + multiDefaultCaption + '"');
 });
 
 
@@ -120,7 +121,8 @@ test('Set/Get/Reset value (list is an array of objects)', function () {
 
 module('MultiSelect - Complex', {
 	setup: function () {
-		d = new window.MultiSelect({
+		d = new window.DropDown4({
+			multiselect: true,
 			target: 'ddtarget',
 			defaultValue: multiDefautlValue,
 			items: complexObjectList,

@@ -53,20 +53,34 @@
 
 	<tr>
 		<td>
-			Static menu:
+			Multiselect without action:
 			<input id="dropdown4" type="text" name="input4" />
 		</td>
+		<td>
+			<button class="btn" data-action="getValue">Get Value</button>
+			<button class="btn" data-action="getTextValue">Get Text Value</button>
+			<button class="btn" data-action="reset">Reset</button>
+			<button class="btn" data-action="replaceList">Replace List</button>
+		</td>
+		<td>{ target: 'dropdown4', defaultText: 'Items', emptyText: 'All Items' }</td>
+	</tr>
+
+	<tr>
+		<td>
+			Static menu:
+			<input id="dropdown5" type="text" name="input5" />
+		</td>
 		<td></td>
-		<td>{ target: 'dropdown4', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu' }</td>
+		<td>{ target: 'dropdown5', isStatic: true, items: [ 'Option 1', 'Option 2' ], emptyText: 'User Menu' }</td>
 	</tr>
 
 	<tr>
 		<td>
 			Static menu with sidebar:
-			<div id="dropdown5"></div>
+			<div id="dropdown6"></div>
 		</td>
 		<td></td>
-		<td>{ target: 'dropdown5', isStatic: true, emptyText: 'Custom Menu', showSidebar: true }</td>
+		<td>{ target: 'dropdown6', isStatic: true, emptyText: 'Custom Menu', showSidebar: true }</td>
 	</tr>
 
 </table>

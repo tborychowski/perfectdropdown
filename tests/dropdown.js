@@ -18,7 +18,7 @@ var defV, d = null, v = null,
 
 
 module('DropDown - Simple', {
-	setup: function () { d = new window.DropDown({ target: 'ddtarget', defaultValue: defV }); },
+	setup: function () { d = new window.DropDown4({ target: 'ddtarget', defaultValue: defV }); },
 	teardown: function () { d.destroy(); }
 });
 
@@ -112,7 +112,7 @@ test('Set/Get/Reset value (list is an array of objects)', function () {
 
 module('DropDown - Complex', {
 	setup: function () {
-		d = new window.DropDown({
+		d = new window.DropDown4({
 			target: 'ddtarget',
 			defaultValue: defV,
 			items: complexObjectList,
