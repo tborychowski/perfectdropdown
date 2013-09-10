@@ -1,5 +1,5 @@
 /**
- * XDropDown component v4.0 (2013-07-26)
+ * DropDown component v4.0 (2013-07-26)
  * @author Tom
  *
  * sample usage:
@@ -491,6 +491,10 @@ window.XDropDown4 = function (conf) {
 		//else _select(0);
 	},
 
+	_clearList = function () {
+		_conf.items = [];
+		_menu.find('.menu-items .menu-item').remove();
+	},
 
 
 	/**
@@ -1035,6 +1039,8 @@ window.XDropDown4 = function (conf) {
 
 	_this = {
 		getEl: function () { return _el; },
+		label: function () { return _label; },
+		button: function () { return _button; },
 
 		getItems: function () { return _conf.items; },
 		setItems: _populate,
@@ -1055,11 +1061,12 @@ window.XDropDown4 = function (conf) {
 
 		select: _select,
 		reset: _reset,
+		clearList: _clearList,
 
 		show: _el.show,
 		hide: _el.hide,
 
-		isEnabled: function () { return _el.hasClass('dropdown-disabled'); },
+		isEnabled: function () { return !_el.hasClass('dropdown-disabled'); },
 		enable: _enable,
 		disable: _disable,
 
@@ -1067,44 +1074,44 @@ window.XDropDown4 = function (conf) {
 	};
 
 
-	if (Object.defineProperties) { // nice api awaiting IE8's death...
-		Object.defineProperties(_this, {
-			el: {
-				enumerable: true,
-				get: function () { return _el; }
-			},
-			items: { enumerable: true,
-				get: function () { return _conf.items; },
-				set: _populate
-			},
-			config: { enumerable: true,
-				get: function () { return _conf; },
-				set: function (cfg) { $.extend(_conf, cfg || {}); }
-			},
-			value: { enumerable: true,
-				get: _getValue,
-				set: _setValue
-			},
-			idValue: { enumerable: true, get: _getIdValue },
+	//if (Object.defineProperties) { // nice api awaiting IE8's death...
+	//	Object.defineProperties(_this, {
+	//		el: {
+	//			enumerable: true,
+	//			get: function () { return _el; }
+	//		},
+	//		items: { enumerable: true,
+	//			get: function () { return _conf.items; },
+	//			set: _populate
+	//		},
+	//		config: { enumerable: true,
+	//			get: function () { return _conf; },
+	//			set: function (cfg) { $.extend(_conf, cfg || {}); }
+	//		},
+	//		value: { enumerable: true,
+	//			get: _getValue,
+	//			set: _setValue
+	//		},
+	//		idValue: { enumerable: true, get: _getIdValue },
 
-			select: { enumerable: true, value: _select },
-			reset: { enumerable: true, value: _reset },
+	//		select: { enumerable: true, value: _select },
+	//		reset: { enumerable: true, value: _reset },
 
-			show: { enumerable: true, value: function () { _el.show(); }},
-			hide: { enumerable: true, value: function () { _el.hide(); }},
+	//		show: { enumerable: true, value: function () { _el.show(); }},
+	//		hide: { enumerable: true, value: function () { _el.hide(); }},
 
-			enable: { enumerable: true, value: _enable },
-			disable: { enumerable: true, value: _disable },
+	//		enable: { enumerable: true, value: _enable },
+	//		disable: { enumerable: true, value: _disable },
 
-			enabled: {
-				enumerable: true,
-				get: function () { return _el.hasClass('dropdown-disabled'); },
-				set: function (v) { if (v === true) _enable(); else _disable(); }
-			},
+	//		enabled: {
+	//			enumerable: true,
+	//			get: function () { return !_el.hasClass('dropdown-disabled'); },
+	//			set: function (v) { if (v === true) _enable(); else _disable(); }
+	//		},
 
-			destroy: { enumerable: true, value: _destroy }
-		});
-	}
+	//		destroy: { enumerable: true, value: _destroy }
+	//	});
+	//}
 
 
 	return _init(conf);
