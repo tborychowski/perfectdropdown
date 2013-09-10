@@ -15,7 +15,7 @@
  *
  */
 
-window.XDropDown4 = function (conf) {
+window.DropDown = function (conf) {
 	'use strict';
 
 	var
@@ -256,7 +256,7 @@ window.XDropDown4 = function (conf) {
 		else target = $(e.target);
 		if (!target) return;
 
-		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
+		if (target.closest('.menu-item').length) target = target.closest('.menu-item');
 		actionId = target.data('id');
 		if (actionId === undefined) return;
 
