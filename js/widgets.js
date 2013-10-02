@@ -936,8 +936,11 @@ window.DropDown = function (conf) {
 					_action(e);
 					break;
 
-				case 27 : // esc
 				case  9 : // tab
+					_collapse();
+					break;
+
+				case 27 : // esc
 					_collapse(e);
 					break;
 
