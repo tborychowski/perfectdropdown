@@ -18,7 +18,6 @@
 window.DropDown = function (conf) {
 	'use strict';
 
-
 	// if user accidentally omits the new keyword, this will silently correct the problem
 	if (!(this instanceof window.DropDown)) return new window.DropDown(conf);
 
