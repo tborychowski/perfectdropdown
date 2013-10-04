@@ -61,6 +61,7 @@ window.DropDown = function (conf) {
 		value: null,								// pre-selected value
 		defaultValue: null,							// default value - will be set after reset
 		items: [],
+		url: null,									// if passed - items will be retrieved via ajax request
 		isStatic: false,							// if true - don't change the button label (name)
 		disabled: false								// init as disabled
 	},
@@ -259,7 +260,7 @@ window.DropDown = function (conf) {
 		else target = $(e.target);
 		if (!target) return;
 
-		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
+		if (target.closest('.menu-item').length) target = target.closest('.menu-item');
 		actionId = target.data('id');
 		if (actionId === undefined) return;
 
