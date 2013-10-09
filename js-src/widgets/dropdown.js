@@ -225,20 +225,6 @@ window.DropDown = function (conf) {
 		d.innerHTML = str;
 		return d.innerText || d.textContent;
 	},
-
-
-	/**
-	 * Returns true if all words in "keyword" are found within the "itemStr" string
-	 */
-	_filterMatch = function (itemStr, keyword) {
-		var words = keyword.split(' '), i = 0, w, reg;
-		for (; w = words[i++] ;) {
-			reg = new RegExp(w, 'ig');
-			if (reg.test(itemStr) === false) return false;
-			itemStr = itemStr.replace(reg, '');
-		}
-		return true;
-	},
 	/*** HELPERS ****************************************************************************************************************/
 
 
@@ -673,7 +659,7 @@ window.DropDown = function (conf) {
 		for (; item = items[i++] ;) {
 			item = $(item);
 			itemStr = item.data('group') + item.data('name');
-			if (_filterMatch(itemStr, key)) item.show();
+			if (itemStr.fuzzy(key)) item.show();
 			else item.hide();
 		}
 
