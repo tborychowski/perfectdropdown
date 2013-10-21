@@ -726,19 +726,11 @@ window.DropDown = function (conf) {
 		}
 		if (!_conf.items || !_conf.items.length) return _this;
 
-		var val = _getIdValue();
-		if (_conf.defaultValue) {
-			_setValue(_conf.defaultValue);
-		}
-		else if (val !== undefined && val !== '' && val !== []) {
-			_setValue(val);
-		}
-		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) {
-			_label.html(_conf.emptyText);
-		}
-		else {
-			_reset();
-		}
+		var val = _getIdValue() || _getValue();
+		if (val !== undefined && val !== '' && val !== []) _setValue(val);
+		else if (_conf.defaultValue) _setValue(_conf.defaultValue);
+		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _label.html(_conf.emptyText);
+		else _reset();
 
 		_adjustPosition();
 
