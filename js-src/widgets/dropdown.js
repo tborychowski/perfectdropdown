@@ -1,5 +1,5 @@
 /**
- * XDropDown component v4.0 (2013-07-26)
+ * DropDown component v4.3 (2013-10-04)
  * @author Tom
  *
  * sample usage:
@@ -15,8 +15,11 @@
  *
  */
 
-window.XDropDown4 = function (conf) {
+window.DropDown = function (conf) {
 	'use strict';
+
+	// if user accidentally omits the new keyword, this will silently correct the problem
+	if (!(this instanceof window.DropDown)) return new window.DropDown(conf);
 
 	var
 
@@ -58,6 +61,7 @@ window.XDropDown4 = function (conf) {
 		value: null,								// pre-selected value
 		defaultValue: null,							// default value - will be set after reset
 		items: [],
+		url: null,									// if passed - items will be retrieved via ajax request
 		isStatic: false,							// if true - don't change the button label (name)
 		disabled: false								// init as disabled
 	},
@@ -221,20 +225,6 @@ window.XDropDown4 = function (conf) {
 		d.innerHTML = str;
 		return d.innerText || d.textContent;
 	},
-
-
-	/**
-	 * Returns true if all words in "keyword" are found within the "itemStr" string
-	 */
-	_filterMatch = function (itemStr, keyword) {
-		var words = keyword.split(' '), i = 0, w, reg;
-		for (; w = words[i++] ;) {
-			reg = new RegExp(w, 'ig');
-			if (reg.test(itemStr) === false) return false;
-			itemStr = itemStr.replace(reg, '');
-		}
-		return true;
-	},
 	/*** HELPERS ****************************************************************************************************************/
 
 
@@ -256,7 +246,7 @@ window.XDropDown4 = function (conf) {
 		else target = $(e.target);
 		if (!target) return;
 
-		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
+		if (target.closest('.menu-item').length) target = target.closest('.menu-item');
 		actionId = target.data('id');
 		if (actionId === undefined) return;
 
@@ -441,16 +431,17 @@ window.XDropDown4 = function (conf) {
 			if (!_isTouch) _menu.find('.menu-filter-text').focus();
 		}, 10);
 		if (!_isTouch) _menu.find('.menu-filter-text').focus();
+		return _this;
 	},
 
 
 
 	_collapse = function (e) {
-		if (!_isExpanded) return;
+		if (!_isExpanded) return _this;
 		if (e) e.stopPropagation();
 		_menu.hide();
 		_menu.find('.menu-apply').remove();
-		if (_conf.value) _setValue(_conf.value);
+		// if (_conf.value) _setValue(_conf.value);
 		_el.removeClass('expanded');
 		_isExpanded = false;
 
@@ -458,6 +449,7 @@ window.XDropDown4 = function (conf) {
 		_button.focus();
 		$(document).off('mousedown DOMMouseScroll mousewheel keyup', _documentClick);
 		$(window).off('resize', _documentClick);
+		return _this;
 	},
 
 
@@ -489,8 +481,13 @@ window.XDropDown4 = function (conf) {
 		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _setValue('', _conf.emptyText);
 		else _setValue();
 		//else _select(0);
+		return _this;
 	},
 
+	_clearList = function () {
+		_conf.items = [];
+		_menu.find('.menu-items .menu-item').remove();
+	},
 
 
 	/**
@@ -593,6 +590,7 @@ window.XDropDown4 = function (conf) {
 	_select = function (idx) {
 		var item = _menu.find('.menu-item').eq(idx || 0);
 		if (item.length) _setValue(item.data('id'), item.data('name'));
+		return _this;
 	},
 
 
@@ -636,9 +634,9 @@ window.XDropDown4 = function (conf) {
 	_loadList = function () {
 		/*jshint unused: false */
 		if (!_conf.url) return;
-		$.ajax({ url: _conf.url, type: 'post', dataType: 'json', data: _conf.params })
-		.fail(function (xhr, status, err) { _loadingError(); })
-		.done(function (items, status, xhr) {
+		$.ajax({ url: _conf.url, type: 'get', dataType: 'json', data: _conf.params })
+		.fail(function () { _loadingError(); })
+		.done(function (items) {
 			if (!items || items.result === 'error') _loadingError();
 			else _populate(items);
 		});
@@ -661,7 +659,7 @@ window.XDropDown4 = function (conf) {
 		for (; item = items[i++] ;) {
 			item = $(item);
 			itemStr = item.data('group') + item.data('name');
-			if (_filterMatch(itemStr, key)) item.show();
+			if (itemStr.fuzzy(key)) item.show();
 			else item.hide();
 		}
 
@@ -726,26 +724,19 @@ window.XDropDown4 = function (conf) {
 			// store items
 			_conf.items = items || [];
 		}
+		if (!_conf.items || !_conf.items.length) return _this;
 
-
-		var val = _getIdValue();
-		if (_conf.defaultValue) {
-			_setValue(_conf.defaultValue);
-		}
-		else if (val !== undefined && val !== '' && val !== []) {
-			_setValue(val);
-		}
-		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) {
-			_label.html(_conf.emptyText);
-		}
-		else {
-			_reset();
-		}
+		var val = _getIdValue() || _getValue();
+		if (val !== undefined && val !== '' && val !== []) _setValue(val);
+		else if (_conf.defaultValue) _setValue(_conf.defaultValue);
+		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _label.html(_conf.emptyText);
+		else _reset();
 
 		_adjustPosition();
 
 		if (!_isTouch) _menu.find('.menu-filter-text').focus();
 		_highlightObj = null;
+		return _this;
 	},
 	/*** DATA *******************************************************************************************************************/
 
@@ -927,8 +918,11 @@ window.XDropDown4 = function (conf) {
 					_action(e);
 					break;
 
-				case 27 : // esc
 				case  9 : // tab
+					_collapse();
+					break;
+
+				case 27 : // esc
 					_collapse(e);
 					break;
 
@@ -985,7 +979,7 @@ window.XDropDown4 = function (conf) {
 				if (e.keyCode === 27 && this.value.length) this.value = '';						// first Esc - clears filter
 				_filter(this.value);
 			})
-			.on('click', '.menu-filter .search-icon', _clearFilter)				// menu filter clear-icon
+			.on('click', '.menu-filter .search-icon', _clearFilter)								// menu filter clear-icon
 
 			.on('mouseover', 'li', function () {
 				_menu.find('.focused').removeClass('focused');
@@ -1032,9 +1026,10 @@ window.XDropDown4 = function (conf) {
 	};
 	/*** INIT *******************************************************************************************************************/
 
-
 	_this = {
 		getEl: function () { return _el; },
+		label: function () { return _label; },
+		button: function () { return _button; },
 
 		getItems: function () { return _conf.items; },
 		setItems: _populate,
@@ -1055,57 +1050,59 @@ window.XDropDown4 = function (conf) {
 
 		select: _select,
 		reset: _reset,
+		clearList: _clearList,
 
 		show: _el.show,
 		hide: _el.hide,
 
-		isEnabled: function () { return _el.hasClass('dropdown-disabled'); },
+		isEnabled: function () { return !_el.hasClass('dropdown-disabled'); },
 		enable: _enable,
 		disable: _disable,
 
 		destroy: _destroy
 	};
 
-
 	if (Object.defineProperties) { // nice api awaiting IE8's death...
 		Object.defineProperties(_this, {
-			el: {
-				enumerable: true,
-				get: function () { return _el; }
-			},
-			items: { enumerable: true,
+			el:     { enumerable: true, get: function () { return _el; } },
+			label:  { enumerable: true, get: function () { return _label; } },
+			button: { enumerable: true, get: function () { return _button; } },
+			menu:   { enumerable: true, get: function () { return _menu; } },
+
+			items:  { enumerable: true,
 				get: function () { return _conf.items; },
-				set: _populate
+				set: function (items) { if (items && items.length) _populate(items); else _clearList(); }
 			},
 			config: { enumerable: true,
 				get: function () { return _conf; },
 				set: function (cfg) { $.extend(_conf, cfg || {}); }
 			},
-			value: { enumerable: true,
-				get: _getValue,
-				set: _setValue
-			},
-			idValue: { enumerable: true, get: _getIdValue },
 
-			select: { enumerable: true, value: _select },
-			reset: { enumerable: true, value: _reset },
-
-			show: { enumerable: true, value: function () { _el.show(); }},
-			hide: { enumerable: true, value: function () { _el.hide(); }},
-
-			enable: { enumerable: true, value: _enable },
-			disable: { enumerable: true, value: _disable },
-
-			enabled: {
-				enumerable: true,
+			enabled: { enumerable: true,
 				get: function () { return _el.hasClass('dropdown-disabled'); },
 				set: function (v) { if (v === true) _enable(); else _disable(); }
 			},
 
-			destroy: { enumerable: true, value: _destroy }
+			value:    { enumerable: true, get: _getValue, set: _setValue },
+
+			idValue:  { enumerable: true, get: _getIdValue },
+			caption:  { enumerable: true, get: _getCaption },
+
+			expand:   { enumerable: true, value: _expand },
+			collapse: { enumerable: true, value: _collapse },
+
+			select:   { enumerable: true, value: _select },
+			reset:    { enumerable: true, value: _reset },
+
+			show:     { enumerable: true, value: function () { _el.show(); }},
+			hide:     { enumerable: true, value: function () { _el.hide(); }},
+
+			enable:   { enumerable: true, value: _enable },
+			disable:  { enumerable: true, value: _disable },
+
+			destroy:  { enumerable: true, value: _destroy }
 		});
 	}
-
 
 	return _init(conf);
 };
