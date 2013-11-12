@@ -18,7 +18,6 @@
 window.DropDown = function (conf) {
 	'use strict';
 
-
 	// if user accidentally omits the new keyword, this will silently correct the problem
 	if (!(this instanceof window.DropDown)) return new window.DropDown(conf);
 
@@ -62,6 +61,7 @@ window.DropDown = function (conf) {
 		value: null,								// pre-selected value
 		defaultValue: null,							// default value - will be set after reset
 		items: [],
+		url: null,									// if passed - items will be retrieved via ajax request
 		isStatic: false,							// if true - don't change the button label (name)
 		disabled: false								// init as disabled
 	},
@@ -225,20 +225,6 @@ window.DropDown = function (conf) {
 		d.innerHTML = str;
 		return d.innerText || d.textContent;
 	},
-
-
-	/**
-	 * Returns true if all words in "keyword" are found within the "itemStr" string
-	 */
-	_filterMatch = function (itemStr, keyword) {
-		var words = keyword.split(' '), i = 0, w, reg;
-		for (; w = words[i++] ;) {
-			reg = new RegExp(w, 'ig');
-			if (reg.test(itemStr) === false) return false;
-			itemStr = itemStr.replace(reg, '');
-		}
-		return true;
-	},
 	/*** HELPERS ****************************************************************************************************************/
 
 
@@ -260,7 +246,7 @@ window.DropDown = function (conf) {
 		else target = $(e.target);
 		if (!target) return;
 
-		if (target.parent('.menu-item').length) target = target.parent('.menu-item');
+		if (target.closest('.menu-item').length) target = target.closest('.menu-item');
 		actionId = target.data('id');
 		if (actionId === undefined) return;
 
@@ -268,7 +254,7 @@ window.DropDown = function (conf) {
 			actionName = target.data('name');
 			_collapse(e);
 			_setValue(actionId, actionName);
-			if (_conf.action) _conf.action.call(_this, actionId, _selectedItem, _this);
+			if (_conf.action) _conf.action.call(_conf.scope || _conf.action, actionId, _selectedItem, _this);
 		}
 		else {
 			/*jshint onevar: false */
@@ -280,7 +266,7 @@ window.DropDown = function (conf) {
 				if (target.closest('.no-items-selected').length) return;
 				_applySelected();
 				_collapse(e);
-				_conf.action.call(_conf.action, _getValue(), _selectedItems, _this);
+				if (_conf.action) _conf.action.call(_conf.scope || _conf.action, _getValue(), _selectedItems, _this);
 			}
 			else {
 				check = target.hasClass('menu-item-checked');
@@ -673,7 +659,7 @@ window.DropDown = function (conf) {
 		for (; item = items[i++] ;) {
 			item = $(item);
 			itemStr = item.data('group') + item.data('name');
-			if (_filterMatch(itemStr, key)) item.show();
+			if (itemStr.fuzzy(key)) item.show();
 			else item.hide();
 		}
 
@@ -740,19 +726,11 @@ window.DropDown = function (conf) {
 		}
 		if (!_conf.items || !_conf.items.length) return _this;
 
-		var val = _getIdValue();
-		if (_conf.defaultValue) {
-			_setValue(_conf.defaultValue);
-		}
-		else if (val !== undefined && val !== '' && val !== []) {
-			_setValue(val);
-		}
-		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) {
-			_label.html(_conf.emptyText);
-		}
-		else {
-			_reset();
-		}
+		var val = _getIdValue() || _getValue();
+		if (val !== undefined && val !== '' && val !== []) _setValue(val);
+		else if (_conf.defaultValue) _setValue(_conf.defaultValue);
+		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _label.html(_conf.emptyText);
+		else _reset();
 
 		_adjustPosition();
 

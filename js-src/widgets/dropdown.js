@@ -266,7 +266,7 @@ window.DropDown = function (conf) {
 				if (target.closest('.no-items-selected').length) return;
 				_applySelected();
 				_collapse(e);
-				_conf.action.call(_conf.scope || _conf.action, _getValue(), _selectedItems, _this);
+				if (_conf.action) _conf.action.call(_conf.scope || _conf.action, _getValue(), _selectedItems, _this);
 			}
 			else {
 				check = target.hasClass('menu-item-checked');
