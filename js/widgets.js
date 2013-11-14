@@ -850,12 +850,22 @@ window.DropDown = function (conf) {
 
 		// store for destroy()
 		_originalEl = _el.clone();
+		var inp, opts = [];
 
 		if (_el.is('input')) {
-			var inp = _el[0];
+			inp = _el[0];
 			_conf.name = inp.name;
 			if (!_conf.id && inp.id) _conf.id = inp.id;
 			if (!_conf.value && _el.val()) _conf.value = _el.val();
+			_el = $('<div>').replaceAll(_el);
+		}
+		else if (_el.is('select')) {
+			inp = _el[0];
+			_conf.name = inp.name;
+			if (!_conf.id && inp.id) _conf.id = inp.id;
+			opts = [];
+			_el.find('option').each(function () { opts.push({ id: this.value, name: this.innerHTML }); });
+			_conf.items = opts;
 			_el = $('<div>').replaceAll(_el);
 		}
 		_el.addClass('dropdown ' + _conf.cls).html(_getHtml(_conf));
@@ -880,12 +890,13 @@ window.DropDown = function (conf) {
 		if (typeof _conf.id !== 'undefined') _el.attr('id', _conf.id);
 		if (_conf.menuCls) _menu.addClass(_conf.menuCls);
 		if (_conf.disabled) _disable();
-		if (_conf.defaultText && _conf.defaultText.length && !_conf.isStatic) _label.html(_conf.defaultText);
 
 		// use the data store provided in the config
 		if (_conf.items.length) _populate(_conf.items);
-		if (_conf.defaultValue) _setValue(_conf.defaultValue);
+		if (_conf.defaultText && _conf.defaultText.length && !_conf.isStatic) _label.html(_conf.defaultText);
+		if (_conf.emptyText && _conf.emptyText.length) _label.html(_conf.emptyText);
 
+        if (_conf.defaultValue) _setValue(_conf.defaultValue);
 
 		if (_conf.value !== undefined && _conf.value !== null) {
 			var fid = _conf.value[_conf.fieldId], fin = _conf.value[_conf.fieldName];
