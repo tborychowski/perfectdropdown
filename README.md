@@ -1,5 +1,5 @@
-Perfect Dropdown
-================
+Perfect Dropdown v4
+===================
 
 This is the Perfect Dropdown - a jQuery based, extensible component
 
@@ -11,10 +11,10 @@ This is the Perfect Dropdown - a jQuery based, extensible component
 
 ### Advanced usages
     $(function(){
-        var myDD = new Dropdown({ target: $('#myInput'), url: 'data.json', fieldName: '{itemName} [{itemId}]', fieldId: 'itemId' });
+		var myDD = new Dropdown({ target: $('#myInput'), url: 'data.json', fieldName: '{itemName} [{itemId}]', fieldId: 'itemId' });
 		myDD.setValue(231, 'Item 23');
 		
-		var myMulti = new Multiselect({ target: $('#myInput'), url: 'data.json', value: [2,3,4], defaultText: 'Items' });
+		var myMulti = new Dropdown({ multiselect: true, target: $('#myInput'), url: 'data.json', value: [2,3,4], defaultText: 'Items' });
 		var values = myMulti.getValue();
     });
 
