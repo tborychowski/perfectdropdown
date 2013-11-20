@@ -36,4 +36,4 @@
 		cls: _cls,
 		log: _log
 	};
-}(jQuery, App, this));
+}(jQuery, window.App || {}, this));

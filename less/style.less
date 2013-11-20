@@ -1,11 +1,18 @@
 @import "_lib";
 
-body { margin:0; padding: 40px; background: #f0f0f0; font: 90% sans-serif; }
-#console { border: 1px solid red; width: 500px; height: 300px; overflow-y: auto; margin-top: 50px; }
+body { margin:0; padding: 20px 40px; background: #f0f0f0; font: 90% sans-serif; }
 
-.demotab { border-collapse: collapse;
-	td { border: 1px solid #999; padding: 10px 15px;
+.demotab { border-collapse: collapse; background: #fff; width: 100%;
+	td { border: 1px solid #999; padding: 5px 10px; vertical-align: top;
 		&:first-child { width: 160px; }
 	}
+	thead td { background-color: #f5f5f5; vertical-align: middle; font-weight: bold; }
+
+	pre { margin: -2px; font-size: 11px; line-height: 1; }
 	.dropdown { width: 100%; }
+}
+
+
+#console { height: 300px; margin: 20px 1px 0; padding: 10px; overflow-y: auto;
+	background: #333; color: #fff; font: 13px/1.6 monospace; border: 1px solid #111;
 }

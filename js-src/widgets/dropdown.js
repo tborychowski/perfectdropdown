@@ -1,5 +1,5 @@
 /**
- * DropDown component v4.3 (2013-10-04)
+ * DropDown component v4.4 (2013-10-04)
  * @author Tom
  *
  * sample usage:
@@ -224,6 +224,22 @@ window.DropDown = function (conf) {
 		var d = document.createElement('div');
 		d.innerHTML = str;
 		return d.innerText || d.textContent;
+	},
+
+
+
+	/**
+	 * Fuzzy search, e.g.:
+	 * @param  {string} s  string to search, e.g.
+	 *                     _fuzzy('a haystack with a needle', 'hay sucks');    // false
+	 *                     _fuzzy('a haystack with a needle', 'sack hand');    // true
+	 * @return {boolean}   true if found
+	 */
+	_fuzzy = function (str, s) {
+		var hay = str.toLowerCase(), i = 0, n = 0, l;
+		s = s.toLowerCase();
+		for (; l = s[i++] ;) if ((n = hay.indexOf(l, n)) === -1) return false;
+		return true;
 	},
 	/*** HELPERS ****************************************************************************************************************/
 
@@ -659,7 +675,7 @@ window.DropDown = function (conf) {
 		for (; item = items[i++] ;) {
 			item = $(item);
 			itemStr = item.data('group') + item.data('name');
-			if (itemStr.fuzzy(key)) item.show();
+			if (_fuzzy(itemStr, key)) item.show();
 			else item.hide();
 		}
 
@@ -727,7 +743,7 @@ window.DropDown = function (conf) {
 		if (!_conf.items || !_conf.items.length) return _this;
 
 		var val = _getIdValue() || _getValue();
-		if (val !== undefined && val !== '' && val !== []) _setValue(val);
+		if (typeof val !== 'undefined' && val !== null  && val !== '' && val !== []) _setValue(val);
 		else if (_conf.defaultValue) _setValue(_conf.defaultValue);
 		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _label.html(_conf.emptyText);
 		else _reset();
@@ -862,6 +878,7 @@ window.DropDown = function (conf) {
 		else if (_el.is('select')) {
 			inp = _el[0];
 			_conf.name = inp.name;
+			_conf.value = inp.value || null;
 			if (!_conf.id && inp.id) _conf.id = inp.id;
 			opts = [];
 			_el.find('option').each(function () { opts.push({ id: this.value, name: this.innerHTML }); });
@@ -1011,7 +1028,7 @@ window.DropDown = function (conf) {
 		_collapse();
 		if (_menu && _menu.length) _menu.remove();
 		if (_originalEl && _originalEl.length) {
-			if (!_conf.isStatic && _originalEl.is('input')) _originalEl.val(_getIdValue());
+			if (!_conf.isStatic && (_originalEl.is('input') || _originalEl.is('select'))) _originalEl.val(_getIdValue());
 			_originalEl.insertAfter(_el);
 		}
 		_el.remove();
