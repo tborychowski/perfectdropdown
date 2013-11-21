@@ -1,5 +1,5 @@
-Perfect Dropdown v4.4
-=====================
+# Perfect Dropdown v4.4 [![Build Status](https://secure.travis-ci.org/tborychowski/perfectdropdown.png?branch=master)](https://travis-ci.org/tborychowski/perfectdropdown)
+
 
 This is the Perfect Dropdown - a jQuery based, extensible component
 
