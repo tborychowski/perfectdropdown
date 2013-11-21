@@ -124,7 +124,7 @@
 	btnAction = function () {
 		var btn = $(this), msg = '',
 			action = btn.data('action'),
-			idx = btn.closest('tr').index() - 1,
+			idx = btn.closest('tr').index(),
 			d = dd[idx], v;
 
 		if (!d) return;

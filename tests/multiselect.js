@@ -1,5 +1,5 @@
 /*global module: false, test: false, notEqual: false, equal: false, deepEqual: false */
-var DropDown = window.XDropDown4,
+var DD = window.DropDown,
 	multiDefautlValue = [],
 	multiDefaultCaption = 'All items',
 	multipleItems = 'Multiple items',
@@ -23,7 +23,7 @@ var DropDown = window.XDropDown4,
 
 module('MultiSelect - Simple', {
 	setup: function () {
-		d = new DropDown({ multiselect: true, target: 'ddtarget', defaultValue: multiDefautlValue, defaultText: 'items' });
+		d = new DD({ multiselect: true, target: 'ddtarget', defaultValue: multiDefautlValue, defaultText: 'items' });
 	},
 	teardown: function () { d.destroy(); }
 });
@@ -122,7 +122,7 @@ test('Set/Get/Reset value (list is an array of objects)', function () {
 
 module('MultiSelect - Complex', {
 	setup: function () {
-		d = new DropDown({
+		d = new DD({
 			multiselect: true,
 			target: 'ddtarget',
 			defaultValue: multiDefautlValue,

@@ -3,30 +3,7 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		jshint: {
-			options: {
-				bitwise   : true,
-				boss      : true,
-				//camelcase : true,
-				eqeqeq    : true,
-				immed     : true,
-				indent    : 4,
-				latedef   : true,
-				maxlen    : 130,
-				newcap    : true,
-				noarg     : true,
-				noempty   : true,
-				nonew     : true,
-				quotmark  : true,
-				smarttabs : true,
-				//strict    : true,
-				trailing  : true,
-				//undef     : true,
-				//unused    : true,
-				white     : true,
-				browser   : true,
-				jquery    : true,
-				globals: {}
-			},
+			options: { jshintrc: 'js-src/.jshintrc' },
 			files: [ 'js-src/**/*.js', '!js-src/lib/**' ]
 		},
 
@@ -55,6 +32,7 @@ module.exports = function (grunt) {
 		},
 
 		watch: {
+			options: { livereload: true },
 			js:   { files: 'js-src/**/*.js', tasks: ['jshint', 'concat' ] },
 			css: { files: 'less/**/*.less', tasks: [ 'less:dev' ] }
 		}

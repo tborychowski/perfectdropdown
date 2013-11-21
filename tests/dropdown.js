@@ -1,5 +1,5 @@
-/*global module: false, test: false, notEqual: false, equal: false, deepEqual: false */
-var DropDown = window.XDropDown4,
+/*global module: false, test: false, notEqual: false, equal: false, strictEqual, deepEqual: false */
+var DD = window.DropDown,
 	defV, d = null, v = null,
 	simpleList = [1, 2, 3, 4, 5],
 	objectList = [
@@ -19,7 +19,7 @@ var DropDown = window.XDropDown4,
 
 
 module('DropDown - Simple', {
-	setup: function () { d = new DropDown({ target: 'ddtarget', defaultValue: defV }); },
+	setup: function () { d = new DD({ target: 'ddtarget', defaultValue: defV }); },
 	teardown: function () { d.destroy(); }
 });
 
@@ -107,13 +107,35 @@ test('Set/Get/Reset value (list is an array of objects)', function () {
 });
 
 
+test('Special Characters', function () {
+	var list = [
+			{ id: 1, name: 'simple string' },
+			{ id: 2, name: '&lt;a&amp;b,&apos;c&apos;,&quot;d&quot;' },
+			{ id: 3, name: 'Terms & Conditions' },
+			{ id: 4, name: 'T&C' }
+		],
+		val = [ 'simple string', '<a&b,\'c\',"d"', 'Terms & Conditions', 'T&C' ];
+	d.setItems(list);
+
+	d.setValue(list[0].id);
+	strictEqual(d.getCaption(), val[0], 'Caption should match 1');
+
+	d.setValue(list[1].id);
+	strictEqual(d.getCaption(), val[1], 'Caption should match 2');
+
+	d.setValue(list[2].id);
+	strictEqual(d.getCaption(), val[2], 'Caption should match 2');
+
+	d.setValue(list[3].id);
+	strictEqual(d.getCaption(), val[3], 'Caption should match 2');
+});
 
 
 
 
 module('DropDown - Complex', {
 	setup: function () {
-		d = new DropDown({
+		d = new DD({
 			target: 'ddtarget',
 			defaultValue: defV,
 			items: complexObjectList,
@@ -121,7 +143,9 @@ module('DropDown - Complex', {
 			fieldName: '{itemName} ({itemId} - {itemCode})'
 		});
 	},
-	teardown: function () { d.destroy(); }
+	teardown: function () {
+		d.destroy();
+	}
 });
 
 

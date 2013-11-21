@@ -35,12 +35,6 @@
 		})();
 	}
 
-	// firebug short-cuts
-	window.log = (window.console && window.console.log && window.console.log.bind) ? console.log.bind(console) :
-		function (e) {alert(JSON.stringify(e)); };
-	window.dir = (window.console && window.console.dir && window.console.dir.bind) ? console.dir.bind(console) :
-		function (e) {alert(JSON.stringify(e)); };
-
 }(this));
 
 var App = (function (App) {

@@ -71,7 +71,7 @@ window.DropDown = function (conf) {
 
 
 
-	/*** HELPERS ****************************************************************************************************************/
+	/*** HELPERS ******************************************************************************************************/
 	_adjustPosition = function () {
 		if (!_isExpanded) return;
 
@@ -163,50 +163,40 @@ window.DropDown = function (conf) {
 		var cItem = _focused, cIdx = items.index(cItem[0]), nIdx = cIdx + off, nItem = items.eq(nIdx);
 
 		if (off < 0) {
-			// current item is first = focus filter
-			if (cIdx === 0) nItem = null;
+			if (cIdx === 0) nItem = null;								// current item is first = focus filter
 			else {
-				// index is negative - highlight first item
-				if (nIdx < 0) nItem = items.first();
+				if (nIdx < 0) nItem = items.first();					// index is negative - highlight first item
 				oT = nItem[0].offsetTop;
 				if (mn.scrollTop <= oT) oT = null;
 			}
 		}
 		else if (off > 0) {
-			// out of index -> highlight last item
-			if (!nItem || !nItem.length) nItem = items.last();
+			if (!nItem || !nItem.length) nItem = items.last();			// out of index -> highlight last item
 			oT = nItem[0].offsetTop + nItem[0].offsetHeight - mn.offsetHeight;
 			if (mn.scrollTop >= oT) oT = null;
 		}
 
 
 		if (nItem && nItem.length) {
-			// focus dropdown button
-			_button.focus();
-			// scroll element into view
-			if (oT !== null) mn.scrollTop = oT;
+			_button.focus();											// focus dropdown button
+			if (oT !== null) mn.scrollTop = oT;							// scroll element into view
 			cItem.removeClass('focused');
 			_focused = nItem.addClass('focused');
 		}
 		else {
 			mn.scrollTop = 0;
-			// focus filter input
-			_menu.find('.menu-filter-text').focus();
+			_menu.find('.menu-filter-text').focus();					// focus filter input
 		}
 	},
 
 
 	_mapName = function (name, rec) {
-		// use defined function to "render" name
-		if (typeof name === 'function') name = name.call(rec);
+		if (typeof name === 'function') name = name.call(rec);			// use defined function to "render" name
 		else {
-			// match template pattern, e.g. {fieldName}
-			var match = /\{(\w+)\}/i.exec(name);
+			var match = /\{(\w+)\}/i.exec(name);						// match template pattern, e.g. {fieldName}
 			if (match && match.length) {
-				// loop through all patterns
-				while (match && match.length > 1) {
-					// replace all {fieldName} with item['fieldName']
-					name = name.replace(match[0], rec[match[1]] || '');
+				while (match && match.length > 1) {						// loop through all patterns
+					name = name.replace(match[0], rec[match[1]] || '');	// replace all {fieldName} with item['fieldName']
 					match = /\{(\w+)\}/i.exec(name);
 				}
 			}
@@ -214,16 +204,7 @@ window.DropDown = function (conf) {
 			else if ($.type(rec) === 'object') name = rec[name];
 			else name = rec;
 		}
-		return _decodeEntities(name);
-	},
-
-
-	_decodeEntities = function (str) {
-		if (!str) return '';
-		if (('' + str).indexOf('&') === -1) return str;
-		var d = document.createElement('div');
-		d.innerHTML = str;
-		return d.innerText || d.textContent;
+		return name;
 	},
 
 
@@ -241,14 +222,14 @@ window.DropDown = function (conf) {
 		for (; l = s[i++] ;) if ((n = hay.indexOf(l, n)) === -1) return false;
 		return true;
 	},
-	/*** HELPERS ****************************************************************************************************************/
+	/*** HELPERS ******************************************************************************************************/
 
 
 
 
 
 
-	/*** HANDLERS ***************************************************************************************************************/
+	/*** HANDLERS *****************************************************************************************************/
 	/**
 	 * On menu item click - action
 	 * @param {Object} e		click event
@@ -366,14 +347,14 @@ window.DropDown = function (conf) {
 		if (tar.parents('.menu').length || tar.hasClass('menu')) return;
 		_collapse();
 	},
-	/*** HANDLERS ***************************************************************************************************************/
+	/*** HANDLERS *****************************************************************************************************/
 
 
 
 
 
 
-	/*** MULTISELECT ************************************************************************************************************/
+	/*** MULTISELECT **************************************************************************************************/
 	/**
 	 * Fake selects all items, selects "All items" and turns the whole menu into "all items selected" look
 	 */
@@ -402,13 +383,13 @@ window.DropDown = function (conf) {
 		_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
 		_label.html('No ' + _conf.defaultText);
 	},
-	/*** MULTISELECT ************************************************************************************************************/
+	/*** MULTISELECT **************************************************************************************************/
 
 
 
 
 
-	/*** EXPAND/COLLAPSE ********************************************************************************************************/
+	/*** EXPAND/COLLAPSE **********************************************************************************************/
 	/**
 	 * Hides/shows the menu
 	 * @param {Object} e		click event object
@@ -478,13 +459,13 @@ window.DropDown = function (conf) {
 			if (el && el.collapse) el.collapse();
 		});
 	},
-	/*** EXPAND/COLLAPSE ********************************************************************************************************/
+	/*** EXPAND/COLLAPSE **********************************************************************************************/
 
 
 
 
 
-	/*** VALUE ******************************************************************************************************************/
+	/*** VALUE ********************************************************************************************************/
 	/**
 	 * Sets the value to 0 & defaultText
 	 */
@@ -523,10 +504,10 @@ window.DropDown = function (conf) {
 
 		_selectedItem = _focused = null;
 		_menu.find('.selected,.focused').removeClass('selected focused');
-		if (id !== '' && _conf.items && _conf.items.length) {								// list available -> select item
+		if (id !== '' && _conf.items && _conf.items.length) {							// list available -> select item
 			_focused = _menu.find('.menu-item-id-' + _clrStr(id));
 			if (_focused.length) {
-				if (!_conf.isStatic) _focused.addClass('selected focused');					// select item
+				if (!_conf.isStatic) _focused.addClass('selected focused');				// select item
 				for (var i = 0, item; item = _conf.items[i++] ;)
 					if (id == (typeof item === 'object' ? item[_conf.fieldId] : item)) {
 						_selectedItem = item;
@@ -535,18 +516,11 @@ window.DropDown = function (conf) {
 			}
 			if (!name && _selectedItem) name = _mapName(_conf.fieldName, _selectedItem);
 			else if (!name) name = id;
-			if (!_conf.isStatic) {
-				name = ('' + name).replace(/&/g, '&amp;');									// encode all & to &amp; for IE
-				_label.html(name);
-			}
+			if (!_conf.isStatic) _label.html(name);
 		}
 		else {
-			// if no name, set to id (if id not null) or to defaultText or to ''
-			name = name || (id === '' ? _conf.defaultText || '' : id);
-			if (!_conf.isStatic) {														// no list -> set value "in blind"
-				name = ('' + name).replace(/&/g, '&amp;');									// encode all & to &amp; for IE
-				_label.html(name);
-			}
+			name = name ? name : (id === '' ? _conf.defaultText || '' : id);
+			if (!_conf.isStatic) _label.html(name);										// no list -> set value "in blind"
 		}
 		return _this;
 	},
@@ -635,7 +609,7 @@ window.DropDown = function (conf) {
 		if (!all) for (; item = items[i++] ;) vals.push($(item).data('id'));
 		_conf.value = vals;
 	},
-	/*** VALUE ******************************************************************************************************************/
+	/*** VALUE ********************************************************************************************************/
 
 
 
@@ -643,7 +617,7 @@ window.DropDown = function (conf) {
 
 
 
-	/*** DATA *******************************************************************************************************************/
+	/*** DATA *********************************************************************************************************/
 	/**
 	 * Load list from the server
 	 */
@@ -754,7 +728,7 @@ window.DropDown = function (conf) {
 		_highlightObj = null;
 		return _this;
 	},
-	/*** DATA *******************************************************************************************************************/
+	/*** DATA *********************************************************************************************************/
 
 
 
@@ -762,7 +736,7 @@ window.DropDown = function (conf) {
 
 
 
-	/*** HTML *******************************************************************************************************************/
+	/*** HTML *********************************************************************************************************/
 	_noItems = function () { _menu.html('<span class="loading-error">No items</span>'); },
 	_loadingError = function () { _menu.html('<span class="loading-error">Loading error</span>'); },
 
@@ -844,7 +818,7 @@ window.DropDown = function (conf) {
 	 * @return {String}      cleared string
 	 */
 	_clrStr = function (str) { return ('' + str).replace(/[^\w\d\-]/g, ''); },
-	/*** HTML *******************************************************************************************************************/
+	/*** HTML *********************************************************************************************************/
 
 
 
@@ -854,7 +828,7 @@ window.DropDown = function (conf) {
 
 
 
-	/*** INIT *******************************************************************************************************************/
+	/*** INIT *********************************************************************************************************/
 	/**
 	 * Initialize DropDown components
 	 */
@@ -1052,7 +1026,7 @@ window.DropDown = function (conf) {
 
 		return _this;
 	};
-	/*** INIT *******************************************************************************************************************/
+	/*** INIT *********************************************************************************************************/
 
 	_this = {
 		getEl: function () { return _el; },
