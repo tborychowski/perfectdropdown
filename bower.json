@@ -1,11 +1,11 @@
 {
 	"name": "perfect-dropdown",
 	"description": "Perfect DropDown",
-	"version": "4.4.2",
+	"version": "4.4.3",
 	"authors": [
 		"Tom <tborychowski@gmail.com>"
 	],
 	"license": "MIT",
 	"ignore": [ "**/.*", "node_modules", "bower_components", "test", "tests" ],
-	"main": [ "js-src/widgets/dropdown.js", "less/dropdown.less" ]
+	"main": [ "js-src/dropdown.js", "js/dropdown.min.js", "less/dropdown.less" ]
 }
