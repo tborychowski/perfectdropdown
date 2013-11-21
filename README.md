@@ -3,13 +3,16 @@ Perfect Dropdown v4.4
 
 This is the Perfect Dropdown - a jQuery based, extensible component
 
-### Basic usages
+### Installation
+    bower install perfect-dropdown
+
+### Basic usage
     $(function(){
         new Dropdown({ target: 'myInputId' });
         new Dropdown({ target: $('#myInput'), items: [1,2,3], emptyText: 'Please select' });
     });
 
-### Advanced usages
+### Advanced usage
     $(function(){
 		var myDD = new Dropdown({ target: $('#myInput'), url: 'data.json', fieldName: '{itemName} [{itemId}]', fieldId: 'itemId' });
 		myDD.setValue(231, 'Item 23');
