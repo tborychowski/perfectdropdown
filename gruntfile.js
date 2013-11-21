@@ -8,16 +8,14 @@ module.exports = function (grunt) {
 		},
 
 		concat: {
-			jquery:  { src: ['js-src/lib/*.js' ],    dest: 'js/jquery.min.js' },
-			widgets: { src: ['js-src/widgets/*.js'], dest: 'js/widgets.js' },
-			modules: { src: ['js-src/modules/*.js'], dest: 'js/modules.js' },
-			app:     { src: ['js-src/app/*.js'],     dest: 'js/app.js' }
+			lib:      { files: { 'js/lib.min.js'     : 'js-src/lib/*.js'    }},
+			dropdown: { files: { 'js/dropdown.min.js': 'js-src/dropdown.js' }},
+			app:      { files: { 'js/app.min.js'     : 'js-src/app/*.js'    }}
 		},
 
 		uglify: {
-			widgets : '<%= concat.widgets %>',
-			modules : '<%= concat.modules %>',
-			app     : '<%= concat.app %>'
+			dropdown : '<%= concat.dropdown %>',
+			app : '<%= concat.app %>'
 		},
 
 		less: {
@@ -31,6 +29,8 @@ module.exports = function (grunt) {
 			}
 		},
 
+		qunit: { files: ['tests/*.html'] },
+
 		watch: {
 			options: { livereload: true },
 			js:   { files: 'js-src/**/*.js', tasks: ['jshint', 'concat' ] },
@@ -43,7 +43,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-qunit');
 
 	grunt.registerTask('default', [ 'jshint', 'concat', 'less:dev' ]);
-	grunt.registerTask('prod', [ 'jshint', 'concat', 'uglify', 'less:prod' ]);
+	grunt.registerTask('prod', [ 'jshint', 'concat', 'uglify', 'less:prod', 'qunit' ]);
 };

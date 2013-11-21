@@ -1,7 +1,7 @@
 {
   "name": "perfectdropdown",
   "description": "PerfectDropDown",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/tborychowski/perfectdropdown.git"
@@ -12,6 +12,7 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-contrib-less": "~0.8.2"
+    "grunt-contrib-less": "~0.8.2",
+    "grunt-contrib-qunit": "~0.3.0"
   }
 }
