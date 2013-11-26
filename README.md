@@ -1,6 +1,4 @@
-# Perfect Dropdown v4.4 
-[![Build Status](https://secure.travis-ci.org/tborychowski/perfectdropdown.png?branch=master)](https://travis-ci.org/tborychowski/perfectdropdown)
-[![Build Status](https://drone.io/github.com/tborychowski/frame/status.png)](https://drone.io/github.com/tborychowski/frame/latest)
+# Perfect Dropdown v4.4 [![Build Status](https://secure.travis-ci.org/tborychowski/perfectdropdown.png?branch=master)](https://travis-ci.org/tborychowski/perfectdropdown))
 
 This is the Perfect Dropdown - a jQuery based, extensible component
 
