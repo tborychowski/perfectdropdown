@@ -7,18 +7,24 @@ This is the Perfect Dropdown - a jQuery based, extensible component
     bower install perfect-dropdown
 
 ### Basic usage
-    $(function(){
-        new Dropdown({ target: 'myInputId' });
-        new Dropdown({ target: $('#myInput'), items: [1,2,3], emptyText: 'Please select' });
-    });
+
+```javascript
+$(function(){
+	new Dropdown({ target: 'myInputId' });
+	new Dropdown({ target: $('#myInput'), items: [1,2,3], emptyText: 'Please select' });
+});
+```
 
 ### Advanced usage
-    $(function(){
-		var myDD = new Dropdown({ target: $('#myInput'), url: 'data.json', fieldName: '{itemName} [{itemId}]', fieldId: 'itemId' });
-		myDD.setValue(231, 'Item 23');
-		
-		var myMulti = new Dropdown({ multiselect: true, target: $('#myInput'), url: 'data.json', value: [2,3,4], defaultText: 'Items' });
-		var values = myMulti.getValue();
-    });
+
+```javascript
+$(function(){
+	var myDD = new Dropdown({ target: $('#myInput'), url: 'data.json', fieldName: '{itemName} [{itemId}]', fieldId: 'itemId' });
+	myDD.setValue(231, 'Item 23');
+	
+	var myMulti = new Dropdown({ multiselect: true, target: $('#myInput'), url: 'data.json', value: [2,3,4], defaultText: 'Items' });
+	var values = myMulti.getValue();
+});
+```
 
 Demo page available soon (download and open index.html (server required for less compilation))
