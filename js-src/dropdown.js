@@ -62,6 +62,7 @@ window.DropDown = function (conf) {
 		defaultValue: null,							// default value - will be set after reset
 		items: [],
 		url: null,									// if passed - items will be retrieved via ajax request
+		params: {},									// ajax parameters
 		isStatic: false,							// if true - don't change the button label (name)
 		disabled: false								// init as disabled
 	},
@@ -163,40 +164,50 @@ window.DropDown = function (conf) {
 		var cItem = _focused, cIdx = items.index(cItem[0]), nIdx = cIdx + off, nItem = items.eq(nIdx);
 
 		if (off < 0) {
-			if (cIdx === 0) nItem = null;								// current item is first = focus filter
+			// current item is first = focus filter
+			if (cIdx === 0) nItem = null;
 			else {
-				if (nIdx < 0) nItem = items.first();					// index is negative - highlight first item
+				// index is negative - highlight first item
+				if (nIdx < 0) nItem = items.first();
 				oT = nItem[0].offsetTop;
 				if (mn.scrollTop <= oT) oT = null;
 			}
 		}
 		else if (off > 0) {
-			if (!nItem || !nItem.length) nItem = items.last();			// out of index -> highlight last item
+			// out of index -> highlight last item
+			if (!nItem || !nItem.length) nItem = items.last();
 			oT = nItem[0].offsetTop + nItem[0].offsetHeight - mn.offsetHeight;
 			if (mn.scrollTop >= oT) oT = null;
 		}
 
 
 		if (nItem && nItem.length) {
-			_button.focus();											// focus dropdown button
-			if (oT !== null) mn.scrollTop = oT;							// scroll element into view
+			// focus dropdown button
+			_button.focus();
+			// scroll element into view
+			if (oT !== null) mn.scrollTop = oT;
 			cItem.removeClass('focused');
 			_focused = nItem.addClass('focused');
 		}
 		else {
 			mn.scrollTop = 0;
-			_menu.find('.menu-filter-text').focus();					// focus filter input
+			// focus filter input
+			_menu.find('.menu-filter-text').focus();
 		}
 	},
 
 
 	_mapName = function (name, rec) {
-		if (typeof name === 'function') name = name.call(rec);			// use defined function to "render" name
+		// use defined function to "render" name
+		if (typeof name === 'function') name = name.call(rec);
 		else {
-			var match = /\{(\w+)\}/i.exec(name);						// match template pattern, e.g. {fieldName}
+			// match template pattern, e.g. {fieldName}
+			var match = /\{(\w+)\}/i.exec(name);
 			if (match && match.length) {
-				while (match && match.length > 1) {						// loop through all patterns
-					name = name.replace(match[0], rec[match[1]] || '');	// replace all {fieldName} with item['fieldName']
+				// loop through all patterns
+				while (match && match.length > 1) {
+					// replace all {fieldName} with item['fieldName']
+					name = name.replace(match[0], rec[match[1]] || '');
 					match = /\{(\w+)\}/i.exec(name);
 				}
 			}
@@ -204,7 +215,7 @@ window.DropDown = function (conf) {
 			else if ($.type(rec) === 'object') name = rec[name];
 			else name = rec;
 		}
-		return name;
+		return _decodeEntities(name);
 	},
 
 
@@ -221,6 +232,13 @@ window.DropDown = function (conf) {
 		s = s.toLowerCase();
 		for (; l = s[i++] ;) if ((n = hay.indexOf(l, n)) === -1) return false;
 		return true;
+	},
+	_decodeEntities = function (str) {
+		if (!str) return '';
+		if (('' + str).indexOf('&') === -1) return str;
+		var d = document.createElement('div');
+		d.innerHTML = str;
+		return d.innerText || d.textContent;
 	},
 	/*** HELPERS ******************************************************************************************************/
 
@@ -484,6 +502,7 @@ window.DropDown = function (conf) {
 	_clearList = function () {
 		_conf.items = [];
 		_menu.find('.menu-items .menu-item').remove();
+		return _this;
 	},
 
 
@@ -516,11 +535,18 @@ window.DropDown = function (conf) {
 			}
 			if (!name && _selectedItem) name = _mapName(_conf.fieldName, _selectedItem);
 			else if (!name) name = id;
-			if (!_conf.isStatic) _label.html(name);
+			if (!_conf.isStatic) {
+				name = ('' + name).replace(/&/g, '&amp;');									// encode all & to &amp; for IE
+				_label.html(name);
+			}
 		}
 		else {
-			name = name ? name : (id === '' ? _conf.defaultText || '' : id);
-			if (!_conf.isStatic) _label.html(name);										// no list -> set value "in blind"
+			// if no name, set to id (if id not null) or to defaultText or to ''
+			name = name || (id === '' ? _conf.defaultText || '' : id);
+			if (!_conf.isStatic) {														// no list -> set value "in blind"
+				name = ('' + name).replace(/&/g, '&amp;');									// encode all & to &amp; for IE
+				_label.html(name);
+			}
 		}
 		return _this;
 	},
@@ -1063,6 +1089,7 @@ window.DropDown = function (conf) {
 
 		destroy: _destroy
 	};
+
 
 	if (Object.defineProperties) { // nice api awaiting IE8's death...
 		Object.defineProperties(_this, {
