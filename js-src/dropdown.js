@@ -215,7 +215,7 @@ window.DropDown = function (conf) {
 			else if ($.type(rec) === 'object') name = rec[name];
 			else name = rec;
 		}
-		return _decodeEntities(name);
+		return name;
 	},
 
 
@@ -232,13 +232,6 @@ window.DropDown = function (conf) {
 		s = s.toLowerCase();
 		for (; l = s[i++] ;) if ((n = hay.indexOf(l, n)) === -1) return false;
 		return true;
-	},
-	_decodeEntities = function (str) {
-		if (!str) return '';
-		if (('' + str).indexOf('&') === -1) return str;
-		var d = document.createElement('div');
-		d.innerHTML = str;
-		return d.innerText || d.textContent;
 	},
 	/*** HELPERS ******************************************************************************************************/
 
@@ -535,18 +528,12 @@ window.DropDown = function (conf) {
 			}
 			if (!name && _selectedItem) name = _mapName(_conf.fieldName, _selectedItem);
 			else if (!name) name = id;
-			if (!_conf.isStatic) {
-				name = ('' + name).replace(/&/g, '&amp;');									// encode all & to &amp; for IE
-				_label.html(name);
-			}
+			if (!_conf.isStatic) _label.html(name);
 		}
 		else {
 			// if no name, set to id (if id not null) or to defaultText or to ''
 			name = name || (id === '' ? _conf.defaultText || '' : id);
-			if (!_conf.isStatic) {														// no list -> set value "in blind"
-				name = ('' + name).replace(/&/g, '&amp;');									// encode all & to &amp; for IE
-				_label.html(name);
-			}
+			if (!_conf.isStatic) _label.html(name);										// no list -> set value "in blind"
 		}
 		return _this;
 	},
