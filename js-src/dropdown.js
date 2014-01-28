@@ -1048,6 +1048,7 @@ window.DropDown = function (conf) {
 
 		getItems: function () { return _conf.items; },
 		setItems: _populate,
+		getSelectedItem: function () { return _selectedItem; },
 
 		/**
 		 * @deprecated (for backwards compatibility)
