@@ -1,5 +1,5 @@
 /**
- * DropDown component v4.4 (2013-10-04)
+ * DropDown v4.5 (2014-02-11)
  * @author Tom
  *
  * sample usage:
@@ -60,6 +60,9 @@ window.DropDown = function (conf) {
 
 		value: null,								// pre-selected value
 		defaultValue: null,							// default value - will be set after reset
+
+		additionalOptions: null,					// array of additional checkboxes to show on the list
+
 		items: [],
 		url: null,									// if passed - items will be retrieved via ajax request
 		params: {},									// ajax parameters
@@ -246,6 +249,8 @@ window.DropDown = function (conf) {
 	 * @param {Object} e		click event
 	 */
 	_action = function (e) {
+		/*jshint onevar: false */
+
 		if (_conf.disabled) return;
 		if (_el.hasClass('dropdown-disabled')) return;
 
@@ -258,80 +263,92 @@ window.DropDown = function (conf) {
 		actionId = target.data('id');
 		if (actionId === undefined) return;
 
+
+		/*** SINGLE SELECT ACTION ***/
+
 		if (_conf.multiselect !== true) {
 			actionName = target.data('name');
 			_collapse(e);
 			_setValue(actionId, actionName);
 			if (_conf.action) _conf.action.call(_conf.scope || _conf.action, actionId, _selectedItem, _this);
+			return;
+		}
+
+
+		/*** MULTI SELECT ACTION ***/
+
+		e.preventDefault();
+		var noItemsSelected, checked, check = target.hasClass('menu-item-checked');
+
+
+		if (actionId === '#apply') {
+			// disable "Apply" when no items selected
+			if (target.closest('.no-items-selected').length) return;
+			_applySelected();
+			_collapse(e);
+			if (_conf.action) _conf.action.call(_conf.scope || _conf.action, _getValue(), _selectedItems, _this);
+			return;
+		}
+
+		if (actionId === '#select-all') {								// if "select all" clicked
+			noItemsSelected = check;									// no items selected - don't show "Apply" menu
+			if (check) _selectNone();									// select none
+			else _selectAll();											// or all
 		}
 		else {
-			/*jshint onevar: false */
-			e.preventDefault();
-			var check, noItemsSelected, checked;
+			if (target.closest('.menu-select').length) {			// additional options
+				target.toggleClass('menu-item-checked', !check);
+			}
 
-			if (actionId === '#apply') {
-				// disable "Apply" when no items selected
-				if (target.closest('.no-items-selected').length) return;
-				_applySelected();
-				_collapse(e);
-				if (_conf.action) _conf.action.call(_conf.scope || _conf.action, _getValue(), _selectedItems, _this);
+			else if (_menu.hasClass('all-items-selected')) {			// if "all items" is selected
+				_unselectAll();											// unselect "all items" and "select" all items
+				target.removeClass('menu-item-checked');				// except target
+				checked = _menu.find('.menu-items .menu-item-checked');
+				if (checked.length === 0) {
+					_label.html('No ' + _conf.defaultText);
+					_menu
+						.removeClass('all-items-selected multiple-items-selected')
+						.addClass('no-items-selected');
+				}
+
+				// no items selected - don't show "Apply" menu
+				noItemsSelected = (checked.length === 0);
 			}
 			else {
-				check = target.hasClass('menu-item-checked');
-				if (actionId === '#select-all') {								// if "select all" clicked
-					noItemsSelected = check;									// no items selected - don't show "Apply" menu
-					if (check) _selectNone();									// select none
-					else _selectAll();											// or all
+				_menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
+				target.toggleClass('menu-item-checked', !check);
+
+				checked = _menu.find('.menu-items .menu-item-checked');
+				if (checked.length === 1) _label.html(checked.data('name') || checked.data('id'));
+				else if (checked.length === 0) {
+					_label.html('No ' + _conf.defaultText);
+					_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
 				}
-				else {
-					if (_menu.hasClass('all-items-selected')) {					// if "all items" is selected
-						_unselectAll();											// unselect "all items" and "select" all items
-						target.removeClass('menu-item-checked');				// except target
-						checked = _menu.find('.menu-items .menu-item-checked');
-						if (checked.length === 0) {
-							_label.html('No ' + _conf.defaultText);
-							_menu
-								.removeClass('all-items-selected multiple-items-selected')
-								.addClass('no-items-selected');
-						}
+				else _label.html('Multiple ' + _conf.defaultText);
 
-						// no items selected - don't show "Apply" menu
-						noItemsSelected = (checked.length === 0);
-					}
-					else {
-						_menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
-						target.toggleClass('menu-item-checked', !check);
-
-						checked = _menu.find('.menu-items .menu-item-checked');
-						if (checked.length === 1) _label.html(checked.data('name') || checked.data('id'));
-						else if (checked.length === 0) {
-							_label.html('No ' + _conf.defaultText);
-							_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
-						}
-						else _label.html('Multiple ' + _conf.defaultText);
-
-						// no items selected - don't show "Apply" menu
-						noItemsSelected = (checked.length === 0);
-					}
-				}
-
-				// add "apply" menu
-				if (!_menu.find('.menu-apply').length && !noItemsSelected && _conf.action) {
-					_menu.append(_getApplyHtml());
-					_adjustPosition();
-					// scroll item into view
-					var mn = target.closest('.menu-items'), mh = mn.innerHeight(),
-						it = target.position().top, ih = target.outerHeight(true) + it;
-					if (it <= 0) mn.scrollTop(-it);
-					if (ih > mh) mn.scrollTop(ih - mh);
-				}
-				else if (!_conf.action) _applySelected();
-
-				// if checked items == all items - select all
-				if (_menu.find('.menu-items .menu-item').length === _menu.find('.menu-items .menu-item-checked').length) {
-					_selectAll();
-				}
+				// no items selected - don't show "Apply" menu
+				noItemsSelected = (checked.length === 0);
 			}
+		}
+
+		// add "apply" menu
+		if (!_menu.find('.menu-apply').length && !noItemsSelected && _conf.action) {
+			_menu.append(_getApplyHtml());
+			_adjustPosition();
+			// scroll item into view
+			var mn = target.closest('.menu-items'),
+				mh = mn.innerHeight(),
+				it = target.position().top,
+				ih = target.outerHeight(true) + it;
+
+			if (it <= 0) mn.scrollTop(-it);
+			if (ih > mh) mn.scrollTop(ih - mh);
+		}
+		else if (!_conf.action) _applySelected();
+
+		// if checked items == all items - select all
+		if (_menu.find('.menu-items .menu-item').length === _menu.find('.menu-items .menu-item-checked').length) {
+			_selectAll();
 		}
 
 	},
@@ -370,7 +387,7 @@ window.DropDown = function (conf) {
 	 * Fake selects all items, selects "All items" and turns the whole menu into "all items selected" look
 	 */
 	_selectAll = function () {
-		_menu.find('.menu-item-checked').removeClass('menu-item-checked');
+		_menu.find('.menu-items .menu-item-checked,.menu-item-all.menu-item-checked').removeClass('menu-item-checked');
 		_menu.find('.menu-item-all').addClass('menu-item-checked');
 		_menu.removeClass('multiple-items-selected no-items-selected').addClass('all-items-selected');
 		_label.html('All ' + _conf.defaultText);
@@ -390,7 +407,7 @@ window.DropDown = function (conf) {
 	 * Unselect everything (except the just-checked element)
 	 */
 	_selectNone = function () {
-		_menu.find('.menu-item').removeClass('menu-item-checked');
+		_menu.find('.menu-items .menu-item,.menu-item-all').removeClass('menu-item-checked');
 		_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
 		_label.html('No ' + _conf.defaultText);
 	},
@@ -610,6 +627,14 @@ window.DropDown = function (conf) {
 	_getCaption = function () { return _label.text(); },
 
 
+	_getAdditionalOptions = function () {
+		var vals = {}, items = _menu.find('.menu-select .menu-item-additional-option');
+		items.each(function (i, item) {
+			item = items.eq(i);
+			vals[item.data('id')] = item.hasClass('menu-item-checked');
+		});
+		return vals;
+	},
 
 	/**
 	 * Applies the selected elements as new value (array) for the field
@@ -702,13 +727,17 @@ window.DropDown = function (conf) {
 			if (items.length > 10) _menu.append(_filterHtml());
 
 			if (_conf.multiselect === true) {
-				// add "Select All" option
-				_menu.append('<ul class="menu-select' + sidebarCls + '">' + _getItemHtml(null, 'Select All') + '</ul>');
+				// add "Select All" and additional options
+				_menu.append('<ul class="menu-select' + sidebarCls + '">' +
+					_getItemHtml(null, 'Select All') +
+					_getAdditionalOptionsHtml() +
+					'</ul>');
 			}
 			else {
 				// add empty text as a 1st option
 				if (_conf.defaultText && _conf.defaultText.length) ar.push(_getItemHtml('', _conf.defaultText));
 			}
+
 
 			// name is a function or a template
 			if (typeof fName === 'function' || (typeof fName === 'string' && fName.indexOf('{') > -1)) {
@@ -763,7 +792,9 @@ window.DropDown = function (conf) {
 		return _html;
 	},
 
-
+	/**
+	 * HTML for the dropdown
+	 */
 	_getHtml = function (conf) {
 		var hasIcon = (conf.iconCls && conf.iconCls.length), _html = '';
 		_html = '<a class="button' + (hasIcon ? ' icon-button' : '') + '" href="#">';
@@ -800,14 +831,13 @@ window.DropDown = function (conf) {
 				sidebar = '<span class="menu-item-aside ' + (item.sidebarCls || '') + '">' + (item.sidebarText || '') + '</span>';
 			}
 		}
+		else item = {};
+
 		cls.push(name === _conf.defaultText ? 'menu-item-empty-text' : 'menu-item-id-' + _clrStr(id));
-		if (_conf.multiselect === true) {
-			cls.push('menu-item-checked');
-			if (id === null) {
-				cls.push('menu-item-all');
-				id = '#select-all';
-			}
-		}
+
+		if ((_conf.multiselect === true && item.checked !== false) || item.checked === true) cls.push('menu-item-checked');
+
+		if (_conf.multiselect === true && id === null) { cls.push('menu-item-all'); id = '#select-all'; }
 		_html += '<li class="menu-item ' + cls.join(' ') + '" data-id="' + id + '" data-name="' + name + '" ' +
 				'data-group="' + group + '">';
 
@@ -818,6 +848,16 @@ window.DropDown = function (conf) {
 		return _html;
 	},
 
+
+	_getAdditionalOptionsHtml = function () {
+		if (!_conf.additionalOptions || !_conf.additionalOptions.length) return '';
+		var i = 0, item, html = [];
+		for (; item = _conf.additionalOptions[i++] ;) {
+			item.cls = 'menu-item-additional-option';
+			html.push(_getItemHtml(item.id, item.name, item));
+		}
+		return html.join('');
+	},
 
 	_getApplyHtml = function () {
 		return '<ul class="menu-apply' + (_conf.showSidebar ? ' has-sidebar' : '') + '">' +
@@ -1064,6 +1104,8 @@ window.DropDown = function (conf) {
 		getIdValue: _getIdValue,
 		getCaption: _getCaption,
 
+		getAdditionalOptions: _getAdditionalOptions,
+
 		select: _select,
 		reset: _reset,
 		clearList: _clearList,
@@ -1079,6 +1121,7 @@ window.DropDown = function (conf) {
 	};
 
 
+/*
 	if (Object.defineProperties) { // nice api awaiting IE8's death...
 		Object.defineProperties(_this, {
 			el:     { enumerable: true, get: function () { return _el; } },
@@ -1120,6 +1163,7 @@ window.DropDown = function (conf) {
 			destroy:  { enumerable: true, value: _destroy }
 		});
 	}
+*/
 
 	return _init(conf);
 };

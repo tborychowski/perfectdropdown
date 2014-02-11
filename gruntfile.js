@@ -1,9 +1,8 @@
 /*global module:false*/
 module.exports = function (grunt) {
 	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
 		jshint: {
-			options: { jshintrc: 'js-src/.jshintrc' },
+			options: { jshintrc: 'js-src/.jshintrc', reporter: require('jshint-stylish') },
 			files: [ 'js-src/**/*.js', '!js-src/lib/**' ]
 		},
 
@@ -20,7 +19,7 @@ module.exports = function (grunt) {
 
 		less: {
 			dev: {
-				options: { compress: true, paths: [ 'less' ] },
+				options: { paths: [ 'less' ], compress: false, sourceMap: true, dumpLineNumbers: 'mediaquery' },
 				files: { 'css/style.css' : 'less/**/*.less' }
 			},
 			prod: {

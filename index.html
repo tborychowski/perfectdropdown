@@ -1,6 +1,10 @@
 ﻿<!DOCTYPE html>
-<meta charset="UTF-8"/>
-<link rel="stylesheet" href="css/style.css">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
 <table class="demotab">
 	<thead>
@@ -12,18 +16,18 @@
 		</thead>
 	<tbody>
 		<tr>
-			<td>Normal dropdown: <input id="dropdown1" type="text" name="input1" value="3"/></td>
+			<td>Normal dropdown: <input id="dropdown0" type="text" name="input1" value="3"/></td>
 			<td>
 				<button class="btn" data-action="getValue">Get Value</button>
 				<button class="btn" data-action="getIdValue">Get ID Value</button>
 				<button class="btn" data-action="reset">Reset</button>
 				<button class="btn" data-action="replaceList">Replace List</button>
 			</td>
-			<td><pre>{ target: 'dropdown1', defaultText: 'Not selected', action: ddAction }</pre></td>
+			<td><pre>{ target: 'dropdown0', defaultText: 'Not selected', action: ddAction }</pre></td>
 		</tr>
 
 		<tr>
-			<td>Normal dropdown: <input id="dropdown2" type="text" name="input2"/></td>
+			<td>Normal dropdown: <input id="dropdown1" type="text" name="input2"/></td>
 			<td>
 				<button class="btn" data-action="getValue">Get Value</button>
 				<button class="btn" data-action="getIdValue">Get ID Value</button>
@@ -31,7 +35,7 @@
 				<button class="btn" data-action="replaceList">Replace List</button>
 			</td>
 			<td><pre>{
-  target: 'dropdown2',
+  target: 'dropdown1',
   defaultValue: 1,
   action: ddAction,
   items: [
@@ -44,7 +48,7 @@
 		</tr>
 
 		<tr>
-			<td>Multiselect: <input id="dropdown3" type="text" name="input3" /></td>
+			<td>Multiselect: <input id="dropdown2" type="text" name="input3" /></td>
 			<td>
 				<button class="btn" data-action="getValue">Get Value</button>
 				<button class="btn" data-action="getTextValue">Get Text Value</button>
@@ -52,7 +56,7 @@
 				<button class="btn" data-action="replaceList">Replace List</button>
 			</td>
 			<td><pre>{
-  target: 'dropdown3',
+  target: 'dropdown2',
   defaultText: 'Items',
   emptyText: 'All Items',
   multiselect: true,
@@ -62,21 +66,21 @@
 }</pre></td></tr>
 
 		<tr>
-			<td>Multiselect without action: <input id="dropdown4" type="text" name="input4" /></td>
+			<td>Multiselect without action: <input id="dropdown3" type="text" name="input4" /></td>
 			<td>
 				<button class="btn" data-action="getValue">Get Value</button>
 				<button class="btn" data-action="getTextValue">Get Text Value</button>
 				<button class="btn" data-action="reset">Reset</button>
 				<button class="btn" data-action="replaceList">Replace List</button>
 			</td>
-			<td><pre>{ target: 'dropdown4', defaultText: 'Items', multiselect: true }</pre></td>
+			<td><pre>{ target: 'dropdown3', defaultText: 'Items', multiselect: true }</pre></td>
 		</tr>
 
 		<tr>
-			<td>Static menu: <input id="dropdown5" type="text" name="input5" /></td>
+			<td>Static menu: <input id="dropdown4" type="text" name="input5" /></td>
 			<td></td>
 			<td><pre>{
-  target: 'dropdown5',
+  target: 'dropdown4',
   isStatic: true,
   emptyText: 'User Menu',
   action: ddAction,
@@ -85,10 +89,10 @@
 		</tr>
 
 		<tr>
-			<td>Static menu with sidebar: <div id="dropdown6"></div></td>
+			<td>Static menu with sidebar: <div id="dropdown5"></div></td>
 			<td></td>
 			<td><pre>{
-  target: 'dropdown6',
+  target: 'dropdown5',
   isStatic: true,
   emptyText: 'Custom Menu',
   action: ddAction,
@@ -97,7 +101,7 @@
 }</pre></td></tr>
 
 		<tr>
-			<td>Select element: <select id="dropdown7">
+			<td>Select element: <select id="dropdown6">
 				<option>Zero</option>
 				<option value="1">One</option>
 				<option value="2">Two</option>
@@ -111,7 +115,40 @@
 				<option value="10">Ten</option>
 			</select></td>
 			<td></td>
-			<td><pre>{ target: 'dropdown7', emptyText: 'Please select' }</pre></td></tr>
+			<td><pre>{ target: 'dropdown6', emptyText: 'Please select' }</pre></td>
+		</tr>
+
+		<tr>
+			<td>Additional options: <select id="dropdown7">
+				<option>Zero</option>
+				<option value="1">One</option>
+				<option value="2">Two</option>
+				<option value="3">Three</option>
+				<option value="4">Four</option>
+				<option value="5">Five</option>
+				<option value="6">Six</option>
+				<option value="7">Seven</option>
+				<option value="8">Eight</option>
+				<option value="9">Nine</option>
+				<option value="10">Ten</option>
+			</select></td>
+			<td>
+				<button class="btn" data-action="getValue">Get Value</button>
+				<button class="btn" data-action="getTextValue">Get Text Value</button>
+				<button class="btn" data-action="getAdditionalOptions">Get Additional Options</button>
+				<button class="btn" data-action="reset">Reset</button>
+				<button class="btn" data-action="replaceList">Replace List</button>
+			</td>
+			<td><pre>{
+  target: 'dropdown7',
+  defaultText: 'Items',
+  multiselect: true,
+  additionalOptions: [
+    { id: 'option1', name: 'Additional Option One', checked: true },
+    { id: 'option2', name: 'Additional Option Two', checked: false }
+  ]
+}</pre></td>
+		</tr>
 
 	</tbody>
 </table>
@@ -124,3 +161,4 @@
 <script src="js/dropdown.min.js"></script>
 
 <script src="http://localhost:35729/livereload.js"></script>
+</body>

@@ -1,4 +1,4 @@
-# Perfect Dropdown v4.4  [![Build Status](https://secure.travis-ci.org/tborychowski/perfectdropdown.png?branch=master)](https://travis-ci.org/tborychowski/perfectdropdown) [![Build Status](https://drone.io/github.com/tborychowski/perfectdropdown/status.png)](https://drone.io/github.com/tborychowski/perfectdropdown/latest) [![devDependency Status](https://david-dm.org/tborychowski/perfectdropdown/dev-status.png)](https://david-dm.org/tborychowski/perfectdropdown#info=devDependencies) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+# Perfect Dropdown v4.4  [![Build Status](https://secure.travis-ci.org/tborychowski/perfectdropdown.png?branch=master)](https://travis-ci.org/tborychowski/perfectdropdown) [![Build Status](https://drone.io/github.com/tborychowski/perfectdropdown/status.png)](https://drone.io/github.com/tborychowski/perfectdropdown/latest) [![devDependency Status](https://david-dm.org/tborychowski/perfectdropdown/dev-status.png)](https://david-dm.org/tborychowski/perfectdropdown#info=devDependencies)
 
 
 This is the Perfect Dropdown - a jQuery based, extensible component
