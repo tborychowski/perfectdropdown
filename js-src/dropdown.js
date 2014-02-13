@@ -638,6 +638,16 @@ window.DropDown = function (conf) {
 		return vals;
 	},
 
+	_setAdditionalOptions = function (options) {
+		var items = _menu.find('.menu-select .menu-item-additional-option');
+		items.each(function (i, item) {
+			item = items.eq(i);
+			if (typeof options[item.data('id')] === 'undefined') return;
+			item.toggleClass('menu-item-checked', options[item.data('id')] === true);
+		});
+		return _this;
+	},
+
 	/**
 	 * Applies the selected elements as new value (array) for the field
 	 */
@@ -664,7 +674,7 @@ window.DropDown = function (conf) {
 	_loadList = function () {
 		/*jshint unused: false */
 		if (!_conf.url) return;
-		$.ajax({ url: _conf.url, type: 'get', dataType: 'json', data: _conf.params })
+		$.ajax({ url: _conf.url, type: 'post', dataType: 'json', data: _conf.params })
 		.fail(function () { _loadingError(); })
 		.done(function (items) {
 			if (!items || items.result === 'error') _loadingError();
@@ -1108,6 +1118,7 @@ window.DropDown = function (conf) {
 		getCaption: _getCaption,
 
 		getAdditionalOptions: _getAdditionalOptions,
+		setAdditionalOptions: _setAdditionalOptions,
 
 		select: _select,
 		reset: _reset,
