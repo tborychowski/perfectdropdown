@@ -36,6 +36,7 @@ window.DropDown = function (conf) {
 	_selectedItem = null,
 	_selectedItems = null,
 	_highlightObj = null,
+	_additionalOptions = {},
 
 	_isExpanded = false,
 
@@ -300,6 +301,7 @@ window.DropDown = function (conf) {
 		else {
 			if (target.closest('.menu-select').length) {			// additional options
 				target.toggleClass('menu-item-checked', !check);
+				_additionalOptions[actionId] = !check;
 			}
 
 			else if (_menu.hasClass('all-items-selected')) {			// if "all items" is selected
@@ -629,21 +631,13 @@ window.DropDown = function (conf) {
 	_getCaption = function () { return _label.text(); },
 
 
-	_getAdditionalOptions = function () {
-		var vals = {}, items = _menu.find('.menu-select .menu-item-additional-option');
-		items.each(function (i, item) {
-			item = items.eq(i);
-			vals[item.data('id')] = item.hasClass('menu-item-checked');
-		});
-		return vals;
-	},
-
 	_setAdditionalOptions = function (options) {
+		if (typeof options === 'object') _additionalOptions = options;
 		var items = _menu.find('.menu-select .menu-item-additional-option');
 		items.each(function (i, item) {
 			item = items.eq(i);
-			if (typeof options[item.data('id')] === 'undefined') return;
-			item.toggleClass('menu-item-checked', options[item.data('id')] === true);
+			if (typeof _additionalOptions[item.data('id')] === 'undefined') return;
+			item.toggleClass('menu-item-checked', _additionalOptions[item.data('id')] === true);
 		});
 		return _this;
 	},
@@ -942,6 +936,10 @@ window.DropDown = function (conf) {
 			}
 		}
 
+		if (_conf.additionalOptions && _conf.additionalOptions.length) {
+			for (var i = 0, item; item = _conf.additionalOptions[i++] ;) _additionalOptions[item.id] = item.checked;
+		}
+
 
 		if (typeof _conf.id !== 'undefined') _el.attr('id', _conf.id);
 		if (_conf.menuCls) _menu.addClass(_conf.menuCls);
@@ -1117,7 +1115,7 @@ window.DropDown = function (conf) {
 		getIdValue: _getIdValue,
 		getCaption: _getCaption,
 
-		getAdditionalOptions: _getAdditionalOptions,
+		getAdditionalOptions: function () { return _additionalOptions; },
 		setAdditionalOptions: _setAdditionalOptions,
 
 		select: _select,
