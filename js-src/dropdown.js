@@ -938,7 +938,7 @@ window.DropDown = function (conf) {
 		if (_conf.disabled) _disable();
 
 		// use the data store provided in the config
-		if (_conf.items.length) _populate(_conf.items);
+		if (_conf.items && _conf.items.length) _populate(_conf.items);
 		if (_conf.defaultText && _conf.defaultText.length && !_conf.isStatic) _label.html(_conf.defaultText);
 		if (_conf.emptyText && _conf.emptyText.length) _label.html(_conf.emptyText);
 
