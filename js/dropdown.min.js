@@ -54,6 +54,7 @@ window.DropDown = function (conf) {
 		menuCls: '',								// additional class for the menu (menu is rendered to the body)
 		iconCls: '',								// if present - an icon will be added to the dropdown button
 
+		showSidebar: false,							// show menu sidebar
 		multiselect: false,							// if true - render checkboxes, apply, etc
 		action: null,								// e.g. action: function (v, rec) {},
 													// if present - will show "Apply" button when selection changes
@@ -231,9 +232,9 @@ window.DropDown = function (conf) {
 	 * @return {boolean}   true if found
 	 */
 	_fuzzy = function (str, s) {
-		var hay = str.toLowerCase(), i = 0, n = 0, l;
+		var hay = str.toLowerCase(), i = 0, n = -1, l;
 		s = s.toLowerCase();
-		for (; l = s[i++] ;) if ((n = hay.indexOf(l, n)) === -1) return false;
+		for (; l = s[i++] ;) if (!~(n = hay.indexOf(l, n + 1))) return false;
 		return true;
 	},
 	/*** HELPERS ******************************************************************************************************/
@@ -273,6 +274,7 @@ window.DropDown = function (conf) {
 			if (_conf.action) _conf.action.call(_conf.scope || _conf.action, actionId, _selectedItem, _this);
 			return;
 		}
+
 
 
 		/*** MULTI SELECT ACTION ***/
@@ -608,7 +610,7 @@ window.DropDown = function (conf) {
 	 * @param idx		index of the item on the dropdown list
 	 */
 	_select = function (idx) {
-		var item = _menu.find('.menu-item').eq(idx || 0);
+		var item = _menu.find('.menu-items .menu-item').eq(idx || 0);
 		if (item.length) _setValue(item.data('id'), item.data('name'));
 		return _this;
 	},
@@ -981,7 +983,7 @@ window.DropDown = function (conf) {
 					_collapse(e);
 					break;
 
-				case 38 : // down arrow
+				case 38 : // up arrow
 					e.preventDefault();
 					_highlightItem(-1);
 					break;
@@ -1030,7 +1032,7 @@ window.DropDown = function (conf) {
 					_highlightItem();
 				}
 			})
-			.on('keyup', '.menu-filter-text', function (e) {									// menu filter
+			.on('keyup change', '.menu-filter-text', function (e) {								// menu filter
 				if (e.keyCode === 27 && this.value.length) this.value = '';						// first Esc - clears filter
 				_filter(this.value);
 			})
@@ -1085,6 +1087,7 @@ window.DropDown = function (conf) {
 		getEl: function () { return _el; },
 		label: function () { return _label; },
 		button: function () { return _button; },
+		menu: function () { return _menu; },
 
 		getItems: function () { return _conf.items; },
 		setItems: _populate,
@@ -1096,7 +1099,7 @@ window.DropDown = function (conf) {
 		replaceList: _populate,
 
 		getConfig: function () { return _conf; },
-		setConfig: function (cfg) { $.extend(_conf, cfg || {}); },
+		setConfig: function (cfg) { $.extend(_conf, cfg || {}); return _this; },
 
 		getValue: _getValue,
 		setValue: _setValue,
@@ -1110,60 +1113,19 @@ window.DropDown = function (conf) {
 		reset: _reset,
 		clearList: _clearList,
 
-		show: _el.show,
-		hide: _el.hide,
+		show: function () { _el.show(); return _this; },
+		hide: function () { _el.hide(); return _this; },
 
 		isEnabled: function () { return !_el.hasClass('dropdown-disabled'); },
 		enable: _enable,
 		disable: _disable,
 
+		isExpanded: function () { return _isExpanded; },
+		expand: _expand,
+		collapse: _collapse,
+
 		destroy: _destroy
 	};
-
-
-/*
-	if (Object.defineProperties) { // nice api awaiting IE8's death...
-		Object.defineProperties(_this, {
-			el:     { enumerable: true, get: function () { return _el; } },
-			label:  { enumerable: true, get: function () { return _label; } },
-			button: { enumerable: true, get: function () { return _button; } },
-			menu:   { enumerable: true, get: function () { return _menu; } },
-
-			items:  { enumerable: true,
-				get: function () { return _conf.items; },
-				set: function (items) { if (items && items.length) _populate(items); else _clearList(); }
-			},
-			config: { enumerable: true,
-				get: function () { return _conf; },
-				set: function (cfg) { $.extend(_conf, cfg || {}); }
-			},
-
-			enabled: { enumerable: true,
-				get: function () { return _el.hasClass('dropdown-disabled'); },
-				set: function (v) { if (v === true) _enable(); else _disable(); }
-			},
-
-			value:    { enumerable: true, get: _getValue, set: _setValue },
-
-			idValue:  { enumerable: true, get: _getIdValue },
-			caption:  { enumerable: true, get: _getCaption },
-
-			expand:   { enumerable: true, value: _expand },
-			collapse: { enumerable: true, value: _collapse },
-
-			select:   { enumerable: true, value: _select },
-			reset:    { enumerable: true, value: _reset },
-
-			show:     { enumerable: true, value: function () { _el.show(); }},
-			hide:     { enumerable: true, value: function () { _el.hide(); }},
-
-			enable:   { enumerable: true, value: _enable },
-			disable:  { enumerable: true, value: _disable },
-
-			destroy:  { enumerable: true, value: _destroy }
-		});
-	}
-*/
 
 	return _init(conf);
 };

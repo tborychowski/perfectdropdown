@@ -3,18 +3,28 @@
 <head>
 	<meta charset="utf-8">
 	<title>DropDown Tests</title>
-	<link rel="stylesheet" href="qunit/qunit.css">
+	<link rel="stylesheet" href="lib/qunit.css">
 </head>
 <body>
 	<div id="qunit"></div>
-	<div id="qunit-fixture"><div id="ddtarget"></div></div>
+	<div id="qunit-fixture">
+		<div id="ddtarget"></div>
+		<input id="ddinput" type="text" name="dropdown" />
+		<select id="ddselect"><option value="1">Item 1</option><option value="2">Item 2</option><option value="3">Item 3</option><option value="4">Item 4</option><option value="5">Item 5</option></select>
+	</div>
 
-	<script src="qunit/qunit.js"></script>
+	<script src="lib/qunit.js"></script>
+	<script src="lib/blanket.min.js"></script>
 
 	<script src="../js-src/lib/jquery.min.js"></script>
-	<script src="../js-src/dropdown.js"></script>
+	<script src="../js-src/dropdown.js" data-cover></script>
 
 	<script src="dropdown.js"></script>
 	<script src="multiselect.js"></script>
+
+	<script>
+	if (location.href.match(/(\?|&)gruntReport($|&|=)/)) blanket.options("reporter", "lib/grunt-reporter.js");
+	</script>
+	<script src="http://localhost:35729/livereload.js"></script>
 </body>
 </html>
