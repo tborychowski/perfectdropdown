@@ -203,6 +203,9 @@ test('Additional Options', function () {
 	strictEqual(d.getAdditionalOptions().option1, true, 'Option 1');
 	strictEqual(d.getAdditionalOptions().option2, false, 'Option 2');
 
+	d.setAdditionalOptions({ option1: false, option2: true });
+	strictEqual(d.getAdditionalOptions().option1, false, 'Option 1');
+	strictEqual(d.getAdditionalOptions().option2, true, 'Option 2');
 });
 
 

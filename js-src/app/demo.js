@@ -112,7 +112,6 @@
 			msg = 'Additional Options: <b>' + JSON.stringify(d.getAdditionalOptions()) + '</b>';
 			break;
 		case 'setAdditionalOptions':
-			console.log(123123);
 			d.setAdditionalOptions({ option1: (Math.random() < 0.5), option2: (Math.random() < 0.5) });
 			msg = 'Additional Options: <b>' + JSON.stringify(d.getAdditionalOptions()) + '</b>';
 			break;
