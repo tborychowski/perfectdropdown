@@ -223,6 +223,12 @@ window.DropDown = function (conf) {
 		return name;
 	},
 
+	_processAdditionalOptions = function () {
+		_additionalOptions = {};
+		if (_conf.additionalOptions && _conf.additionalOptions.length) {
+			for (var i = 0, item; item = _conf.additionalOptions[i++] ;) _additionalOptions[item.id] = item.checked;
+		}
+	},
 
 
 	/**
@@ -509,7 +515,9 @@ window.DropDown = function (conf) {
 		else if (_conf.defaultText && _conf.defaultText.length) _setValue('', _conf.defaultText);
 		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _setValue('', _conf.emptyText);
 		else _setValue();
-		//else _select(0);
+
+		_processAdditionalOptions();
+
 		return _this;
 	},
 
@@ -632,8 +640,13 @@ window.DropDown = function (conf) {
 
 
 	_setAdditionalOptions = function (options) {
-		if (typeof options === 'object') _additionalOptions = options;
-		var items = _menu.find('.menu-select .menu-item-additional-option');
+		if (!_conf.additionalOptions || !_conf.additionalOptions.length) return;
+
+		var items = _menu.find('.menu-select .menu-item-additional-option'), item, i = 0;
+		if (typeof options === 'object') {
+			for (; item = _conf.additionalOptions[i++] ;) _additionalOptions[item.id] = options[item.id];
+		}
+
 		items.each(function (i, item) {
 			item = items.eq(i);
 			if (typeof _additionalOptions[item.data('id')] === 'undefined') return;
@@ -860,7 +873,7 @@ window.DropDown = function (conf) {
 		var i = 0, item, html = [];
 		for (; item = _conf.additionalOptions[i++] ;) {
 			item.cls = 'menu-item-additional-option';
-			html.push(_getItemHtml(item.id, item.name, item));
+			html.push(_getItemHtml(item.id, item.name, { checked: _additionalOptions[item.id] }));
 		}
 		return html.join('');
 	},
@@ -936,9 +949,7 @@ window.DropDown = function (conf) {
 			}
 		}
 
-		if (_conf.additionalOptions && _conf.additionalOptions.length) {
-			for (var i = 0, item; item = _conf.additionalOptions[i++] ;) _additionalOptions[item.id] = item.checked;
-		}
+		_processAdditionalOptions();
 
 
 		if (typeof _conf.id !== 'undefined') _el.attr('id', _conf.id);
