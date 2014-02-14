@@ -1,4 +1,4 @@
-/*global module: false, test: false, notEqual: false, equal: false, strictEqual, deepEqual: false, start: false, stop: false */
+/*global module: false, test: false, expect: false, notEqual: false, equal: false, strictEqual, deepEqual: false, start: false, stop: false */
 var DD = window.DropDown,
 	defV, d = null, v = null,
 	simpleList = [1, 2, 3, 4, 5],
@@ -226,31 +226,35 @@ test('Enable/Disable', function () {
 });
 
 
-test('Expand/Collapse', function () {
+test('Expand/Collapse 1', function () {
+	expect(4);
 	strictEqual(d.isExpanded(), false, 'Is collapsed');
 	d.expand();
 	strictEqual(d.isExpanded(), true, 'Is expanded');
 	d.collapse();
 	strictEqual(d.isExpanded(), false, 'Is collapsed');
 
-	stop();
 	d.button().trigger('click').trigger('mousedown');
+	stop();
 	setTimeout(function () {
-		strictEqual(d.isExpanded(), true, 'Is expanded again');
 		start();
-	}, 30);
+		strictEqual(d.isExpanded(), true, 'Is expanded again');
+	}, 20);
+});
 
+test('Expand/Collapse 2', function () {
+	expect(2);
+
+	d.expand();
+	strictEqual(d.isExpanded(), true, 'Is expanded');
 	stop();
 	setTimeout(function () {
 		$(document).trigger('mousedown');
-		start();
-	}, 60);
-
-	stop();
-	setTimeout(function () {
-		strictEqual(d.isExpanded(), false, 'Is collapsed again');
-		start();
-	}, 90);
+		setTimeout(function () {
+			strictEqual(d.isExpanded(), false, 'Is collapsed');
+			start();
+		}, 20);
+	}, 100);
 });
 
 
@@ -272,6 +276,8 @@ module('DropDown - UI (input)', {
 });
 
 test('Filter', function () {
+	expect(8);
+
 	d.expand();
 
 	var mn = d.menu(), filter = mn.find('.menu-filter-text'), items = mn.find('.menu-items .menu-item');
@@ -293,11 +299,11 @@ test('Filter', function () {
 	d.button().trigger(Down());
 	strictEqual(items.filter('.focused').index(), 1, 'Second item selected');
 
-	stop();
 	d.button().trigger(Up()).trigger(Up());
+	stop();
 	setTimeout(function () {
-		strictEqual(items.filter('.focused').index(), -1, 'First item selected again');
 		start();
+		strictEqual(items.filter('.focused').index(), -1, 'First item selected again');
 
 		d.button().trigger(Esc());
 		strictEqual(d.isExpanded(), false, 'Collapse on Esc');
@@ -326,30 +332,37 @@ module('DropDown - Remote data (input)', {
 	teardown: function () { d.destroy(); }
 });
 
-test('Load List', function () {
+
+test('Load List 1', function () {
+	expect(2);
 
 	d.setConfig({ url: '' }).expand();
 	strictEqual(d.getItems().length, 0, 'Retrieve no list with ajax');
 	d.collapse().clearList();
 
+	d.setConfig({ url: 'resources/data-empty.json' }).expand();
 	stop();
-	d.setConfig({ url: 'data-empty.json' }).expand();
-	$.getJSON('data-empty.json', function (dat) {
+	$.getJSON('resources/data-empty.json', function (dat) {
 		start();
 		strictEqual(d.getItems().length, dat.length, 'Retrieve empty list with ajax');
-		d.collapse().clearList();
 	});
+});
 
+
+test('Load List 2', function () {
+	expect(2);
+
+	d.setConfig({ url: '' }).expand();
+	strictEqual(d.getItems().length, 0, 'Retrieve no list with ajax');
+	d.collapse().clearList();
+
+	d.setConfig({ url: 'resources/data.json' }).expand();
 	stop();
 	setTimeout(function () {
-		d.setConfig({ url: 'data.json' }).expand();
-		setTimeout(function () {
-			$.getJSON('data.json', function (dat) {
-				start();
-				strictEqual(d.getItems().length, dat.length, 'Retrieve items list with ajax');
-				d.collapse().clearList();
-			});
-		}, 100);
+		$.getJSON('resources/data.json', function (dat) {
+			start();
+			strictEqual(d.getItems().length, dat.length, 'Retrieve items list with ajax');
+		});
 	}, 100);
 
 });
