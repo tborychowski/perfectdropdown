@@ -225,9 +225,9 @@ window.DropDown = function (conf) {
 
 	_processAdditionalOptions = function () {
 		_additionalOptions = {};
-		if (_conf.additionalOptions && _conf.additionalOptions.length) {
-			for (var i = 0, item; item = _conf.additionalOptions[i++] ;) _additionalOptions[item.id] = item.checked;
-		}
+		if (!_conf.additionalOptions || !_conf.additionalOptions.length) return _this;
+		for (var i = 0, item; item = _conf.additionalOptions[i++] ;) _additionalOptions[item.id] = item.checked;
+		return _this;
 	},
 
 
@@ -517,6 +517,7 @@ window.DropDown = function (conf) {
 		else _setValue();
 
 		_processAdditionalOptions();
+		_setAdditionalOptions();
 
 		return _this;
 	},
@@ -646,7 +647,6 @@ window.DropDown = function (conf) {
 		if (typeof options === 'object') {
 			for (; item = _conf.additionalOptions[i++] ;) _additionalOptions[item.id] = options[item.id];
 		}
-
 		items.each(function (i, item) {
 			item = items.eq(i);
 			if (typeof _additionalOptions[item.data('id')] === 'undefined') return;
@@ -870,10 +870,10 @@ window.DropDown = function (conf) {
 
 	_getAdditionalOptionsHtml = function () {
 		if (!_conf.additionalOptions || !_conf.additionalOptions.length) return '';
-		var i = 0, item, html = [];
+		var i = 0, item, html = [], itemCfg;
 		for (; item = _conf.additionalOptions[i++] ;) {
-			item.cls = 'menu-item-additional-option';
-			html.push(_getItemHtml(item.id, item.name, { checked: _additionalOptions[item.id] }));
+			itemCfg = { checked: _additionalOptions[item.id], cls: 'menu-item-additional-option' };
+			html.push(_getItemHtml(item.id, item.name, itemCfg));
 		}
 		return html.join('');
 	},
