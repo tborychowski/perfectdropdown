@@ -1,5 +1,5 @@
 /**
- * DropDown v4.5 (2014-02-11)
+ * DropDown v4.6 (2014-03-28)
  * @author Tom
  *
  * sample usage:
@@ -47,9 +47,11 @@ window.DropDown = function (conf) {
 		fieldName: 'name',							// this can be a string (fieldName); a pattern (eg. '{name}, {id}')
 													// or a function (eg. fieldName: function () { return _name+'123'; }
 		fieldId: 'id',
+		emptyText: '',								// this is a default label for the dropdown when nothing is selected
+
 		defaultText: '',							// this is a 1st element (e.g. "Please select") of for multiple -
 													// it becomes "All {defaultText}", e.g. "All Items", etc.
-		emptyText: '',								// this is a default label for the dropdown when nothing is selected
+
 		menuAlign: 'left',							// if menu is longer than button - this can make it align to the right
 		cls: '',									// additional class for the dropdown (without menu)
 		menuCls: '',								// additional class for the menu (menu is rendered to the body)
@@ -62,6 +64,15 @@ window.DropDown = function (conf) {
 
 		value: null,								// pre-selected value
 		defaultValue: null,							// default value - will be set after reset
+
+		allowNone: false,							// in multiselect - allow to select none
+													// if false - selecting nothing would make all items selected
+
+		multiselectLabels: {						// prefix label (defaultText) with these
+			all: 'All ',
+			none: 'No ',
+			multi: 'Multiple '
+		},
 
 		additionalOptions: null,					// array of additional checkboxes to show on the list
 
@@ -315,7 +326,7 @@ window.DropDown = function (conf) {
 				target.removeClass('menu-item-checked');				// except target
 				checked = _menu.find('.menu-items .menu-item-checked');
 				if (checked.length === 0) {
-					_label.html('No ' + _conf.defaultText);
+					_label.html(_conf.multiselectLabels.none + _conf.defaultText);
 					_menu
 						.removeClass('all-items-selected multiple-items-selected')
 						.addClass('no-items-selected');
@@ -331,10 +342,10 @@ window.DropDown = function (conf) {
 				checked = _menu.find('.menu-items .menu-item-checked');
 				if (checked.length === 1) _label.html(checked.data('name') || checked.data('id'));
 				else if (checked.length === 0) {
-					_label.html('No ' + _conf.defaultText);
+					_label.html(_conf.multiselectLabels.none + _conf.defaultText);
 					_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
 				}
-				else _label.html('Multiple ' + _conf.defaultText);
+				else _label.html(_conf.multiselectLabels.multi + _conf.defaultText);
 
 				// no items selected - don't show "Apply" menu
 				noItemsSelected = (checked.length === 0);
@@ -400,7 +411,7 @@ window.DropDown = function (conf) {
 		_menu.find('.menu-items .menu-item-checked,.menu-item-all.menu-item-checked').removeClass('menu-item-checked');
 		_menu.find('.menu-item-all').addClass('menu-item-checked');
 		_menu.removeClass('multiple-items-selected no-items-selected').addClass('all-items-selected');
-		_label.html('All ' + _conf.defaultText);
+		_label.html(_conf.multiselectLabels.all + _conf.defaultText);
 	},
 
 	/**
@@ -410,7 +421,7 @@ window.DropDown = function (conf) {
 		_menu.find('.menu-item-all').removeClass('menu-item-checked');
 		_menu.find('.menu-items .menu-item').addClass('menu-item-checked');
 		_menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
-		_label.html('Multiple ' + _conf.defaultText);
+		_label.html(_conf.multiselectLabels.multi + _conf.defaultText);
 	},
 
 	/**
@@ -419,7 +430,7 @@ window.DropDown = function (conf) {
 	_selectNone = function () {
 		_menu.find('.menu-items .menu-item,.menu-item-all').removeClass('menu-item-checked');
 		_menu.removeClass('all-items-selected multiple-items-selected').addClass('no-items-selected');
-		_label.html('No ' + _conf.defaultText);
+		_label.html(_conf.multiselectLabels.none + _conf.defaultText);
 	},
 	/*** MULTISELECT **************************************************************************************************/
 
@@ -510,8 +521,8 @@ window.DropDown = function (conf) {
 	_reset = function () {
 		_selectedItem = _focused = null;
 		_menu.find('.selected,.focused').removeClass('selected focused');
-		if (_conf.defaultValue) _setValue(_conf.defaultValue);
-		else if (_conf.multiselect === true) _setValue([], 'All ' + (_conf.defaultText || 'items'));
+		if (_conf.defaultValue !== null) _setValue(_conf.defaultValue);
+		else if (_conf.multiselect === true) _setValue([], _conf.multiselectLabels.all + (_conf.defaultText || 'items'));
 		else if (_conf.defaultText && _conf.defaultText.length) _setValue('', _conf.defaultText);
 		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _setValue('', _conf.emptyText);
 		else _setValue();
@@ -577,13 +588,16 @@ window.DropDown = function (conf) {
 		if ($.type(ids) !== 'array') ids = [ids];
 		_conf.value = ids;
 
-		if (!ids.length) _selectAll();
+		if (!ids.length) {
+			if (_conf.allowNone) _selectNone();
+			else _selectAll();
+		}
 		else {
 			var items = _menu.find('.menu-items .menu-item'), i = 0, il = ids.length, checked;
 
 			if (il === 0) _selectNone();
 			else {
-				_label.html('Multiple ' + _conf.defaultText);
+				_label.html(_conf.multiselectLabels.multi + _conf.defaultText);
 				_menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 
 				if (items.length) {
@@ -597,14 +611,14 @@ window.DropDown = function (conf) {
 						if (checked.length === 1) _label.html(checked.data('name'));
 						else if (checked.length === 0) _selectNone();
 						else {
-							_label.html('Multiple ' + _conf.defaultText);
+							_label.html(_conf.multiselectLabels.multi + _conf.defaultText);
 							_menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 						}
 					}
 				}
 				else {
 					if (name && name.length) _label.html(name);
-					else _label.html('Multiple ' + _conf.defaultText);
+					else _label.html(_conf.multiselectLabels.multi + _conf.defaultText);
 					_menu.removeClass('all-items-selected no-items-selected').addClass('multiple-items-selected');
 				}
 			}
@@ -779,7 +793,7 @@ window.DropDown = function (conf) {
 
 		var val = _getIdValue() || _getValue();
 		if (typeof val !== 'undefined' && val !== null  && val !== '' && val !== []) _setValue(val);
-		else if (_conf.defaultValue) _setValue(_conf.defaultValue);
+		else if (_conf.defaultValue !== null) _setValue(_conf.defaultValue);
 		else if (_conf.emptyText && _conf.emptyText.length && !_conf.isStatic) _label.html(_conf.emptyText);
 		else _reset();
 
@@ -961,7 +975,7 @@ window.DropDown = function (conf) {
 		if (_conf.defaultText && _conf.defaultText.length && !_conf.isStatic) _label.html(_conf.defaultText);
 		if (_conf.emptyText && _conf.emptyText.length) _label.html(_conf.emptyText);
 
-        if (_conf.defaultValue) _setValue(_conf.defaultValue);
+        if (_conf.defaultValue !== null) _setValue(_conf.defaultValue);
 
 		if (_conf.value !== undefined && _conf.value !== null) {
 			var fid = _conf.value[_conf.fieldId], fin = _conf.value[_conf.fieldName];

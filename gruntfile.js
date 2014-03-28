@@ -12,10 +12,7 @@ module.exports = function (grunt) {
 			app:      { files: { 'js/app.min.js'     : 'js-src/app/*.js'    }}
 		},
 
-		uglify: {
-			dropdown : '<%= concat.dropdown %>',
-			app : '<%= concat.app %>'
-		},
+		uglify: { dropdown : '<%= concat.dropdown %>', app : '<%= concat.app %>' },
 
 		less: {
 			dev: {
@@ -31,9 +28,7 @@ module.exports = function (grunt) {
 		qunit: { files: ['tests/*.html'] },
 
 		blanket_qunit: {
-			all: {
-				options: { urls: ['tests/index.html?coverage=true&gruntReport'], threshold: 70 }
-			}
+			all: { options: { urls: ['tests/index.html?coverage=true&gruntReport'], threshold: 70 } }
 		},
 
 		watch: {
