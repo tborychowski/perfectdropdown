@@ -1004,7 +1004,6 @@ window.DropDown = function (conf) {
 			keydown: function (e) {
 				switch (e.keyCode) {
 				case 32 : // space
-				case 13 : // enter
 					_action(e);
 					break;
 
@@ -1020,6 +1019,12 @@ window.DropDown = function (conf) {
 					e.preventDefault();
 					_highlightItem(-1);
 					break;
+
+				case 13 : // enter
+					if (_isExpanded) _action(e);
+					else _highlightItem(1);
+					break;
+
 
 				case 40 : // down arrow
 					e.preventDefault();
