@@ -290,6 +290,7 @@ window.DropDown = function (conf) {
 			_collapse(e);
 			_setValue(actionId, actionName);
 			if (_conf.action) _conf.action.call(_conf.scope || _conf.action, actionId, _selectedItem, _this);
+			_input.trigger('change');
 			return;
 		}
 
