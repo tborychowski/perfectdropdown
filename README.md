@@ -4,6 +4,8 @@
 
 This is the Perfect Dropdown - a jQuery based, extensible component
 
+[DEMO](http://htmlpreview.github.io/?https://raw.githubusercontent.com/tborychowski/perfectdropdown/master/index.html)
+
 ### Installation
     bower install perfect-dropdown
 
